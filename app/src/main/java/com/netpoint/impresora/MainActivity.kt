@@ -2,6 +2,7 @@
 
 package com.netpoint.impresora
 
+import android.annotation.SuppressLint
 import android.bluetooth.*
 import android.content.*
 import android.os.Bundle
@@ -16,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 fun HardwareScreen() {
 
@@ -51,12 +52,12 @@ fun HardwareScreen() {
     var btSocket by remember { mutableStateOf<BluetoothSocket?>(null) }
     var selectedMac by remember { mutableStateOf<String?>(null) }
 
-    fun log(message: String) {
+    fun log(msg: String) {
         val time = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-        logs += "[$time] $message\n"
+        logs += "[$time] $msg\n"
     }
 
-    fun isSocketConnected(): Boolean =
+    fun isConnected(): Boolean =
         btSocket != null && btSocket!!.isConnected
 
     LaunchedEffect(logs) {
@@ -69,8 +70,6 @@ fun HardwareScreen() {
             .padding(16.dp)
     ) {
 
-        /* ================= CONSOLA ================= */
-
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -80,33 +79,15 @@ fun HardwareScreen() {
             Text(
                 text = logs,
                 color = Color(0xFF00FF41),
-                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scroll)
                     .padding(12.dp)
             )
-
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(8.dp),
-                onClick = {
-                    val clipboard =
-                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    clipboard.setPrimaryClip(
-                        ClipData.newPlainText("logs", logs)
-                    )
-                    log("Logs copiados al portapapeles.")
-                }
-            ) {
-                Icon(Icons.Default.ContentCopy, null, tint = Color.Cyan)
-            }
         }
 
         Spacer(Modifier.height(8.dp))
 
-        /* ================= VER SOCKETS ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -117,8 +98,8 @@ fun HardwareScreen() {
                     val adapter = manager.adapter
 
                     withContext(Dispatchers.Main) {
-                        log("Escaneando dispositivos vinculados...")
                         selectedMac = null
+                        log("Buscando dispositivos vinculados…")
                     }
 
                     adapter?.bondedDevices?.forEach { device ->
@@ -145,7 +126,6 @@ fun HardwareScreen() {
 
         Spacer(Modifier.height(6.dp))
 
-        /* ================= CONECTAR SOCKET ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -154,7 +134,14 @@ fun HardwareScreen() {
 
                     if (selectedMac == null) {
                         withContext(Dispatchers.Main) {
-                            log("No hay MAC seleccionada. Ejecutá VER SOCKETS primero.")
+                            log("Primero ejecutá VER SOCKETS.")
+                        }
+                        return@launch
+                    }
+
+                    if (isConnected()) {
+                        withContext(Dispatchers.Main) {
+                            log("El socket ya está conectado.")
                         }
                         return@launch
                     }
@@ -163,27 +150,8 @@ fun HardwareScreen() {
                         context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
                     val adapter = manager.adapter
 
-                    if (adapter == null || !adapter.isEnabled) {
-                        withContext(Dispatchers.Main) {
-                            log("Bluetooth apagado.")
-                        }
-                        return@launch
-                    }
-
-                    val device = try {
-                        adapter.getRemoteDevice(selectedMac!!)
-                    } catch (_: Exception) {
-                        null
-                    }
-
-                    if (device == null) {
-                        withContext(Dispatchers.Main) {
-                            log("No se pudo obtener el dispositivo por MAC.")
-                        }
-                        return@launch
-                    }
-
                     try {
+                        val device = adapter.getRemoteDevice(selectedMac!!)
                         adapter.cancelDiscovery()
 
                         btSocket = device.javaClass
@@ -193,13 +161,14 @@ fun HardwareScreen() {
                         btSocket!!.connect()
 
                         withContext(Dispatchers.Main) {
-                            log("Socket conectado a ${device.address}")
+                            log("Conectado a ${device.address}")
                         }
 
                     } catch (e: Exception) {
                         withContext(Dispatchers.Main) {
                             log("Error conectando socket: ${e.message}")
                         }
+                        btSocket = null
                     }
                 }
             }
@@ -211,7 +180,6 @@ fun HardwareScreen() {
 
         Spacer(Modifier.height(6.dp))
 
-        /* ================= IMPRIMIR TEXTO ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -219,36 +187,21 @@ fun HardwareScreen() {
             onClick = {
                 scope.launch(Dispatchers.IO) {
 
-                    if (!isSocketConnected()) {
+                    if (!isConnected()) {
                         withContext(Dispatchers.Main) {
-                            log("Socket no conectado.")
+                            log("No hay socket conectado.")
                         }
                         return@launch
                     }
-
                     try {
+                        val now = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                            .format(Date())
                         val text = """
-                            Poema de la impresora
-
-                            En la mesa zumba baja, concentrada,
-                            la impresora despierta su latido,
-                            un motor que murmura madrugada
-                            y escupe palabras con sonido.
-
-                            Traga silencio, bytes y pensamientos,
-                            los mastica en calor y en tinta oscura,
-                            y pariendo recibos y argumentos
-                            deja huellas exactas de cordura.
-
-                            Cada línea cae recta, obediente,
-                            como soldados blancos en papel,
-                            pero adentro hay un pulso diferente:
-                            un poema mecánico y fiel.
-
-                            Cuando corta, suspira, satisfecha,
-                            queda el texto, la marca y la razón:
-                            la máquina también sueña —aunque estrecha—
-                            con dejar su mensaje en impresión.
+                        ====================
+                        MAC: $selectedMac
+                        Hora: $now
+                        Hola mundo
+                        ====================
                         """.trimIndent()
 
                         val payload =
@@ -268,15 +221,17 @@ fun HardwareScreen() {
                             log("Error imprimiendo: ${e.message}")
                         }
                     }
+
                 }
             }
         ) {
             Icon(Icons.Default.Print, null)
             Spacer(Modifier.width(8.dp))
-            Text("IMPRIMIR TEXTO")
+            Text("IMPRIMIR")
         }
 
         Spacer(Modifier.height(6.dp))
+
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -296,25 +251,6 @@ fun HardwareScreen() {
             Icon(Icons.Default.Close, null)
             Spacer(Modifier.width(8.dp))
             Text("CERRAR SOCKET")
-        }
-
-        Spacer(Modifier.height(6.dp))
-
-        OutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    bottom = WindowInsets.navigationBars
-                        .asPaddingValues()
-                        .calculateBottomPadding()
-                ),
-            onClick = {
-                logs = "--- CONSOLA LIMPIA ---\n"
-            }
-        ) {
-            Icon(Icons.Default.Delete, null)
-            Spacer(Modifier.width(8.dp))
-            Text("LIMPIAR LOGS")
         }
     }
 }
