@@ -3,7 +3,6 @@
 package com.netpoint.impresora
 
 import android.app.PendingIntent
-import android.bluetooth.*
 import android.content.*
 import android.hardware.usb.*
 import android.os.Bundle
@@ -27,9 +26,8 @@ import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 private const val USB_DISCONNECT_TIMEOUT_MS = 2_000L
-
+private const val TARGET_USB_PATH = "/dev/bus/usb/001/003"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +41,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/* ================= UI ================= */
-
 @Composable
 fun HardwareScreen() {
 
@@ -56,25 +52,53 @@ fun HardwareScreen() {
 
     var logs by remember { mutableStateOf("--- CONSOLA LIMPIA ---\n") }
 
-    var btSocket by remember { mutableStateOf<BluetoothSocket?>(null) }
-    var selectedMac by remember { mutableStateOf<String?>(null) }
-
     val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
     var usbDevice by remember { mutableStateOf<UsbDevice?>(null) }
     var usbConnection by remember { mutableStateOf<UsbDeviceConnection?>(null) }
     var usbInterface by remember { mutableStateOf<UsbInterface?>(null) }
     var usbEndpointOut by remember { mutableStateOf<UsbEndpoint?>(null) }
 
-
     fun log(msg: String) {
         val time = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
         logs += "[$time] $msg\n"
     }
 
+    fun dumpUsbDevice(device: UsbDevice) {
+        log("🔍 USB DEVICE DUMP")
+        log("deviceName=${device.deviceName}")
+        log("vendorId=${device.vendorId}")
+        log("productId=${device.productId}")
+        log("deviceClass=${device.deviceClass}")
+        log("deviceSubclass=${device.deviceSubclass}")
+        log("protocol=${device.deviceProtocol}")
+        log("interfaces=${device.interfaceCount}")
+        log("manufacturer=${device.manufacturerName ?: "N/A"}")
+        log("product=${device.productName ?: "N/A"}")
+        log("serial=${device.serialNumber ?: "N/A"}")
+
+        for (i in 0 until device.interfaceCount) {
+            val intf = device.getInterface(i)
+            log(" ├─ Interface[$i]")
+            log(" │  class=${intf.interfaceClass}")
+            log(" │  subclass=${intf.interfaceSubclass}")
+            log(" │  protocol=${intf.interfaceProtocol}")
+            log(" │  endpoints=${intf.endpointCount}")
+
+            for (e in 0 until intf.endpointCount) {
+                val ep = intf.getEndpoint(e)
+                log(
+                    " │   └─ EP[$e] " +
+                            "type=${ep.type} " +
+                            "dir=${if (ep.direction == UsbConstants.USB_DIR_OUT) "OUT" else "IN"} " +
+                            "maxPacket=${ep.maxPacketSize}"
+                )
+            }
+        }
+    }
+
     LaunchedEffect(logs) {
         logScroll.animateScrollTo(logScroll.maxValue)
     }
-
 
     Column(
         modifier = Modifier
@@ -83,6 +107,7 @@ fun HardwareScreen() {
             .padding(16.dp)
     ) {
 
+        /* ================= CONSOLA ================= */
 
         Box(
             modifier = Modifier
@@ -118,97 +143,51 @@ fun HardwareScreen() {
 
         Spacer(Modifier.height(12.dp))
 
+        /* ================= LISTAR USB ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                scope.launch(Dispatchers.IO) {
-                    val manager =
-                        context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-                    val adapter = manager.adapter
-
-                    withContext(Dispatchers.Main) {
-                        log("Escaneando dispositivos Bluetooth vinculados...")
-                        selectedMac = null
-                    }
-
-                    adapter?.bondedDevices?.forEach {
-                        withContext(Dispatchers.Main) {
-                            log("${it.name ?: "Sin nombre"} | ${it.address}")
-                            selectedMac = it.address
-                        }
-                    }
+                log("Listando dispositivos USB...")
+                usbManager.deviceList.values.forEach { d ->
+                    log(
+                        "USB → path=${d.deviceName} | VID=${d.vendorId} | PID=${d.productId} | class=${d.deviceClass}"
+                    )
                 }
             }
         ) {
-            Icon(Icons.Default.BluetoothSearching, null)
+            Icon(Icons.Default.List, null)
             Spacer(Modifier.width(8.dp))
-            Text("VER SOCKETS BT")
+            Text("LISTAR USB")
         }
 
         Spacer(Modifier.height(6.dp))
 
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                scope.launch(Dispatchers.IO) {
-                    try {
-                        val manager =
-                            context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-                        val adapter = manager.adapter
-                        val device = adapter.getRemoteDevice(selectedMac!!)
-                        adapter.cancelDiscovery()
-
-                        btSocket = device.javaClass
-                            .getMethod("createRfcommSocket", Int::class.java)
-                            .invoke(device, 1) as BluetoothSocket
-
-                        btSocket!!.connect()
-
-                        withContext(Dispatchers.Main) {
-                            log("Bluetooth conectado: ${device.address}")
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            log("Error BT: ${e.message}")
-                        }
-                    }
-                }
-            }
-        ) {
-            Icon(Icons.Default.Link, null)
-            Spacer(Modifier.width(8.dp))
-            Text("CONECTAR BT")
-        }
-
-        Spacer(Modifier.height(12.dp))
-
+        /* ================= DETECTAR USB ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1565C0)),
             onClick = {
-                scope.launch {
-                    usbDevice = usbManager.deviceList.values.firstOrNull {
-                        it.deviceClass == UsbConstants.USB_CLASS_PRINTER ||
-                                it.getInterface(0).interfaceClass == UsbConstants.USB_CLASS_PRINTER
-                    }
-
-                    if (usbDevice == null) {
-                        log("No se detectó impresora USB.")
-                        return@launch
-                    }
-
-                    log("USB detectado VID=${usbDevice!!.vendorId} PID=${usbDevice!!.productId}")
-
-                    val pi = PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        Intent("USB_PERMISSION"),
-                        PendingIntent.FLAG_MUTABLE
-                    )
-                    usbManager.requestPermission(usbDevice, pi)
+                usbDevice = usbManager.deviceList.values.firstOrNull {
+                    it.deviceName == TARGET_USB_PATH
                 }
+
+                if (usbDevice == null) {
+                    log("❌ No se encontró USB en $TARGET_USB_PATH")
+                    return@Button
+                }
+
+                log("✅ USB encontrado en ${usbDevice!!.deviceName}")
+                log("VID=${usbDevice!!.vendorId} PID=${usbDevice!!.productId}")
+
+                val pi = PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    Intent("USB_PERMISSION"),
+                    PendingIntent.FLAG_MUTABLE
+                )
+                usbManager.requestPermission(usbDevice, pi)
             }
         ) {
             Icon(Icons.Default.Usb, null)
@@ -217,6 +196,8 @@ fun HardwareScreen() {
         }
 
         Spacer(Modifier.height(6.dp))
+
+        /* ================= IMPRIMIR ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -233,6 +214,18 @@ fun HardwareScreen() {
 
                         usbInterface = device.getInterface(0)
                         usbConnection = usbManager.openDevice(device)
+
+                        if (usbConnection == null) {
+                            withContext(Dispatchers.Main) {
+                                log("❌ No se pudo abrir el USB.")
+                            }
+                            return@launch
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            dumpUsbDevice(device)
+                        }
+
                         usbConnection!!.claimInterface(usbInterface, true)
 
                         usbEndpointOut = (0 until usbInterface!!.endpointCount)
@@ -252,7 +245,7 @@ fun HardwareScreen() {
                         )
 
                         withContext(Dispatchers.Main) {
-                            log("Impresión USB enviada.")
+                            log("🖨 Impresión enviada.")
                         }
 
                     } catch (e: Exception) {
@@ -270,6 +263,7 @@ fun HardwareScreen() {
 
         Spacer(Modifier.height(6.dp))
 
+        /* ================= DESCONECTAR ================= */
 
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -278,26 +272,25 @@ fun HardwareScreen() {
                 scope.launch(Dispatchers.IO) {
                     try {
                         withTimeout(USB_DISCONNECT_TIMEOUT_MS) {
-                            usbConnection?.releaseInterface(usbInterface)
+                            usbInterface?.let {
+                                usbConnection?.releaseInterface(it)
+                            }
                             usbConnection?.close()
                         }
 
                         withContext(Dispatchers.Main) {
-                            log("USB desconectado correctamente.")
+                            log("🔌 USB desconectado.")
                         }
 
-                    } catch (e: TimeoutCancellationException) {
+                    } catch (_: TimeoutCancellationException) {
                         withContext(Dispatchers.Main) {
-                            log("⚠ Timeout al desconectar USB, estado limpiado.")
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            log("Error al desconectar USB: ${e.message}")
+                            log("⚠ Timeout al cerrar USB.")
                         }
                     } finally {
                         usbConnection = null
                         usbInterface = null
                         usbEndpointOut = null
+                        usbDevice = null
                     }
                 }
             }
