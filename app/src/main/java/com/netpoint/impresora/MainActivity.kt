@@ -8,11 +8,13 @@ import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.lifecycleScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,10 +32,13 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 import com.common.apiutil.printer.UsbThermalPrinter
 import com.common.apiutil.printer.ThermalPrinter
@@ -42,36 +47,286 @@ import com.common.apiutil.nfc.NfcUtil
 import com.common.apiutil.powercontrol.PowerControl
 import com.common.apiutil.CommonException
 import android.nfc.NfcAdapter
+import android.nfc.Tag
+import android.app.PendingIntent
+import android.view.KeyEvent
+
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.common.InputImage
 
 import com.common.apiutil.decode.DecodeReader
 import com.common.callback.IInputListener
 import com.common.apiutil.pos.CommonUtil
 
 import com.netpoint.impresora.ui.*
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 class MainActivity : ComponentActivity() {
+
+    // ZXing cámara: launcher para scanear con cámara si módulo HW no responde
+    internal var zxingResultCallback: ((String) -> Unit)? = null
+    internal val zxingLauncher = registerForActivityResult(ScanContract()) { result ->
+        val txt = result?.contents
+        if (txt != null) zxingResultCallback?.invoke(txt)
+        else zxingResultCallback?.invoke("")
+    }
+
+    // NFC Android nativo: callback para notificar al composable cuando llega un tag
+    internal var onAndroidNfcTag: ((uid: String, techs: String) -> Unit)? = null
+
+    // Scanner Keyboard Mode (emulación de teclado física)
+    internal var onKeyboardScanDetected: ((String) -> Unit)? = null
+    private val scanBuffer = StringBuilder()
+    private var lastKeyTime = 0L
+
+    // Background Camera Scanner (sin Preview UI)
+    private var cameraExecutor: ExecutorService? = null
+    private var cameraProvider: ProcessCameraProvider? = null
+    internal var isScanningBackground = false
+    internal var isNfcListening = false
+
+    private var nfcPendingIntent: PendingIntent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent { MaterialTheme { HardwareScreen() } }
+
+        // Setup PendingIntent for NFC Foreground Dispatch
+        val intent = Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        val flags = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        nfcPendingIntent = PendingIntent.getActivity(this, 0, intent, flags)
     }
 
     override fun onResume() {
         super.onResume()
-        val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        nfcAdapter?.enableReaderMode(
-            this,
-            { _ -> },
-            NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_NFC_B or
-            NfcAdapter.FLAG_READER_NFC_F or NfcAdapter.FLAG_READER_NFC_V or
-            NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
-            null
-        )
+        if (isNfcListening) {
+            val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+            if (nfcAdapter != null && nfcAdapter.isEnabled) {
+                val intentFilter = IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+                val techLists = arrayOf(
+                    arrayOf("android.nfc.tech.NfcA"),
+                    arrayOf("android.nfc.tech.NfcB"),
+                    arrayOf("android.nfc.tech.NfcF"),
+                    arrayOf("android.nfc.tech.NfcV"),
+                    arrayOf("android.nfc.tech.IsoDep"),
+                    arrayOf("android.nfc.tech.MifareClassic"),
+                    arrayOf("android.nfc.tech.MifareUltralight")
+                )
+                nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, arrayOf(intentFilter), techLists)
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        NfcAdapter.getDefaultAdapter(this)?.disableReaderMode(this)
+        if (isNfcListening) {
+            val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+            nfcAdapter?.disableForegroundDispatch(this)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (isNfcListening && (NfcAdapter.ACTION_TECH_DISCOVERED == intent.action || 
+            NfcAdapter.ACTION_TAG_DISCOVERED == intent.action)) {
+            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+            if (tag != null) {
+                val uid = tag.id.joinToString("") { String.format("%02X", it) }
+                val techs = tag.techList.joinToString(", ") { it.substringAfterLast(".") }
+                onAndroidNfcTag?.invoke(uid, techs)
+            }
+        }
+    }
+
+    fun startNfcListening(
+        onResult: (uid: String, techs: String) -> Unit,
+        onError: (String) -> Unit,
+        onStateChange: (Boolean) -> Unit
+    ) {
+        val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if (nfcAdapter == null) {
+            onError("NFC no soportado")
+            return
+        }
+        if (!nfcAdapter.isEnabled) {
+            onError("NFC desactivado")
+            return
+        }
+
+        isNfcListening = true
+        onStateChange(true)
+        onAndroidNfcTag = { uid, techs ->
+            onResult(uid, techs)
+            stopNfcListening(onStateChange)
+        }
+
+        val intentFilter = IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+        val techLists = arrayOf(
+            arrayOf("android.nfc.tech.NfcA"),
+            arrayOf("android.nfc.tech.NfcB"),
+            arrayOf("android.nfc.tech.NfcF"),
+            arrayOf("android.nfc.tech.NfcV"),
+            arrayOf("android.nfc.tech.IsoDep"),
+            arrayOf("android.nfc.tech.MifareClassic"),
+            arrayOf("android.nfc.tech.MifareUltralight")
+        )
+        try {
+            nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, arrayOf(intentFilter), techLists)
+
+            // Timeout de 15 segundos
+            lifecycleScope.launch {
+                delay(15000L)
+                if (isNfcListening) {
+                    runOnUiThread {
+                        onError("Timeout NFC (15s sin lectura)")
+                        stopNfcListening(onStateChange)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            onError("Error al iniciar NFC: ${e.message}")
+            stopNfcListening(onStateChange)
+        }
+    }
+
+    fun stopNfcListening(onStateChange: (Boolean) -> Unit) {
+        isNfcListening = false
+        onAndroidNfcTag = null
+        onStateChange(false)
+        try {
+            val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+            nfcAdapter?.disableForegroundDispatch(this)
+        } catch (_: Exception) {}
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // Intercepta caracteres veloces de la emulación de teclado del escáner
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime > 120L) {
+                scanBuffer.clear()
+            }
+            lastKeyTime = now
+
+            val keyCode = event.keyCode
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                val scanned = scanBuffer.toString().trim()
+                if (scanned.length >= 3) {
+                    runOnUiThread {
+                        onKeyboardScanDetected?.invoke(scanned)
+                    }
+                    scanBuffer.clear()
+                    return true // Consumir el Enter para que no navegue en la UI
+                }
+                scanBuffer.clear()
+            } else {
+                val unicodeChar = event.unicodeChar
+                if (unicodeChar != 0) {
+                    val char = unicodeChar.toChar()
+                    if (char.isLetterOrDigit() || char in "-_./:+=*&?@#") {
+                        scanBuffer.append(char)
+                    }
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    // Escáner de Cámara en Segundo Plano (sin Preview, silencioso)
+    fun startBackgroundCameraScan(
+        onResult: (String) -> Unit,
+        onError: (String) -> Unit,
+        onStateChange: (Boolean) -> Unit
+    ) {
+        if (isScanningBackground) return
+        isScanningBackground = true
+        onStateChange(true)
+
+        val providerFuture = ProcessCameraProvider.getInstance(this)
+        providerFuture.addListener({
+            try {
+                val provider = providerFuture.get()
+                cameraProvider = provider
+
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+
+                imageAnalysis.setAnalyzer(cameraExecutor ?: Executors.newSingleThreadExecutor().also { cameraExecutor = it }) { imageProxy ->
+                    val mediaImage = imageProxy.image
+                    if (mediaImage != null) {
+                        val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+                        BarcodeScanning.getClient().process(image)
+                            .addOnSuccessListener { barcodes ->
+                                for (barcode in barcodes) {
+                                    val value = barcode.rawValue
+                                    if (!value.isNullOrEmpty()) {
+                                        runOnUiThread {
+                                            onResult(value)
+                                            stopBackgroundCameraScan(onStateChange)
+                                        }
+                                        break
+                                    }
+                                }
+                            }
+                            .addOnCompleteListener {
+                                imageProxy.close()
+                            }
+                    } else {
+                        imageProxy.close()
+                    }
+                }
+
+                provider.unbindAll()
+                provider.bindToLifecycle(
+                    this,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    imageAnalysis
+                )
+
+                // Timeout de 15 segundos
+                lifecycleScope.launch {
+                    delay(15000L)
+                    if (isScanningBackground) {
+                        runOnUiThread {
+                            onError("Timeout de 15s sin lectura de cámara")
+                            stopBackgroundCameraScan(onStateChange)
+                        }
+                    }
+                }
+
+            } catch (e: Exception) {
+                runOnUiThread {
+                    onError("Error de cámara: ${e.message}")
+                    stopBackgroundCameraScan(onStateChange)
+                }
+            }
+        }, ContextCompat.getMainExecutor(this))
+    }
+
+    fun stopBackgroundCameraScan(onStateChange: (Boolean) -> Unit) {
+        isScanningBackground = false
+        onStateChange(false)
+        try {
+            cameraProvider?.unbindAll()
+        } catch (_: Exception) {}
+        cameraProvider = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor?.shutdown()
     }
 }
 
@@ -125,6 +380,8 @@ fun HardwareScreen() {
     // Scanner state
     var lastScanned by remember { mutableStateOf("Nada") }
     var isScanning by remember { mutableStateOf(false) }
+    var isScanningBackground by remember { mutableStateOf(false) }
+    var isNfcListeningAndroid by remember { mutableStateOf(false) }
 
     val grayMax = if (is58mm) usbGrayMax else 12
     val grayDefault = if (is58mm) minOf(usbGrayMax, 1) else 3
@@ -693,22 +950,115 @@ fun HardwareScreen() {
         if (isScanning) return
         scope.launch(Dispatchers.IO) {
             isScanning = true
-            withContext(Dispatchers.Main) { log("Scanner activo (5s)...") }
+            withContext(Dispatchers.Main) { log("Scanner HW | decodePower(1)...") }
             try {
-                powerControl.decodePower(1); Thread.sleep(500)
-                decodeReader.open(115200)
+                val pwrResult = powerControl.decodePower(1)
+                withContext(Dispatchers.Main) { log("decodePower(1) -> $pwrResult") }
+                Thread.sleep(800)
+
+                // Estrategia 1: baud 115200, escucha auto-scan (sin trigger)
                 var scannedData = ""
-                decodeReader.setDecodeReaderListener { data -> if (data != null) scannedData = String(data) }
-                decodeReader.cmdSend(com.common.apiutil.util.StringUtil.hexStringToBytes("7E01303030304053434E545247313B03"))
-                val endTime = System.currentTimeMillis() + 5000
-                while (System.currentTimeMillis() < endTime && scannedData.isEmpty()) Thread.sleep(100)
+                val open1 = decodeReader.open(115200)
+                withContext(Dispatchers.Main) { log("open(115200) -> $open1 | escuchando 2s (auto-scan)...") }
+                decodeReader.setDecodeReaderListener { data ->
+                    if (data != null && data.isNotEmpty()) scannedData = String(data).trim()
+                }
+                val t1 = System.currentTimeMillis() + 2000
+                while (System.currentTimeMillis() < t1 && scannedData.isEmpty()) Thread.sleep(80)
+
+                if (scannedData.isEmpty()) {
+                    // Estrategia 2: comando trigger Newland (~\x010000@SCNTRG1;\x03)
+                    val newlandCmd = byteArrayOf(0x7E,0x01,0x30,0x30,0x30,0x30,0x40,0x53,0x43,0x4E,0x54,0x52,0x47,0x31,0x3B,0x03)
+                    decodeReader.cmdSend(newlandCmd)
+                    withContext(Dispatchers.Main) { log("Trigger Newland enviado, escuchando 2s...") }
+                    val t2 = System.currentTimeMillis() + 2000
+                    while (System.currentTimeMillis() < t2 && scannedData.isEmpty()) Thread.sleep(80)
+                }
+
+                try { decodeReader.close() } catch (_: Exception) {}
+
+                if (scannedData.isEmpty()) {
+                    // Estrategia 3: baud 9600, escucha + trigger
+                    val open2 = decodeReader.open(9600)
+                    withContext(Dispatchers.Main) { log("open(9600) -> $open2 | escuchando 1s...") }
+                    decodeReader.setDecodeReaderListener { data ->
+                        if (data != null && data.isNotEmpty()) scannedData = String(data).trim()
+                    }
+                    val t3 = System.currentTimeMillis() + 1000
+                    while (System.currentTimeMillis() < t3 && scannedData.isEmpty()) Thread.sleep(80)
+                    if (scannedData.isEmpty()) {
+                        decodeReader.cmdSend(byteArrayOf(0x7E,0x01,0x30,0x30,0x30,0x30,0x40,0x53,0x43,0x4E,0x54,0x52,0x47,0x31,0x3B,0x03))
+                        val t4 = System.currentTimeMillis() + 1000
+                        while (System.currentTimeMillis() < t4 && scannedData.isEmpty()) Thread.sleep(80)
+                    }
+                    try { decodeReader.close() } catch (_: Exception) {}
+                }
+
                 withContext(Dispatchers.Main) {
-                    if (scannedData.isNotEmpty()) { lastScanned = scannedData; logOk("Escaneado: $scannedData") }
-                    else logWarn("Scanner timeout")
+                    if (scannedData.isNotEmpty()) {
+                        lastScanned = scannedData
+                        logOk("Scanner HW: \"$scannedData\"")
+                    } else {
+                        logWarn("Scanner HW: sin respuesta (3 estrategias). El módulo puede no estar presente.")
+                    }
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) { logError("Scanner: ${e.message}") }
-            } finally { decodeReader.close(); powerControl.decodePower(0); isScanning = false }
+                withContext(Dispatchers.Main) { logError("Scanner HW: ${e.javaClass.simpleName}: ${e.message}") }
+            } finally {
+                try { powerControl.decodePower(0) } catch (_: Exception) {}
+                isScanning = false
+            }
+        }
+    }
+
+    fun startNfcScan(timeoutMs: Long = 8000L) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                withContext(Dispatchers.Main) { log("NFC start | nfcPower(1) -> ...") }
+                val pwrResult = powerControl.nfcPower(1)
+                withContext(Dispatchers.Main) { log("nfcPower(1) -> $pwrResult") }
+                Thread.sleep(500)
+                withContext(Dispatchers.Main) { log("NFC initSerial...") }
+                nfcUtil.initSerial()
+                Thread.sleep(300)
+                // Verificar versión del MCU NFC
+                try {
+                    val ver = nfcUtil.checkVersion()
+                    withContext(Dispatchers.Main) { log("NFC MCU version: $ver") }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) { logWarn("NFC MCU version error: ${e.javaClass.simpleName}: ${e.message}") }
+                }
+                withContext(Dispatchers.Main) { log("NFC esperando tarjeta (${timeoutMs/1000}s)... Acerá el tag al lector.") }
+                val endTime = System.currentTimeMillis() + timeoutMs
+                var found = false
+                var attempts = 0
+                while (System.currentTimeMillis() < endTime && !found) {
+                    attempts++
+                    try {
+                        val result = nfcUtil.selectCard()
+                        if (result != null) {
+                            val hex = result.cardNum?.joinToString("") { String.format("%02X", it) } ?: "(sin UID)"
+                            withContext(Dispatchers.Main) {
+                                logOk("NFC: tipo=${result.cardType?.name ?: "?"} | UID=$hex | intentos=$attempts")
+                            }
+                            found = true
+                        }
+                    } catch (e: Exception) {
+                        // ignorar errores de polling, solo logear cada 10 intentos
+                        if (attempts % 10 == 0) {
+                            withContext(Dispatchers.Main) { logWarn("NFC poll #$attempts: ${e.javaClass.simpleName}") }
+                        }
+                    }
+                    if (!found) Thread.sleep(150)
+                }
+                if (!found) withContext(Dispatchers.Main) { logWarn("NFC timeout ($attempts intentos). Verificá que el tag sea ISO14443-A/B, M1 o CPU.") }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) { logError("NFC: ${e.javaClass.simpleName}: ${e.message}") }
+            } finally {
+                try { nfcUtil.destroySerial() } catch (_: Exception) {}
+                try { powerControl.nfcPower(0) } catch (_: Exception) {}
+                withContext(Dispatchers.Main) { log("NFC: serial cerrado, power off") }
+            }
         }
     }
 
@@ -719,7 +1069,27 @@ fun HardwareScreen() {
             override fun wiegandInput(inputData: ByteArray?) {}
             override fun input(sw: Int, status: Int) {
                 if (sw == 2 && status == 0) {
-                    scope.launch(Dispatchers.Main) { log("Botón FUNC → scan"); startBarcodeScan() }
+                    scope.launch(Dispatchers.Main) {
+                        val act = context as? MainActivity
+                        if (act != null) {
+                            if (!isScanningBackground) {
+                                log("Botón FUNC → Iniciando escáner cámara 2do plano")
+                                act.startBackgroundCameraScan(
+                                    onResult = { result ->
+                                        lastScanned = result
+                                        logOk("Escáner 2do plano (Botón FUNC): \"$result\"")
+                                    },
+                                    onError = { err ->
+                                        logWarn("Escáner 2do plano (Botón FUNC): $err")
+                                    },
+                                    onStateChange = { isScanningBackground = it }
+                                )
+                            } else {
+                                log("Botón FUNC → Cancelando escáner cámara 2do plano")
+                                act.stopBackgroundCameraScan { isScanningBackground = it }
+                            }
+                        }
+                    }
                 }
             }
         })
@@ -922,22 +1292,25 @@ fun HardwareScreen() {
                     )
                     TracedButton("🖨 IMPRIMIR TEXTO", ::doPrint, Modifier.fillMaxWidth(), Color(0xFF2E7D32), Icons.Default.Print, isPrinterReady)
                     Spacer(Modifier.height(4.dp))
-                    // Impresión larga: genera ~80 líneas para medir velocidad real
+                    // Impresión larga: genera 60 líneas, mide tiempo real antes/después del print
                     TracedButton(
                         text = "⏱ IMPRIMIR LARGO (test velocidad)",
                         onClick = {
                             scope.launch(Dispatchers.IO) {
                                 try {
-                                    val now = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-                                    withContext(Dispatchers.Main) { log("Print largo start -> speed=$usbPrintSpeedMode") }
+                                    val tStart = System.currentTimeMillis()
+                                    val fmtHora = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault())
+                                    val horaInicio = fmtHora.format(Date(tStart))
+                                    withContext(Dispatchers.Main) { log("Print largo start -> speed=$usbPrintSpeedMode | inicio=$horaInicio") }
                                     val linea = "ABCDEFGHIJ 0123456789 abcdefghij !@#$%&*()\n"
+                                    // El bloque NO incluye hora fin — se imprime en un 2do pass real
                                     val bloque = buildString {
-                                        append("=== TEST VELOCIDAD | $now ===\n")
+                                        append("=== TEST VELOCIDAD ===\n")
                                         append("Speed: $usbPrintSpeedMode | Gray: $grayLevel\n")
+                                        append("Inicio: $horaInicio\n")
                                         append("--- inicio ---\n")
                                         repeat(60) { i -> append("${(i+1).toString().padStart(2)}: $linea") }
                                         append("--- fin ---\n")
-                                        append("Hora fin: ${SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())}\n")
                                     }
                                     if (is58mm) {
                                         usbPrinter.start(usbPrintSpeedMode); usbPrinter.reset()
@@ -946,18 +1319,30 @@ fun HardwareScreen() {
                                         try { usbPrinter.setGray(grayLevel.coerceIn(0, usbGrayMax)) } catch (_: Exception) {}
                                         usbPrinter.addString(bloque)
                                         usbPrinter.printString()
+                                        // Capturar hora DESPUÉS de que printString() retorna = tiempo real
+                                        val horaFin = fmtHora.format(Date())
+                                        usbPrinter.addString("Fin: $horaFin\n")
+                                        usbPrinter.printString()
                                         usbPrinter.walkPaper(paperFeedLines)
                                     } else if (is80mm) {
                                         ThermalPrinter.reset()
                                         ThermalPrinter.setGray(grayLevel)
                                         ThermalPrinter.addString(bloque)
                                         ThermalPrinter.printString(ThermalPrinter.SPANISH)
+                                        val horaFin = fmtHora.format(Date())
+                                        ThermalPrinter.addString("Fin: $horaFin\n")
+                                        ThermalPrinter.printString(ThermalPrinter.SPANISH)
                                         ThermalPrinter.walkPaper(paperFeedLines)
                                     } else {
                                         withContext(Dispatchers.Main) { logWarn("Impresora no conectada") }
                                         return@launch
                                     }
-                                    withContext(Dispatchers.Main) { logOk("Print largo enviado (${bloque.length} chars)") }
+                                    val tEnd = System.currentTimeMillis()
+                                    val elapsed = tEnd - tStart
+                                    val horaFinLog = fmtHora.format(Date(tEnd))
+                                    withContext(Dispatchers.Main) {
+                                        logOk("Print largo OK | inicio=$horaInicio | fin=$horaFinLog | duración=${elapsed}ms (~${elapsed/1000}s)")
+                                    }
                                 } catch (e: Exception) {
                                     withContext(Dispatchers.Main) { logError("Print largo: ${e.javaClass.simpleName}: ${e.message}") }
                                 }
@@ -986,31 +1371,112 @@ fun HardwareScreen() {
 
                 item {
                     CollapsibleSection("NFC y Scanner", Icons.Default.Nfc, Color(0xFF1976D2)) {
-                    TracedButton("LEER NFC (5s)", {
-                        scope.launch(Dispatchers.IO) {
-                            try {
-                                withContext(Dispatchers.Main) { log("NFC buscando (5s)...") }
-                                powerControl.nfcPower(1); nfcUtil.initSerial(); Thread.sleep(500)
-                                val endTime = System.currentTimeMillis() + 5000
-                                var found = false
-                                while (System.currentTimeMillis() < endTime && !found) {
-                                    val result = nfcUtil.selectCard()
-                                    if (result != null) {
-                                        val hex = result.cardNum.joinToString("") { String.format("%02X", it) }
-                                        withContext(Dispatchers.Main) { logOk("NFC: ${result.cardType.name} | UID: $hex") }
-                                        found = true
-                                    } else Thread.sleep(200)
-                                }
-                                if (!found) withContext(Dispatchers.Main) { logWarn("NFC timeout") }
-                            } catch (e: Exception) {
-                                withContext(Dispatchers.Main) { logError("NFC: ${e.message}") }
-                            } finally { nfcUtil.destroySerial(); powerControl.nfcPower(0) }
+                        // --- NFC Status ---
+                        val nfcAdapter = remember { NfcAdapter.getDefaultAdapter(context) }
+                        val nfcStatusText = when {
+                            nfcAdapter == null -> "❌ NFC no soportado en este dispositivo"
+                            !nfcAdapter.isEnabled -> "⚠️ NFC desactivado (activalo en Ajustes)"
+                            isNfcListeningAndroid -> "📶 NFC Activo - Esperando tarjeta..."
+                            else -> "✅ NFC Listo (Presioná para leer)"
                         }
-                    }, Modifier.fillMaxWidth(), Color(0xFF1976D2), Icons.Default.Nfc)
+                        Text(nfcStatusText, style = MaterialTheme.typography.labelSmall, color = if (isNfcListeningAndroid) Color(0xFF4FC3F7) else if (nfcAdapter?.isEnabled == true) Color(0xFF81C784) else Color(0xFFFFB74D))
+                        
+                        if (nfcAdapter != null && !nfcAdapter.isEnabled) {
+                            TracedButton(
+                                text = "Abrir Ajustes NFC",
+                                onClick = {
+                                    try {
+                                        context.startActivity(Intent(android.provider.Settings.ACTION_NFC_SETTINGS))
+                                    } catch (_: Exception) {
+                                        try {
+                                            context.startActivity(Intent(android.provider.Settings.ACTION_SETTINGS))
+                                        } catch (_: Exception) {}
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                color = Color(0xFFE65100),
+                                icon = Icons.Default.Settings
+                            )
+                        }
 
-                    Text("Último scan: $lastScanned", fontSize = 11.sp, color = Color.Gray)
-                    TracedButton("ESCANEAR (5s)", { startBarcodeScan() }, Modifier.fillMaxWidth(), Color(0xFFE64A19), Icons.Default.QrCodeScanner)
-                }
+                        // Registrar callbacks para Input de Teclado del Escáner
+                        DisposableEffect(Unit) {
+                            val act = context as? MainActivity
+                            act?.onKeyboardScanDetected = { scanned ->
+                                scope.launch(Dispatchers.Main) {
+                                    lastScanned = scanned
+                                    logOk("🔌 Escáner (Emul. Teclado): \"$scanned\"")
+                                }
+                            }
+                            onDispose {
+                                act?.onKeyboardScanDetected = null
+                            }
+                        }
+                        
+                        // --- NFC Android Button ---
+                        TracedButton(
+                            text = if (isNfcListeningAndroid) "Detener Detección NFC" else "LEER TARJETA NFC",
+                            onClick = {
+                                val act = context as? MainActivity
+                                if (act != null) {
+                                    if (isNfcListeningAndroid) {
+                                        act.stopNfcListening { isNfcListeningAndroid = it }
+                                        log("Detección NFC cancelada")
+                                    } else {
+                                        log("NFC → Esperando tarjeta... Acercala al lector.")
+                                        act.startNfcListening(
+                                            onResult = { uid, techs ->
+                                                lastScanned = uid
+                                                logOk("📶 NFC Android: UID=$uid | techs=$techs")
+                                            },
+                                            onError = { err ->
+                                                logWarn("NFC Android: $err")
+                                            },
+                                            onStateChange = { isNfcListeningAndroid = it }
+                                        )
+                                    }
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            color = if (isNfcListeningAndroid) Color(0xFFD32F2F) else Color(0xFF1565C0),
+                            icon = Icons.Default.Nfc,
+                            enabled = nfcAdapter?.isEnabled == true
+                        )
+
+                        Divider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 6.dp))
+                        
+                        // --- Cámara en 2do Plano (Background sin UI) ---
+                        Text("Cámara (2do plano - silencioso, sin preview)", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                        TracedButton(
+                            text = if (isScanningBackground) "Detener Escaneo Cámara" else "ESCANEAR CÁMARA (2do plano)",
+                            onClick = {
+                                val act = context as? MainActivity
+                                if (act != null) {
+                                    if (isScanningBackground) {
+                                        act.stopBackgroundCameraScan { isScanningBackground = it }
+                                        log("Escáner 2do plano cancelado")
+                                    } else {
+                                        act.startBackgroundCameraScan(
+                                            onResult = { result ->
+                                                lastScanned = result
+                                                logOk("Escáner 2do plano: \"$result\"")
+                                            },
+                                            onError = { err ->
+                                                logWarn("Escáner 2do plano: $err")
+                                            },
+                                            onStateChange = { isScanningBackground = it }
+                                        )
+                                    }
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            color = if (isScanningBackground) Color(0xFFD32F2F) else Color(0xFF00796B),
+                            icon = if (isScanningBackground) Icons.Default.Stop else Icons.Default.VisibilityOff
+                        )
+                        
+                        Divider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 4.dp))
+                        Text("Último scan: $lastScanned", fontSize = 11.sp, color = Color.Gray)
+                    }
                 }
 
                 item {
