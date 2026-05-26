@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_marginTop="@dimen/margin_large"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/app_title"
+        android:textSize="@dimen/text_size_large_xx"/>
+    <GridLayout
+        android:layout_marginTop="@dimen/margin_normal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="3">
+        <Button
+            android:id="@+id/btn_prn"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_height="@dimen/flag_height_large_x"
+            android:textSize="@dimen/text_size_large_x"
+            android:onClick="onClick"
+            android:text="@string/flag_prn"
+            android:padding="@dimen/padding_normal"/>
+
+        <Button
+            android:id="@+id/btn_lcd"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_height="@dimen/flag_height_large_x"
+            android:textSize="@dimen/text_size_large_x"
+            android:onClick="onClick"
+            android:text="@string/flag_lcd"
+            android:padding="@dimen/padding_normal" />
+        <Button
+            android:id="@+id/btn_uart"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_height="@dimen/flag_height_large_x"
+            android:textSize="@dimen/text_size_large_x"
+            android:onClick="onClick"
+            android:text="@string/flag_uart"
+            android:padding="@dimen/padding_normal" />
+        <Button
+            android:id="@+id/btn_drawer"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_height="@dimen/flag_height_large_x"
+            android:textSize="@dimen/text_size_large_x"
+            android:onClick="onClick"
+            android:text="@string/flag_drawer"
+            android:padding="@dimen/padding_normal" />
+        <Button
+            android:id="@+id/btn_magcard"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_height="@dimen/flag_height_large_x"
+            android:textSize="@dimen/text_size_large_x"
+            android:onClick="onClick"
+            android:text="@string/flag_magcard"
+            android:padding="@dimen/padding_normal"/>
+    </GridLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -7,12 +7,15 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.Alignment
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import androidx.compose.foundation.background
@@ -34,14 +37,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.delay
 import java.io.IOException
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import java.io.File
+import java.nio.charset.Charset
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 import com.common.apiutil.printer.UsbThermalPrinter
 import com.common.apiutil.printer.ThermalPrinter
+import com.common.apiutil.printer.NoPaperException
+import com.common.apiutil.printer.OverHeatException
+import com.common.apiutil.printer.GateOpenException
+import com.common.apiutil.printer.PaperCutException
 import com.common.apiutil.util.SystemUtil
 import com.common.apiutil.nfc.NfcUtil
 import com.common.apiutil.powercontrol.PowerControl
@@ -64,6 +73,9 @@ import com.common.callback.IInputListener
 import com.common.apiutil.pos.CommonUtil
 
 import com.netpoint.impresora.ui.*
+import upos.POSPrinter
+import upos.POSPrinterConst
+import upos.events.StatusUpdateListener
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -355,12 +367,71 @@ fun HardwareScreen() {
     var lastBluetoothMac by remember { mutableStateOf("No detectada") }
     var usbPrintSpeedMode by remember { mutableIntStateOf(0) }  // 0=Mín,1=Med,2=Máx
     var usbGrayMax by remember { mutableIntStateOf(200) }
-    val is58mm = !useBluetoothPrinter && printerType == SystemUtil.PRINTER_PRT_COMMON
-    val is80mm = !useBluetoothPrinter && (printerType == SystemUtil.PRINTER_80MM_USB_COMMON ||
+    var terminalProfile by remember { mutableStateOf("Desconocido") }
+    var printerBackendHint by remember { mutableStateOf("Auto") }
+    var isUnifiedPosConnected by remember { mutableStateOf(false) }
+    var unifiedPosProfile by remember { mutableStateOf("No conectado") }
+    val is58mm = !useBluetoothPrinter && (printerType == SystemUtil.PRINTER_PRT_COMMON ||
+            printerType == SystemUtil.PRINTER_80MM_USB_COMMON ||
             printerType == SystemUtil.PRINTER_SY581 ||
             printerType == SystemUtil.PRINTER_PT486F08401MB)
+    val is80mm = false
     val isBluetooth80mm = useBluetoothPrinter && lastBluetoothMac != "No detectada"
-    val isPrinterReady = is58mm || is80mm || isBluetooth80mm
+    // Direct ESC/POS states
+    var isDirectSerial by remember { mutableStateOf(false) }
+    var isDirectUsb by remember { mutableStateOf(false) }
+    
+    // Serial port list & selection
+    var detectedSerialPorts by remember { mutableStateOf(listOf("/dev/ttyS4", "/dev/ttyS0", "/dev/ttyS1", "/dev/ttyS3", "/dev/ttyUSB0", "/dev/ttyACM0")) }
+    var selectedSerialPortIdx by remember { mutableIntStateOf(0) }
+    val selectedSerialPort = detectedSerialPorts.getOrElse(selectedSerialPortIdx) { "/dev/ttyS4" }
+    
+    // Baudrate cycling
+    val baudrates = listOf(115200, 9600, 19200, 38400, 57600)
+    var selectedBaudrateIdx by remember { mutableIntStateOf(0) }
+    val selectedBaudrate = baudrates[selectedBaudrateIdx]
+    
+    // USB device list & selection
+    var detectedUsbDevices by remember { mutableStateOf(listOf<android.hardware.usb.UsbDevice>()) }
+    var selectedUsbDeviceIdx by remember { mutableIntStateOf(-1) }
+
+    fun refreshDirectDevices() {
+        // Scan Serial Ports
+        try {
+            val devDir = java.io.File("/dev")
+            val files = devDir.listFiles { _, name ->
+                name.startsWith("ttyS") || name.startsWith("ttyUSB") || 
+                name.startsWith("ttyACM") || name.startsWith("ttyHS") || 
+                name.startsWith("ttyMT")
+            }
+            val ports = mutableListOf<String>()
+            if (files != null && files.isNotEmpty()) {
+                ports.addAll(files.map { "/dev/${it.name}" }.sorted())
+            }
+            if (!ports.contains("/dev/ttyS4")) {
+                ports.add("/dev/ttyS4")
+            }
+            detectedSerialPorts = ports
+            if (selectedSerialPortIdx >= ports.size) {
+                selectedSerialPortIdx = 0
+            }
+        } catch (_: Exception) {}
+
+        // Scan USB Devices
+        try {
+            val usbManager = context.getSystemService(Context.USB_SERVICE) as android.hardware.usb.UsbManager
+            val list = usbManager.deviceList.values.toList()
+            detectedUsbDevices = list
+            if (list.isNotEmpty()) {
+                val prtIdx = list.indexOfFirst { it.deviceClass == 7 }
+                selectedUsbDeviceIdx = if (prtIdx != -1) prtIdx else 0
+            } else {
+                selectedUsbDeviceIdx = -1
+            }
+        } catch (_: Exception) {}
+    }
+
+    val isPrinterReady = is58mm || is80mm || isBluetooth80mm || isDirectSerial || isDirectUsb || isUnifiedPosConnected
 
     // Format state
     var alignment by remember { mutableIntStateOf(0) } // 0=left,1=center,2=right
@@ -391,11 +462,39 @@ fun HardwareScreen() {
         logs += "[$time] $msg\n"
     }
 
+    fun detectBackend(profile: String): String {
+        val hay = profile.lowercase(Locale.getDefault())
+        return when {
+            hay.contains("pta0010") -> "PTA0010 UnifiedPOS SDK"
+            hay.contains("pta0130") || hay.contains("pta0140") -> "SDK V2.30 com.common.apiutil"
+            else -> "Auto / desconocido"
+        }
+    }
+
+    fun refreshTerminalProfile() {
+        val parts = linkedSetOf<String>()
+        runCatching { SystemUtil.getInternalModel() }.getOrNull()?.takeIf { it.isNotBlank() }?.let { parts += "internal=$it" }
+        parts += "model=${Build.MODEL ?: "n/a"}"
+        parts += "device=${Build.DEVICE ?: "n/a"}"
+        parts += "product=${Build.PRODUCT ?: "n/a"}"
+        parts += "brand=${Build.BRAND ?: "n/a"}"
+        val profile = parts.joinToString(" | ")
+        terminalProfile = profile
+        printerBackendHint = detectBackend(profile)
+    }
+
+    fun isPta0010Family(): Boolean = printerBackendHint == "PTA0010 UnifiedPOS SDK"
+
     fun tap(label: String) = log("Tap -> $label")
 
     fun logError(msg: String) { log("❌ $msg") }
     fun logWarn(msg: String) { log("⚠️ $msg") }
     fun logOk(msg: String) { log("✅ $msg") }
+
+    LaunchedEffect(Unit) {
+        refreshDirectDevices()
+        refreshTerminalProfile()
+    }
 
     fun statusToString(status: Int): String = when (status) {
         ThermalPrinter.STATUS_OK -> "✅ Normal"
@@ -458,9 +557,15 @@ fun HardwareScreen() {
     }
 
     fun get58mmStatus(): Int {
-        val method = usbPrinter.javaClass.getMethod("checkStatus")
-        val receiver = if (java.lang.reflect.Modifier.isStatic(method.modifiers)) null else usbPrinter
-        return method.invoke(receiver) as Int
+        try {
+            val method = usbPrinter.javaClass.getMethod("checkStatus")
+            val receiver = if (java.lang.reflect.Modifier.isStatic(method.modifiers)) null else usbPrinter
+            return method.invoke(receiver) as Int
+        } catch (e: java.lang.reflect.InvocationTargetException) {
+            val target = e.targetException
+            if (target is Exception) throw target
+            throw e
+        }
     }
 
     fun withBluetoothSocket(block: (BluetoothSocket) -> Unit) {
@@ -495,10 +600,14 @@ fun HardwareScreen() {
                 withContext(Dispatchers.Main) {
                     log("Detect start -> MAC=$lastBluetoothMac")
                 }
+                refreshDirectDevices()
+                refreshTerminalProfile()
                 val detected = SystemUtil.checkPrinter581(context)
                 val rawType = if (detected == -1 || detected == 0) SystemUtil.getPrinterType() else detected
                 val printerInterface = SystemUtil.getProperty("persist.printer.interface", "")
                 withContext(Dispatchers.Main) {
+                    log("Terminal -> $terminalProfile")
+                    log("Backend sugerido -> $printerBackendHint")
                     log("SDK detect -> type=$rawType interface=${printerInterface.ifBlank { "n/a" }}")
                     val name = when (rawType) {
                         SystemUtil.PRINTER_PRT_COMMON -> "58mm USB (PRINTER_PRT_COMMON=$rawType)"
@@ -518,6 +627,37 @@ fun HardwareScreen() {
         }
     }
 
+    fun doConnectPta0010UnifiedPos(is3Inch: Boolean) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                refreshTerminalProfile()
+                val label = if (is3Inch) "3INCH" else "2INCH"
+                withContext(Dispatchers.Main) { log("Conectando PTA0010 UnifiedPOS $label") }
+                val result = if (is3Inch) UnifiedPosPrinterDriver.open3Inch() else UnifiedPosPrinterDriver.open2Inch()
+                isUnifiedPosConnected = true
+                unifiedPosProfile = result
+                useBluetoothPrinter = false
+                isDirectSerial = false
+                isDirectUsb = false
+                printerType = -1
+                printerTypeName = "PTA0010 SDK [$label]"
+                printerStatus = "Conectada PTA0010 SDK"
+                paperFeedLines = 3
+                grayLevel = 0
+                withContext(Dispatchers.Main) { logOk("$result | feed por defecto=3") }
+            } catch (e: Exception) {
+                val sw = java.io.StringWriter()
+                e.printStackTrace(java.io.PrintWriter(sw))
+                val stack = sw.toString().lines().take(5).joinToString("\n")
+                isUnifiedPosConnected = false
+                withContext(Dispatchers.Main) {
+                    logError("Error PTA0010 SDK: ${e.javaClass.simpleName}: ${e.message}")
+                    log("Stack:\n$stack")
+                }
+            }
+        }
+    }
+
     // --- Conexión forzada 58mm USB ---
     fun doConnect58mmUsb() {
         scope.launch(Dispatchers.IO) {
@@ -528,56 +668,159 @@ fun HardwareScreen() {
                 printerType = SystemUtil.PRINTER_PRT_COMMON
                 printerStatus = "Conectada 58mm USB"
                 useBluetoothPrinter = false
+                isDirectSerial = false
+                isDirectUsb = false
                 grayLevel = 100
                 withContext(Dispatchers.Main) { logOk("Conectada 58mm USB speed=$usbPrintSpeedMode") }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) { logError("Error 58mm USB: ${e.javaClass.simpleName}: ${e.message}") }
+                val sw = java.io.StringWriter()
+                e.printStackTrace(java.io.PrintWriter(sw))
+                val stack = sw.toString().lines().take(5).joinToString("\n")
+                withContext(Dispatchers.Main) { 
+                    logError("Error 58mm USB: ${e.javaClass.simpleName}: ${e.message}") 
+                    log("Stack:\n$stack")
+                }
                 printerStatus = "Error"
             }
         }
     }
 
-    // --- Conexión forzada 80mm USB ---
-    fun doConnect80mmUsb() {
+    // --- Conexión forzada 58mm Serial ---
+    fun doConnect58mmSerial() {
         scope.launch(Dispatchers.IO) {
             try {
-                withContext(Dispatchers.Main) { log("Conectando 80mm USB") }
-                powerControl.printerPower(1)
-                SystemUtil.setProperty("persist.printer.interface", "usb")
-                ThermalPrinter.setPaperWidth(ThermalPrinter.PAPER_80mm)
-                ThermalPrinter.init80mmUsbPrinter(context)
-                ThermalPrinter.start(context); ThermalPrinter.reset()
-                val s = ThermalPrinter.checkStatus()
-                printerType = SystemUtil.PRINTER_80MM_USB_COMMON
-                printerStatus = statusToString(s)
-                useBluetoothPrinter = false
-                grayLevel = 3
-                withContext(Dispatchers.Main) { logOk("Conectada 80mm USB (Status: $s)") }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) { logError("Error 80mm USB: ${e.javaClass.simpleName}: ${e.message}") }
-                printerStatus = "Error"
-            }
-        }
-    }
-
-    // --- Conexión forzada 80mm Serial ---
-    fun doConnect80mmSerial() {
-        scope.launch(Dispatchers.IO) {
-            try {
-                withContext(Dispatchers.Main) { log("Conectando 80mm Serial") }
+                withContext(Dispatchers.Main) { log("Conectando 58mm Serial") }
                 powerControl.printerPower(1)
                 SystemUtil.setProperty("persist.printer.interface", "serial")
-                ThermalPrinter.setPaperWidth(ThermalPrinter.PAPER_80mm)
+                ThermalPrinter.setPaperWidth(ThermalPrinter.PAPER_58mm)
                 ThermalPrinter.init80mmSerialPrinter()
-                ThermalPrinter.start(context); ThermalPrinter.reset()
-                val s = ThermalPrinter.checkStatus()
+                ThermalPrinter.start(context)
+                ThermalPrinter.reset()
+                
+                var s = -2
+                try {
+                    s = ThermalPrinter.checkStatus()
+                } catch (e: Exception) {
+                    val errStr = e.toString()
+                    val isNoClass = errStr.contains("NoClassObjectsException") || 
+                                    e.cause?.toString()?.contains("NoClassObjectsException") == true
+                    if (isNoClass) {
+                        withContext(Dispatchers.Main) { log("ℹ️ checkStatus no soportado. Usando fallback de sensor...") }
+                        try {
+                            ThermalPrinter.walkPaper(1)
+                            s = ThermalPrinter.STATUS_OK
+                        } catch (pe: Exception) {
+                            val peStr = pe.toString()
+                            s = if (peStr.contains("NoPaperException") || pe is NoPaperException) {
+                                ThermalPrinter.STATUS_NO_PAPER
+                            } else if (peStr.contains("OverHeatException") || pe is OverHeatException) {
+                                ThermalPrinter.STATUS_OVER_HEAT
+                            } else if (peStr.contains("GateOpenException") || pe is GateOpenException) {
+                                ThermalPrinter.STATUS_BOX_OPEN
+                            } else if (peStr.contains("PaperCutException") || pe is PaperCutException) {
+                                ThermalPrinter.STATUS_CUT_WRONG
+                            } else {
+                                throw pe
+                            }
+                        }
+                    } else {
+                        throw e
+                    }
+                }
+                
                 printerType = SystemUtil.PRINTER_SY581
                 printerStatus = statusToString(s)
                 useBluetoothPrinter = false
+                isDirectSerial = false
+                isDirectUsb = false
                 grayLevel = 3
-                withContext(Dispatchers.Main) { logOk("Conectada 80mm Serial (Status: $s)") }
+                withContext(Dispatchers.Main) { logOk("Conectada 58mm Serial (Status: ${statusToString(s)})") }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) { logError("Error 80mm Serial: ${e.javaClass.simpleName}: ${e.message}") }
+                val sw = java.io.StringWriter()
+                e.printStackTrace(java.io.PrintWriter(sw))
+                val stack = sw.toString().lines().take(5).joinToString("\n")
+                withContext(Dispatchers.Main) { 
+                    logError("Error 58mm Serial: ${e.javaClass.simpleName}: ${e.message}") 
+                    log("Stack:\n$stack")
+                }
+                printerStatus = "Error"
+            }
+        }
+    }
+
+    // --- Conexiones Directas ESC/POS (Fallback para PTA0010 u otros sin JNI) ---
+    fun doConnectDirectSerial() {
+        scope.launch(Dispatchers.IO) {
+            try {
+                withContext(Dispatchers.Main) { log("Abriendo Serial Directo: $selectedSerialPort a $selectedBaudrate baudios...") }
+                try {
+                    powerControl.printerPower(1)
+                } catch (pe: Exception) {
+                    withContext(Dispatchers.Main) { logWarn("Aviso PowerControl: ${pe.message}") }
+                }
+                DirectPrinterDriver.connectSerial(selectedSerialPort, selectedBaudrate)
+                isDirectSerial = true
+                isDirectUsb = false
+                useBluetoothPrinter = false
+                printerType = -1
+                printerTypeName = "Direct Serial ($selectedSerialPort)"
+                printerStatus = "Conectado Directo"
+                withContext(Dispatchers.Main) { logOk("✅ Conectado Directo Serial a $selectedSerialPort") }
+            } catch (e: Exception) {
+                val sw = java.io.StringWriter()
+                e.printStackTrace(java.io.PrintWriter(sw))
+                val stack = sw.toString().lines().take(5).joinToString("\n")
+                withContext(Dispatchers.Main) { 
+                    logError("Error Serial Directo: ${e.javaClass.simpleName}: ${e.message}") 
+                    log("Stack:\n$stack")
+                }
+                printerStatus = "Error"
+            }
+        }
+    }
+
+    fun doConnectDirectUsb() {
+        scope.launch(Dispatchers.IO) {
+            try {
+                val list = detectedUsbDevices
+                val idx = selectedUsbDeviceIdx
+                if (idx < 0 || idx >= list.size) {
+                    withContext(Dispatchers.Main) { logError("No hay dispositivo USB seleccionado") }
+                    return@launch
+                }
+                val device = list[idx]
+                withContext(Dispatchers.Main) { log("Abriendo USB Directo: ${device.productName ?: "USB Device"} [VID:0x${Integer.toHexString(device.vendorId).uppercase()}|PID:0x${Integer.toHexString(device.productId).uppercase()}]...") }
+                
+                val usbManager = context.getSystemService(Context.USB_SERVICE) as android.hardware.usb.UsbManager
+                if (!usbManager.hasPermission(device)) {
+                    withContext(Dispatchers.Main) { log("Solicitando permiso USB al sistema...") }
+                    val permissionIntent = PendingIntent.getBroadcast(
+                        context, 
+                        0, 
+                        Intent("com.netpoint.impresora.USB_PERMISSION"), 
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
+                    )
+                    usbManager.requestPermission(device, permissionIntent)
+                    withContext(Dispatchers.Main) { logWarn("⚠️ Permiso solicitado. Aceptá la ventana y presioná conectar otra vez.") }
+                    return@launch
+                }
+                
+                val label = DirectPrinterDriver.connectUsb(usbManager, device)
+                isDirectUsb = true
+                isDirectSerial = false
+                useBluetoothPrinter = false
+                printerType = -1
+                printerTypeName = "Direct USB"
+                printerStatus = "Conectado Directo"
+                withContext(Dispatchers.Main) { logOk("✅ $label") }
+            } catch (e: Exception) {
+                val sw = java.io.StringWriter()
+                e.printStackTrace(java.io.PrintWriter(sw))
+                val stack = sw.toString().lines().take(5).joinToString("\n")
+                withContext(Dispatchers.Main) { 
+                    logError("Error USB Directo: ${e.javaClass.simpleName}: ${e.message}") 
+                    log("Stack:\n$stack")
+                }
                 printerStatus = "Error"
             }
         }
@@ -689,7 +932,7 @@ fun HardwareScreen() {
                                 withContext(Dispatchers.Main) {
                                     logOk("RFCOMM OK -> $name | MAC=${device.address}")
                                     useBluetoothPrinter = true
-                                    printerTypeName = "80mm BT [$name]"
+                                    printerTypeName = "BT [$name]"
                                     printerStatus = "BT RFCOMM OK"
                                 }
                             }
@@ -712,6 +955,23 @@ fun HardwareScreen() {
     fun doCheckStatus() {
         scope.launch(Dispatchers.IO) {
             try {
+                if (isDirectSerial) {
+                    val s = DirectPrinterDriver.queryStatusSerial()
+                    printerStatus = statusToString(s)
+                    withContext(Dispatchers.Main) { log("Estado Serial Directo: ${statusToString(s)}") }
+                    return@launch
+                }
+                if (isDirectUsb) {
+                    printerStatus = "Conectado Directo USB"
+                    withContext(Dispatchers.Main) { logOk("Estado USB Directo: OK") }
+                    return@launch
+                }
+                if (isUnifiedPosConnected) {
+                    val st = UnifiedPosPrinterDriver.getLastStatus().ifBlank { "Conectado" }
+                    printerStatus = st
+                    withContext(Dispatchers.Main) { logOk("Estado PTA0010 SDK: $st") }
+                    return@launch
+                }
                 if (isBluetooth80mm) {
                     withBluetoothSocket { }
                     withContext(Dispatchers.Main) {
@@ -720,7 +980,40 @@ fun HardwareScreen() {
                     }
                     return@launch
                 }
-                val s = if (is58mm) get58mmStatus() else ThermalPrinter.checkStatus()
+                var s = -2
+                try {
+                    s = if (is58mm) get58mmStatus() else ThermalPrinter.checkStatus()
+                } catch (e: Exception) {
+                    val errStr = e.toString()
+                    val isNoClass = errStr.contains("NoClassObjectsException") || 
+                                    e.cause?.toString()?.contains("NoClassObjectsException") == true
+                    if (isNoClass) {
+                        withContext(Dispatchers.Main) { log("ℹ️ checkStatus no soportado. Usando fallback de sensor...") }
+                        try {
+                            if (is58mm) {
+                                usbPrinter.walkPaper(1)
+                            } else {
+                                ThermalPrinter.walkPaper(1)
+                            }
+                            s = ThermalPrinter.STATUS_OK
+                        } catch (pe: Exception) {
+                            val peStr = pe.toString()
+                            s = if (peStr.contains("NoPaperException") || pe is NoPaperException) {
+                                ThermalPrinter.STATUS_NO_PAPER
+                            } else if (peStr.contains("OverHeatException") || pe is OverHeatException) {
+                                ThermalPrinter.STATUS_OVER_HEAT
+                            } else if (peStr.contains("GateOpenException") || pe is GateOpenException) {
+                                ThermalPrinter.STATUS_BOX_OPEN
+                            } else if (peStr.contains("PaperCutException") || pe is PaperCutException) {
+                                ThermalPrinter.STATUS_CUT_WRONG
+                            } else {
+                                throw pe
+                            }
+                        }
+                    } else {
+                        throw e
+                    }
+                }
                 printerStatus = statusToString(s)
                 withContext(Dispatchers.Main) { log("Estado: ${statusToString(s)}") }
             } catch (e: Exception) {
@@ -736,30 +1029,14 @@ fun HardwareScreen() {
                     withContext(Dispatchers.Main) { log("Versión BT no disponible en SDK | $lastBluetoothName | MAC=$lastBluetoothMac") }
                     return@launch
                 }
+                if (isUnifiedPosConnected) {
+                    withContext(Dispatchers.Main) { log("Versión PTA0010 SDK no expuesta por API | $unifiedPosProfile") }
+                    return@launch
+                }
                 val v = if (is58mm) usbPrinter.version else ThermalPrinter.getVersion()
                 withContext(Dispatchers.Main) { logOk("Versión: $v") }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) { logError("Error versión: ${e.message}") }
-            }
-        }
-    }
-
-    fun doGetPrintCount() {
-        scope.launch(Dispatchers.Main) {
-            try {
-                val count = ThermalPrinter.getPrintCount()
-                logOk("Impresiones: $count")
-            } catch (e: Exception) { logError("Error contador: ${e.message}") }
-        }
-    }
-
-    fun doSetProtectTemp() {
-        scope.launch(Dispatchers.IO) {
-            try {
-                ThermalPrinter.setTem(protectTemp)
-                withContext(Dispatchers.Main) { logOk("Temp. protección: ${protectTemp}°C") }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) { logError("Error temp: ${e.message}") }
             }
         }
     }
@@ -770,6 +1047,44 @@ fun HardwareScreen() {
                 val now = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
                 withContext(Dispatchers.Main) {
                     log("Print start -> ready=$isPrinterReady | 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm | gray=$grayLevel | feed=$paperFeedLines")
+                }
+                if (isUnifiedPosConnected) {
+                    withContext(Dispatchers.Main) { log("Print branch -> PTA0010 UnifiedPOS | $unifiedPosProfile") }
+                    val effectiveFeed = paperFeedLines.coerceIn(0, 4)
+                    if (effectiveFeed != paperFeedLines) {
+                        withContext(Dispatchers.Main) { logWarn("PTA0010 ajusta feed final a $effectiveFeed líneas para evitar mucho papel") }
+                    }
+                    UnifiedPosPrinterDriver.printText(
+                        text = "$printText\nHora: $now\n",
+                        alignment = alignment,
+                        widthMul = fontWidthMul,
+                        heightMul = fontHeightMul,
+                        bold = isBold,
+                        italic = isItalic,
+                        inverse = isInverse,
+                        lineSpacing = lineSpacing,
+                        leftIndent = leftMargin,
+                        feedLines = effectiveFeed
+                    )
+                    withContext(Dispatchers.Main) { logOk("Impresión enviada (PTA0010 SDK)") }
+                    return@launch
+                }
+                if (isDirectSerial || isDirectUsb) {
+                    withContext(Dispatchers.Main) {
+                        log("Print branch -> ESC/POS Direct | serial=$isDirectSerial usb=$isDirectUsb")
+                    }
+                    DirectPrinterDriver.initPrinter()
+                    DirectPrinterDriver.setAlign(alignment)
+                    DirectPrinterDriver.setBold(isBold)
+                    DirectPrinterDriver.setItalic(isItalic)
+                    DirectPrinterDriver.setInverse(isInverse)
+                    DirectPrinterDriver.setFontSize(fontWidthMul, fontHeightMul)
+                    DirectPrinterDriver.setLineSpacing(lineSpacing)
+                    DirectPrinterDriver.setLeftIndent(leftMargin)
+                    DirectPrinterDriver.addString("$printText\nHora: $now\n")
+                    DirectPrinterDriver.walkPaper(paperFeedLines)
+                    withContext(Dispatchers.Main) { logOk("Impresión enviada (Directa)") }
+                    return@launch
                 }
                 if (isBluetooth80mm) {
                     val size = (((fontWidthMul - 1).coerceIn(0, 7) shl 4) or (fontHeightMul - 1).coerceIn(0, 7)).toByte()
@@ -863,9 +1178,13 @@ fun HardwareScreen() {
         scope.launch(Dispatchers.IO) {
             try {
                 withContext(Dispatchers.Main) {
-                    log("Feed start -> lines=$paperFeedLines | 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm")
+                    log("Feed start -> lines=$paperFeedLines | 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm | directSerial=$isDirectSerial | directUsb=$isDirectUsb")
                 }
-                if (isBluetooth80mm) {
+                if (isDirectSerial || isDirectUsb) {
+                    DirectPrinterDriver.walkPaper(paperFeedLines)
+                } else if (isUnifiedPosConnected) {
+                    UnifiedPosPrinterDriver.feed(paperFeedLines)
+                } else if (isBluetooth80mm) {
                     withBluetoothSocket { socket ->
                         socket.outputStream.write(byteArrayOf(0x1B, 0x64, paperFeedLines.coerceIn(0, 255).toByte()))
                         socket.outputStream.flush()
@@ -882,8 +1201,16 @@ fun HardwareScreen() {
     fun doPaperCut() {
         scope.launch(Dispatchers.IO) {
             try {
-                withContext(Dispatchers.Main) { log("Cut start -> 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm") }
-                if (isBluetooth80mm) {
+                withContext(Dispatchers.Main) { log("Cut start -> 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm | directSerial=$isDirectSerial | directUsb=$isDirectUsb") }
+                if (isPta0010Family()) {
+                    withContext(Dispatchers.Main) { logWarn("PTA0010: cutter deshabilitado, modelo sin cutter físico") }
+                    return@launch
+                }
+                if (isDirectSerial || isDirectUsb) {
+                    DirectPrinterDriver.paperCut()
+                } else if (isUnifiedPosConnected) {
+                    UnifiedPosPrinterDriver.cut()
+                } else if (isBluetooth80mm) {
                     withBluetoothSocket { socket ->
                         socket.outputStream.write(byteArrayOf(0x1D, 0x56, 0x42, 0x00))
                         socket.outputStream.flush()
@@ -913,8 +1240,16 @@ fun HardwareScreen() {
     fun doStop() {
         scope.launch(Dispatchers.IO) {
             try {
-                withContext(Dispatchers.Main) { log("Stop start -> 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm") }
-                if (isBluetooth80mm) {
+                withContext(Dispatchers.Main) { log("Stop start -> 58=$is58mm | 80=$is80mm | bt=$isBluetooth80mm | directSerial=$isDirectSerial | directUsb=$isDirectUsb") }
+                if (isDirectSerial || isDirectUsb) {
+                    DirectPrinterDriver.closeAll()
+                    isDirectSerial = false
+                    isDirectUsb = false
+                } else if (isUnifiedPosConnected) {
+                    UnifiedPosPrinterDriver.close()
+                    isUnifiedPosConnected = false
+                    unifiedPosProfile = "No conectado"
+                } else if (isBluetooth80mm) {
                     useBluetoothPrinter = false
                 } else if (is58mm) usbPrinter.stop()
                 else { ThermalPrinter.stop(context); powerControl.printerPower(0) }
@@ -928,11 +1263,14 @@ fun HardwareScreen() {
     fun doSystemInfo() {
         scope.launch(Dispatchers.IO) {
             try {
+                refreshTerminalProfile()
                 val cpu = SystemUtil.getCpuRate()
                 val temp = SystemUtil.getCpuTem()
                 val mem = SystemUtil.getMemRate()
                 withContext(Dispatchers.Main) {
                     log("📊 CPU: ${cpu}% | Temp: ${temp}°C | RAM: ${mem}%")
+                    log("🧩 Terminal: $terminalProfile")
+                    log("🧭 Backend sugerido: $printerBackendHint")
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) { logError("Error info: ${e.message}") }
@@ -943,6 +1281,42 @@ fun HardwareScreen() {
                     withContext(Dispatchers.Main) { log("Funciones: ${supported.joinToString(", ")}") }
                 }
             } catch (_: Exception) {}
+            
+            // Diagnostics: USB Devices
+            try {
+                val usbManager = context.getSystemService(Context.USB_SERVICE) as android.hardware.usb.UsbManager
+                val deviceList = usbManager.deviceList
+                if (deviceList.isEmpty()) {
+                    withContext(Dispatchers.Main) { log("🔌 USB: Ningún dispositivo conectado") }
+                } else {
+                    withContext(Dispatchers.Main) { log("🔌 USB (${deviceList.size} disp):") }
+                    deviceList.values.forEach { dev ->
+                        withContext(Dispatchers.Main) {
+                            log("   - [VID:${String.format("0x%04X", dev.vendorId)}|PID:${String.format("0x%04X", dev.productId)}] ${dev.manufacturerName ?: ""} ${dev.productName ?: ""} (Clase:${dev.deviceClass})")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) { logWarn("⚠️ Error listando USB: ${e.message}") }
+            }
+
+            // Diagnostics: Serial Ports
+            try {
+                val devDir = java.io.File("/dev")
+                val files = devDir.listFiles { _, name ->
+                    name.startsWith("ttyS") || name.startsWith("ttyUSB") || 
+                    name.startsWith("ttyACM") || name.startsWith("ttyHS") || 
+                    name.startsWith("ttyMT")
+                }
+                if (files == null || files.isEmpty()) {
+                    withContext(Dispatchers.Main) { log("📟 Serial: Ningún puerto /dev/tty*") }
+                } else {
+                    val portNames = files.map { it.name }.sorted()
+                    withContext(Dispatchers.Main) { log("📟 Serial en /dev (${portNames.size}): ${portNames.joinToString(", ")}") }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) { logWarn("⚠️ Error listando /dev/tty: ${e.message}") }
+            }
         }
     }
 
@@ -1099,74 +1473,72 @@ fun HardwareScreen() {
     LaunchedEffect(logs) { logScroll.animateScrollTo(logScroll.maxValue) }
 
     // ========= UI =========
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp).padding(top = 24.dp)
-    ) {
-        Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    val stackedLayout = isPta0010Family()
 
-            // LEFT: Console
-            Box(
-                modifier = Modifier.weight(1f).fillMaxHeight().background(Color(0xFF1A1A2E))
-            ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                try {
-                                    val ts = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-                                    val dir = File(context.cacheDir, "shared_logs").apply { mkdirs() }
-                                    val file = File(dir, "impresora_logs_$ts.txt")
-                                    file.writeText(logs)
-                                    val uri = FileProvider.getUriForFile(
-                                        context,
-                                        "${context.packageName}.fileprovider",
-                                        file
-                                    )
-                                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                        type = "text/plain"
-                                        putExtra(Intent.EXTRA_STREAM, uri)
-                                        putExtra(Intent.EXTRA_SUBJECT, file.name)
-                                        putExtra(Intent.EXTRA_TEXT, "Logs app impresora")
-                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                    }
-                                    context.startActivity(Intent.createChooser(shareIntent, "Compartir logs"))
-                                    logOk("Logs listos en TXT")
-                                } catch (e: Exception) {
-                                    logError("Error compartiendo logs: ${e.message}")
+    val consolePane: @Composable (Modifier) -> Unit = { paneModifier ->
+        Box(modifier = paneModifier.background(Color(0xFF1A1A2E))) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            try {
+                                val ts = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+                                val dir = File(context.cacheDir, "shared_logs").apply { mkdirs() }
+                                val file = File(dir, "impresora_logs_$ts.txt")
+                                file.writeText(logs)
+                                val uri = FileProvider.getUriForFile(
+                                    context,
+                                    "${context.packageName}.fileprovider",
+                                    file
+                                )
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_STREAM, uri)
+                                    putExtra(Intent.EXTRA_SUBJECT, file.name)
+                                    putExtra(Intent.EXTRA_TEXT, "Logs app impresora")
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                 }
-                            },
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            Icon(Icons.Default.Share, contentDescription = "Compartir logs")
-                            Spacer(Modifier.width(6.dp))
-                            Text("COMPARTIR TXT", fontSize = 11.sp)
-                        }
+                                context.startActivity(Intent.createChooser(shareIntent, "Compartir logs"))
+                                logOk("Logs listos en TXT")
+                            } catch (e: Exception) {
+                                logError("Error compartiendo logs: ${e.message}")
+                            }
+                        },
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    ) {
+                        Icon(Icons.Default.Share, contentDescription = "Compartir logs")
+                        Spacer(Modifier.width(6.dp))
+                        Text("COMPARTIR TXT", fontSize = 11.sp)
                     }
-                    Text(
-                        text = logs,
-                        color = Color(0xFF00FF41),
-                        fontSize = 11.sp,
-                        lineHeight = 14.sp,
-                        modifier = Modifier.fillMaxSize().verticalScroll(logScroll).padding(horizontal = 10.dp, vertical = 2.dp)
-                    )
                 }
+                Text(
+                    text = logs,
+                    color = Color(0xFF00FF41),
+                    fontSize = 11.sp,
+                    lineHeight = 14.sp,
+                    modifier = Modifier.fillMaxSize().verticalScroll(logScroll).padding(horizontal = 10.dp, vertical = 2.dp)
+                )
             }
+        }
+    }
 
-            // RIGHT: Controls
-            LazyColumn(
-                modifier = Modifier.weight(1f).fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-                contentPadding = PaddingValues(bottom = 32.dp)
-            ) {
+    val controlsPane: @Composable (Modifier) -> Unit = { paneModifier ->
+        LazyColumn(
+            modifier = paneModifier,
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+            contentPadding = PaddingValues(bottom = 32.dp)
+        ) {
                 item {
                     Text("Impresora: $printerTypeName", style = MaterialTheme.typography.bodySmall)
                     Text("Estado: $printerStatus", style = MaterialTheme.typography.bodySmall)
+                    Text("Backend: $printerBackendHint", style = MaterialTheme.typography.bodySmall)
+                    Text("Terminal: ${terminalProfile.take(80)}", style = MaterialTheme.typography.bodySmall)
                     Text("MAC BT: $lastBluetoothMac", style = MaterialTheme.typography.bodySmall)
                     val speedLabel = when (usbPrintSpeedMode) { 0 -> "Mín (0)" ; 1 -> "Med (1)" ; else -> "Máx (2)" }
-                    Text("SDK speed 58mm: $speedLabel", style = MaterialTheme.typography.bodySmall)
+                    Text("Velocidad SDK: $speedLabel", style = MaterialTheme.typography.bodySmall)
                 }
 
                 item {
@@ -1178,14 +1550,14 @@ fun HardwareScreen() {
                     }
                     Divider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 2.dp))
                     // -- Forzar conexión --
-                    Text("Forzar conexión:", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        TracedButton("58mm USB", ::doConnect58mmUsb, Modifier.weight(1f), Color(0xFF00838F), Icons.Default.Usb)
-                        TracedButton("58mm BT", ::doProbeBluetoothPrinter, Modifier.weight(1f), Color(0xFF1565C0), Icons.Default.Bluetooth)
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        TracedButton("80mm USB", ::doConnect80mmUsb, Modifier.weight(1f), Color(0xFF00897B), Icons.Default.Usb)
-                        TracedButton("80mm Serial", ::doConnect80mmSerial, Modifier.weight(1f), Color(0xFF6A1B9A), Icons.Default.SettingsEthernet)
+                    Text("Forzar conexión SDK:", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                    if (isPta0010Family()) {
+                        TracedButton("PTA0010 SDK", { doConnectPta0010UnifiedPos(false) }, Modifier.fillMaxWidth(), Color(0xFF6A1B9A), Icons.Default.PointOfSale)
+                        Text("PTA0010 oficial: usa possdk/UnifiedPOS. USB/Serial SDK quedan como fallback heredado.", fontSize = 10.sp, color = Color(0xFFCE93D8))
+                    } else Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        TracedButton("USB SDK", ::doConnect58mmUsb, Modifier.weight(1f), Color(0xFF00838F), Icons.Default.Usb)
+                        TracedButton("Serial SDK", ::doConnect58mmSerial, Modifier.weight(1f), Color(0xFF37474F), Icons.Default.SettingsEthernet)
+                        TracedButton("Bluetooth (BT)", ::doProbeBluetoothPrinter, Modifier.weight(1f), Color(0xFF1565C0), Icons.Default.Bluetooth)
                     }
                     Divider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 2.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1193,17 +1565,98 @@ fun HardwareScreen() {
                         TracedButton("SISTEMA", ::doSystemInfo, Modifier.weight(1f), Color(0xFF795548), Icons.Default.Memory)
                     }
                     TracedButton("BLUETOOTH INTERNOS", ::doListBluetoothPrinters, Modifier.fillMaxWidth(), Color(0xFF1565C0), Icons.Default.Bluetooth)
-                    if (is80mm) {
-                        TracedButton("CONTADOR", ::doGetPrintCount, Modifier.fillMaxWidth(), Color(0xFF9C27B0), Icons.Default.Numbers)
-                        NumericCounter("Temp protección (°C):", protectTemp, { protectTemp = it }, 60, 127, 5)
-                        TracedButton("APLICAR TEMP", ::doSetProtectTemp, Modifier.fillMaxWidth(), Color(0xFFFF5722))
-                    }
                 }
                 }
 
                 item {
+                    CollapsibleSection("Conexión Directa ESC/POS (Para PTA0010/Fallbacks)", Icons.Default.Settings, Color(0xFFE65100)) {
+                        Text("Permite saltear el SDK e interactuar directamente por tty o USB bulk.", fontSize = 11.sp, color = Color.Gray)
+                        
+                        // --- Serial Direct Controls ---
+                        Divider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 4.dp))
+                        Text("Direct Serial (UART):", style = MaterialTheme.typography.labelSmall, color = Color.LightGray)
+                        
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Cycle Port button
+                            TracedButton(
+                                text = "Puerto: $selectedSerialPort",
+                                onClick = {
+                                    selectedSerialPortIdx = (selectedSerialPortIdx + 1) % detectedSerialPorts.size
+                                    log("Direct Serial -> puerto cambiado a $selectedSerialPort")
+                                },
+                                modifier = Modifier.weight(1.5f),
+                                color = Color(0xFF455A64)
+                            )
+                            
+                            // Cycle Baudrate button
+                            TracedButton(
+                                text = "Bauds: $selectedBaudrate",
+                                onClick = {
+                                    selectedBaudrateIdx = (selectedBaudrateIdx + 1) % baudrates.size
+                                    log("Direct Serial -> baudrate cambiado a $selectedBaudrate")
+                                },
+                                modifier = Modifier.weight(1f),
+                                color = Color(0xFF455A64)
+                            )
+                        }
+                        
+                        TracedButton(
+                            text = "CONECTAR DIRECT SERIAL",
+                            onClick = ::doConnectDirectSerial,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = Color(0xFFD84315),
+                            icon = Icons.Default.SettingsEthernet
+                        )
+                        
+                        // --- USB Direct Controls ---
+                        Divider(color = Color.White.copy(alpha = 0.1f), modifier = Modifier.padding(vertical = 4.dp))
+                        Text("Direct USB Host (Bulk):", style = MaterialTheme.typography.labelSmall, color = Color.LightGray)
+                        
+                        if (detectedUsbDevices.isEmpty()) {
+                            Text("⚠️ No se detectan dispositivos USB.", fontSize = 10.sp, color = Color(0xFFFFB74D))
+                            TracedButton(
+                                text = "Buscar Dispositivos USB",
+                                onClick = { refreshDirectDevices(); log("USB -> Escaneando dispositivos USB...") },
+                                modifier = Modifier.fillMaxWidth(),
+                                color = Color(0xFF37474F)
+                            )
+                        } else {
+                            val selectedDev = detectedUsbDevices.getOrNull(selectedUsbDeviceIdx)
+                            val devName = selectedDev?.let { 
+                                "[VID:${String.format("0x%04X", it.vendorId)}|PID:${String.format("0x%04X", it.productId)}] ${it.productName ?: "Dispositivo USB"}"
+                            } ?: "Ninguno seleccionado"
+                            
+                            TracedButton(
+                                text = "Disp: $devName",
+                                onClick = {
+                                    selectedUsbDeviceIdx = (selectedUsbDeviceIdx + 1) % detectedUsbDevices.size
+                                    val newDev = detectedUsbDevices[selectedUsbDeviceIdx]
+                                    log("Direct USB -> seleccionado [VID:${newDev.vendorId}|PID:${newDev.productId}]")
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                color = Color(0xFF37474F)
+                            )
+                            
+                            TracedButton(
+                                text = "CONECTAR DIRECT USB",
+                                onClick = ::doConnectDirectUsb,
+                                modifier = Modifier.fillMaxWidth(),
+                                color = Color(0xFFEF6C00),
+                                icon = Icons.Default.Usb
+                            )
+                        }
+                    }
+                }
+
+                item {
                     CollapsibleSection("Densidad / Gris", Icons.Default.Contrast, Color(0xFF9C27B0)) {
-                    if (is58mm) {
+                    if (isPta0010Family()) {
+                        Text("PTA0010 SDK oficial no expone control de densidad/gris. Se usa densidad por defecto del firmware.", fontSize = 10.sp, color = Color(0xFFE65100))
+                        Text("Formato disponible: alineación, negrita, ancho/alto, interlineado y margen izquierdo via ESC.", fontSize = 10.sp, color = Color.Gray)
+                    } else if (is58mm) {
                         // 58mm: hardware confirmado acepta solo 0 o 1 (int, sin decimales)
                         Text("⚠️ SDK 58mm: setGray acepta solo enteros 0 o 1", fontSize = 10.sp, color = Color(0xFFE65100))
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1236,7 +1689,7 @@ fun HardwareScreen() {
                 }
 
                 // --- Velocidad 58mm (solo visible si 58mm conectada) ---
-                if (is58mm) item {
+                if (is58mm && !isPta0010Family()) item {
                     CollapsibleSection("Velocidad 58mm", Icons.Default.Speed, Color(0xFF00838F)) {
                     val speedNames = listOf("Mínima (0)", "Media (1)", "Máxima (2)")
                     NumericCounter(
@@ -1260,24 +1713,20 @@ fun HardwareScreen() {
                     CollapsibleSection("Formato de Texto", Icons.Default.TextFormat, Color(0xFF2196F3)) {
                     AlignmentSelector(alignment) { alignment = it }
                     if (is58mm) {
-                        NumericCounter("Tamaño fuente:", fontSize, { fontSize = it }, 8, 64, 4)
-                    } else if (is80mm) {
-                        NumericCounter("Tamaño fuente:", fontSize, { fontSize = it }, 1, 2)
+                        NumericCounter("Tamaño fuente (SDK):", fontSize, { fontSize = it }, 8, 64, 4)
                     }
-                    // 58mm: enlargeFontSize acepta solo 1-2 (x3+ lanza IllegalArgumentException)
-                    val maxMul = if (is58mm) 2 else 4
+                    val maxMul = if (is58mm) 2 else 8
                     NumericCounter("Ancho x:", fontWidthMul, { fontWidthMul = it }, 1, maxMul)
                     NumericCounter("Alto x:", fontHeightMul, { fontHeightMul = it }, 1, maxMul)
-                    if (is58mm) Text("⚠️ 58mm: máx x2 (x3+ no soportado)", fontSize = 10.sp, color = Color(0xFFE65100))
-                    if (is58mm) {
-                        LabeledSwitch("Negrita", isBold, { isBold = it })
-                        LabeledSwitch("Cursiva", isItalic, { isItalic = it })
-                        NumericCounter("Margen izq:", leftMargin, { leftMargin = it }, 0, 255, 8)
-                        NumericCounter("Interlineado:", lineSpacing, { lineSpacing = it }, 0, 255)
-                    }
-                    if (is80mm) {
-                        LabeledSwitch("Invertir colores", isInverse, { isInverse = it })
-                    }
+                    if (isPta0010Family()) {
+                        Text("PTA0010 SDK: formato vía ESC con possdk. Se aplica alineación, negrita, cursiva, invertido, ancho/alto, margen e interlineado.", fontSize = 10.sp, color = Color.Gray)
+                    } else if (is58mm) Text("⚠️ SDK 58mm: máx x2 (x3+ no soportado)", fontSize = 10.sp, color = Color(0xFFE65100))
+                    
+                    LabeledSwitch("Negrita", isBold, { isBold = it })
+                    LabeledSwitch("Cursiva", isItalic, { isItalic = it })
+                    LabeledSwitch("Invertir colores (Direct/BT)", isInverse, { isInverse = it })
+                    NumericCounter("Margen izq:", leftMargin, { leftMargin = it }, 0, 255, 8)
+                    NumericCounter("Interlineado:", lineSpacing, { lineSpacing = it }, 0, 255)
                 }
                 }
 
@@ -1312,7 +1761,28 @@ fun HardwareScreen() {
                                         repeat(60) { i -> append("${(i+1).toString().padStart(2)}: $linea") }
                                         append("--- fin ---\n")
                                     }
-                                    if (is58mm) {
+                                    if (isUnifiedPosConnected) {
+                                        val effectiveFeed = paperFeedLines.coerceIn(0, 4)
+                                        UnifiedPosPrinterDriver.printText(
+                                            text = bloque,
+                                            alignment = alignment,
+                                            widthMul = fontWidthMul,
+                                            heightMul = fontHeightMul,
+                                            bold = isBold,
+                                            italic = isItalic,
+                                            inverse = isInverse,
+                                            lineSpacing = lineSpacing,
+                                            leftIndent = leftMargin,
+                                            feedLines = effectiveFeed
+                                        )
+                                    } else if (isDirectSerial || isDirectUsb) {
+                                        DirectPrinterDriver.initPrinter()
+                                        DirectPrinterDriver.setAlign(alignment)
+                                        DirectPrinterDriver.addString(bloque)
+                                        val horaFin = fmtHora.format(Date())
+                                        DirectPrinterDriver.addString("Fin: $horaFin\n")
+                                        DirectPrinterDriver.walkPaper(paperFeedLines)
+                                    } else if (is58mm) {
                                         usbPrinter.start(usbPrintSpeedMode); usbPrinter.reset()
                                         usbPrinter.setAlgin(alignConst(alignment))
                                         usbPrinter.setTextSize(fontSize.coerceIn(8, 64))
@@ -1324,17 +1794,8 @@ fun HardwareScreen() {
                                         usbPrinter.addString("Fin: $horaFin\n")
                                         usbPrinter.printString()
                                         usbPrinter.walkPaper(paperFeedLines)
-                                    } else if (is80mm) {
-                                        ThermalPrinter.reset()
-                                        ThermalPrinter.setGray(grayLevel)
-                                        ThermalPrinter.addString(bloque)
-                                        ThermalPrinter.printString(ThermalPrinter.SPANISH)
-                                        val horaFin = fmtHora.format(Date())
-                                        ThermalPrinter.addString("Fin: $horaFin\n")
-                                        ThermalPrinter.printString(ThermalPrinter.SPANISH)
-                                        ThermalPrinter.walkPaper(paperFeedLines)
                                     } else {
-                                        withContext(Dispatchers.Main) { logWarn("Impresora no conectada") }
+                                        withContext(Dispatchers.Main) { logWarn("Impresora no conectada o no soportada para este test") }
                                         return@launch
                                     }
                                     val tEnd = System.currentTimeMillis()
@@ -1362,9 +1823,12 @@ fun HardwareScreen() {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         TracedButton("AVANZAR", ::doPaperFeed, Modifier.weight(1f), Color(0xFFFF9800), Icons.Default.ArrowDownward, isPrinterReady)
                         // Cortar disponible para 80mm, BT, y 58mm (fallback ESC/POS)
-                        if (isPrinterReady) {
+                        if (isPrinterReady && !isPta0010Family()) {
                             TracedButton("CORTAR", ::doPaperCut, Modifier.weight(1f), Color(0xFFF44336), Icons.Default.ContentCut)
                         }
+                    }
+                    if (isPta0010Family()) {
+                        Text("PTA0010: cutter deshabilitado por hardware sin guillotina.", fontSize = 10.sp, color = Color(0xFFE65100))
                     }
                 }
                 }
@@ -1489,5 +1953,302 @@ fun HardwareScreen() {
                 }
             }
         }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp).padding(top = 24.dp)
+    ) {
+        if (stackedLayout) {
+            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                consolePane(Modifier.fillMaxWidth().weight(0.85f))
+                controlsPane(Modifier.fillMaxWidth().weight(1.15f))
+            }
+        } else {
+            Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                consolePane(Modifier.weight(1f).fillMaxHeight())
+                controlsPane(Modifier.weight(1f).fillMaxHeight())
+            }
+        }
+    }
+}
+
+object UnifiedPosPrinterDriver {
+    private var printer: POSPrinter? = null
+    private var statusListener: StatusUpdateListener? = null
+    private var profileLabel: String = "No conectado"
+    @Volatile private var lastStatusText: String = ""
+    @Volatile var isConnected = false
+
+    fun open2Inch(): String = open(POSPrinterConst.PTR_CP_2INCH, "PTA0010 2INCH")
+
+    fun open3Inch(): String = open(POSPrinterConst.PTR_CP_3INCH, "PTA0010 3INCH")
+
+    @Synchronized
+    private fun open(logicalName: String, label: String): String {
+        close()
+        val dev = POSPrinter()
+        val listener = StatusUpdateListener { event ->
+            lastStatusText = runCatching { event.string }.getOrDefault("")
+        }
+        dev.addStatusUpdateListener(listener)
+        dev.open(logicalName)
+        printer = dev
+        statusListener = listener
+        profileLabel = label
+        lastStatusText = ""
+        isConnected = true
+        return "Conectada $label por possdk"
+    }
+
+    fun getLastStatus(): String = lastStatusText
+
+    fun getProfileLabel(): String = profileLabel
+
+    fun printText(
+        text: String,
+        alignment: Int,
+        widthMul: Int,
+        heightMul: Int,
+        bold: Boolean,
+        italic: Boolean,
+        inverse: Boolean,
+        lineSpacing: Int,
+        leftIndent: Int,
+        feedLines: Int
+    ) {
+        val dev = printer ?: error("PTA0010 SDK no conectado")
+        val payload = ByteArrayOutputStream().apply {
+            write(byteArrayOf(0x1B, 0x40))
+            write(byteArrayOf(0x1B, 0x61, alignment.coerceIn(0, 2).toByte()))
+            write(byteArrayOf(0x1B, 0x33, lineSpacing.coerceIn(0, 255).toByte()))
+            val indent = leftIndent.coerceIn(0, 65535)
+            write(byteArrayOf(0x1D, 0x4C, (indent and 0xFF).toByte(), ((indent shr 8) and 0xFF).toByte()))
+            write(byteArrayOf(0x1B, 0x45, if (bold) 1 else 0))
+            if (italic) write(byteArrayOf(0x1B, 0x34))
+            if (inverse) write(byteArrayOf(0x1D, 0x42, 0x01))
+            val w = (widthMul.coerceIn(1, 8) - 1)
+            val h = (heightMul.coerceIn(1, 8) - 1)
+            write(byteArrayOf(0x1D, 0x21, ((w shl 4) or h).toByte()))
+            write(text.toByteArray(Charset.forName("windows-1252")))
+            write(byteArrayOf(0x1B, 0x64, feedLines.coerceIn(0, 255).toByte()))
+        }.toByteArray()
+        dev.printNormal(0, payload)
+    }
+
+    fun feed(lines: Int) {
+        val dev = printer ?: error("PTA0010 SDK no conectado")
+        dev.printNormal(0, byteArrayOf(0x1B, 0x64, lines.coerceIn(0, 255).toByte()))
+    }
+
+    fun cut() {
+        val dev = printer ?: error("PTA0010 SDK no conectado")
+        dev.cutPaper(POSPrinterConst.PTR_CP_PARTIALCUT)
+    }
+
+    @Synchronized
+    fun close() {
+        try {
+            val listener = statusListener
+            val dev = printer
+            if (listener != null && dev != null) {
+                runCatching { dev.removeStatusUpdateListener(listener) }
+            }
+            dev?.close()
+        } catch (_: Exception) {}
+        printer = null
+        statusListener = null
+        profileLabel = "No conectado"
+        lastStatusText = ""
+        isConnected = false
+    }
+}
+
+object DirectPrinterDriver {
+    // Serial connection state
+    private var serialPort: com.common.apiutil.serial.Serial? = null
+    private var serialOutputStream: java.io.OutputStream? = null
+
+    // USB connection state
+    private var usbConnection: android.hardware.usb.UsbDeviceConnection? = null
+    private var usbInterface: android.hardware.usb.UsbInterface? = null
+    private var usbEndpoint: android.hardware.usb.UsbEndpoint? = null
+
+    var isSerialConnected = false
+    var isUsbConnected = false
+    
+    // Connect serial
+    fun connectSerial(portPath: String, baudrate: Int) {
+        closeAll()
+        val port = com.common.apiutil.serial.Serial(portPath, baudrate, 0)
+        serialPort = port
+        serialOutputStream = port.outputStream
+        isSerialConnected = true
+    }
+
+    // Connect USB
+    fun connectUsb(manager: android.hardware.usb.UsbManager, device: android.hardware.usb.UsbDevice): String {
+        closeAll()
+        
+        var printerIntf: android.hardware.usb.UsbInterface? = null
+        var bulkOut: android.hardware.usb.UsbEndpoint? = null
+        
+        for (i in 0 until device.interfaceCount) {
+            val intf = device.getInterface(i)
+            if (intf.interfaceClass == 7) {
+                printerIntf = intf
+                break
+            }
+        }
+        
+        if (printerIntf == null && device.interfaceCount > 0) {
+            printerIntf = device.getInterface(0)
+        }
+        
+        if (printerIntf == null) {
+            throw Exception("No se encontró interfaz USB válida")
+        }
+        
+        for (i in 0 until printerIntf.endpointCount) {
+            val ep = printerIntf.getEndpoint(i)
+            if (ep.type == android.hardware.usb.UsbConstants.USB_ENDPOINT_XFER_BULK &&
+                ep.direction == android.hardware.usb.UsbConstants.USB_DIR_OUT) {
+                bulkOut = ep
+                break
+            }
+        }
+        
+        if (bulkOut == null) {
+            throw Exception("No se encontró endpoint BULK OUT de escritura")
+        }
+        
+        val conn = manager.openDevice(device) ?: throw Exception("No se pudo abrir el dispositivo USB (¿Falta permiso?)")
+        if (!conn.claimInterface(printerIntf, true)) {
+            conn.close()
+            throw Exception("No se pudo reclamar la interfaz USB")
+        }
+        
+        usbConnection = conn
+        usbInterface = printerIntf
+        usbEndpoint = bulkOut
+        isUsbConnected = true
+        return "Conectado a ${device.productName ?: "USB Printer"}"
+    }
+
+    fun closeAll() {
+        try {
+            serialOutputStream?.close()
+            serialPort?.close()
+        } catch (_: Exception) {}
+        serialPort = null
+        serialOutputStream = null
+        isSerialConnected = false
+
+        try {
+            if (usbConnection != null && usbInterface != null) {
+                usbConnection!!.releaseInterface(usbInterface)
+            }
+            usbConnection?.close()
+        } catch (_: Exception) {}
+        usbConnection = null
+        usbInterface = null
+        usbEndpoint = null
+        isUsbConnected = false
+    }
+
+    // Write bytes
+    fun write(bytes: ByteArray) {
+        if (isSerialConnected) {
+            val stream = serialOutputStream ?: throw Exception("Serial no conectado")
+            stream.write(bytes)
+            stream.flush()
+        } else if (isUsbConnected) {
+            val conn = usbConnection ?: throw Exception("USB no conectado")
+            val ep = usbEndpoint ?: throw Exception("Endpoint USB no configurado")
+            val result = conn.bulkTransfer(ep, bytes, bytes.size, 5000)
+            if (result < 0) {
+                throw Exception("Error de transferencia USB ($result)")
+            }
+        } else {
+            throw Exception("Sin conexión directa activa")
+        }
+    }
+
+    fun initPrinter() {
+        write(byteArrayOf(0x1B, 0x40)) // ESC @
+    }
+
+    fun setAlign(align: Int) {
+        write(byteArrayOf(0x1B, 0x61, align.toByte())) // ESC a n
+    }
+
+    fun setBold(bold: Boolean) {
+        write(byteArrayOf(0x1B, 0x45, if (bold) 1 else 0)) // ESC E n
+    }
+
+    fun setItalic(italic: Boolean) {
+        write(byteArrayOf(0x1B, if (italic) 0x34 else 0x35)) // ESC 4 / ESC 5
+    }
+
+    fun setInverse(inverse: Boolean) {
+        write(byteArrayOf(0x1D, 0x42, if (inverse) 1 else 0)) // GS B n
+    }
+
+    fun setFontSize(widthMul: Int, heightMul: Int) {
+        val w = (widthMul.coerceIn(1, 8) - 1)
+        val h = (heightMul.coerceIn(1, 8) - 1)
+        val size = ((w shl 4) or h).toByte()
+        write(byteArrayOf(0x1D, 0x21, size)) // GS ! n
+    }
+
+    fun setLineSpacing(dots: Int) {
+        write(byteArrayOf(0x1B, 0x33, dots.coerceIn(0, 255).toByte())) // ESC 3 n
+    }
+
+    fun setLeftIndent(dots: Int) {
+        val nL = (dots % 256).toByte()
+        val nH = (dots / 256).toByte()
+        write(byteArrayOf(0x1D, 0x4C, nL, nH)) // GS L nL nH
+    }
+
+    fun addString(text: String) {
+        write(text.toByteArray(java.nio.charset.Charset.forName("GBK")))
+    }
+
+    fun walkPaper(lines: Int) {
+        write(byteArrayOf(0x1B, 0x64, lines.coerceIn(0, 255).toByte())) // ESC d n
+    }
+
+    fun paperCut() {
+        write(byteArrayOf(0x1D, 0x56, 66, 0)) // GS V 66 0
+    }
+
+    fun queryStatusSerial(): Int {
+        val stream = serialOutputStream ?: return -2
+        val input = serialPort?.inputStream ?: return -2
+        
+        try {
+            while (input.available() > 0) {
+                input.read()
+            }
+        } catch (_: Exception) {}
+        
+        try {
+            stream.write(byteArrayOf(0x10, 0x04, 0x04))
+            stream.flush()
+        } catch (_: Exception) {
+            return -2
+        }
+        
+        val start = System.currentTimeMillis()
+        while (System.currentTimeMillis() - start < 500) {
+            if (input.available() > 0) {
+                val statusByte = input.read()
+                if ((statusByte and 0x0C) == 0x0C) {
+                    return com.common.apiutil.printer.ThermalPrinter.STATUS_NO_PAPER
+                }
+                return com.common.apiutil.printer.ThermalPrinter.STATUS_OK
+            }
+            Thread.sleep(10)
+        }
+        return com.common.apiutil.printer.ThermalPrinter.STATUS_OK
     }
 }

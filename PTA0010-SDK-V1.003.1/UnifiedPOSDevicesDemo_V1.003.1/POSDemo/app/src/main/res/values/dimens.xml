@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_small_xx">1dp</dimen>
+    <dimen name="margin_small_x">2dp</dimen>
+    <dimen name="margin_small">5dp</dimen>
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="margin_big">10dp</dimen>
+    <dimen name="margin_large">30dp</dimen>
+    <dimen name="margin_large_x">70dp</dimen>
+
+    <dimen name="padding_small_xx">2dp</dimen>
+    <dimen name="padding_small_x">4dp</dimen>
+    <dimen name="padding_small">6dp</dimen>
+    <dimen name="padding_normal">8dp</dimen>
+    <dimen name="padding_big">10dp</dimen>
+    <dimen name="padding_large">15dp</dimen>
+    <dimen name="padding_large_x">50dp</dimen>
+
+    <dimen name="text_size_small_x">6sp</dimen>
+    <dimen name="text_size_small">10sp</dimen>
+    <dimen name="text_size_normal">16sp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
+    <dimen name="text_size_large">25sp</dimen>
+    <dimen name="text_size_large_x">35sp</dimen>
+    <dimen name="text_size_large_xx">80sp</dimen>
+
+    <dimen name="home_step2_devicelist_width">350dp</dimen>
+
+    <dimen name="print_device_connect_set_width">450dp</dimen>
+    <dimen name="print_preview_widget_height">390dp</dimen>
+    <dimen name="print_preview_image_height">340dp</dimen>
+    <dimen name="print_preview_widget_width">250dp</dimen>
+    <dimen name="print_desty_spinner_width">100dp</dimen>
+
+    <dimen name="set_communication_right_widget_width">400dp</dimen>
+    <dimen name="set_communication_right_widget_height">320dp</dimen>
+    <dimen name="set_spinner_width">200dp</dimen>
+    <dimen name="set_btn_width">150dp</dimen>
+    <dimen name="set_print_spinner_width">150dp</dimen>
+    <dimen name="set_warning_spinner_width">175dp</dimen>
+
+    <dimen name="set_voice_seekbar_width">330dp</dimen>
+
+    <dimen name="set_head_tail_ll_width">480dp</dimen>
+    <dimen name="set_head_tail_et_width">90dp</dimen>
+    <dimen name="back_width">80dp</dimen>
+    <dimen name="back_height">80dp</dimen>
+    <dimen name="prn_width">50dp</dimen>
+
+    <dimen name="note_text_switch_height">50dp</dimen>
+    <dimen name="note_text_switch_width">70dp</dimen>
+    <dimen name="note_flag">150dp</dimen>
+    <dimen name="note_pic">50dp</dimen>
+    <dimen name="note_pic_width">70dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="flag_height_large_x">100sp</dimen>
+    <dimen name="btn_height_large_x">100sp</dimen>
+    <dimen name="btn_height_large">80sp</dimen>
+    <dimen name="btn_height_normal">50sp</dimen>
+    <dimen name="btn_height_small">30sp</dimen>
+</resources>

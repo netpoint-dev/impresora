@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activitys.ActivityPrinter">
+
+    <include layout="@layout/title_view_common"/>
+    <LinearLayout
+        android:layout_margin="@dimen/text_size_normal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/layout_prn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/prn_sp_type"
+                android:entries="@array/printer_Type"
+                android:layout_weight="1"></Spinner>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_open"
+                android:text="@string/prn_open"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_close"
+                android:text="@string/prn_close"
+                android:onClick="onClick"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_normal"
+                android:textSize="@dimen/text_size_large"
+                android:text="@string/prn_status"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_normal"
+                android:textSize="@dimen/text_size_large"
+                android:id="@+id/prn_tv_status"
+                android:text="@string/prn_nopaper"
+                android:layout_weight="3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_prn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_feed"
+                android:text="@string/prn_feed"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_printbmp"
+                android:text="@string/prn_printbmp"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_printesc"
+                android:text="@string/prn_printesc"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_select"
+                android:text="@string/prn_select"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height_large"
+                android:textSize="@dimen/text_size_large_x"
+                android:id="@+id/prn_btn_printbarcode"
+                android:text="@string/prn_printbarcode"
+                android:onClick="onClick"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

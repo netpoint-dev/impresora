@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activitys.ActivityDrawer">
+    <include layout="@layout/title_view_common"/>
+
+    <LinearLayout
+        android:id="@+id/layout_drawer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height_large"
+            android:textSize="@dimen/text_size_large_x"
+            android:id="@+id/drawer_btn_open"
+            android:text="@string/drawer_open"
+            android:onClick="onClick"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height_large"
+            android:textSize="@dimen/text_size_large_x"
+            android:id="@+id/drawer_btn_close"
+            android:text="@string/drawer_close"
+            android:onClick="onClick"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height_large"
+            android:textSize="@dimen/text_size_large_x"
+            android:id="@+id/drawer_btn_do"
+            android:text="@string/drawer_do"
+            android:onClick="onClick"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>
