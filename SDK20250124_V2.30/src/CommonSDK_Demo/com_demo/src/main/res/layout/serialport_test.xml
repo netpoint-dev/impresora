@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
+    android:orientation="vertical">
+
+    <include android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dip"
+        android:textColor="#FF000000"
+        android:gravity="center"
+        android:text="@string/serial_test" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dip">
+
+            <TextView
+                android:id="@+id/tv_serial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#FF000000"
+                android:paddingLeft="10dp"
+                android:textSize="23dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/connect_serial"
+                android:textColor="#FF000000"
+                android:textSize="18dp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/serial_dev"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:spinnerMode="dialog" />
+
+                <Spinner
+                    android:id="@+id/serial_baud"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:spinnerMode="dialog" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/DataSendText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/serial_send"
+                android:textColor="#FF000000"
+                android:textSize="18dp" />
+
+            <EditText
+                android:id="@+id/DataSendEdit"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:focusable="true"
+                android:inputType="textMultiLine" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/serial_bt_open"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/open_serial"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"
+                    android:layout_marginRight="10dp"/>
+
+                <Button
+                    android:id="@+id/DataSendBn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/serial_senddata"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/DataReceiveText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/serial_receive_data"
+                android:textColor="#FF000000"
+                android:textSize="18dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/serial_tv_receive_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="#F00" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,3 @@
+include ':com_demo'
+rootProject.name = "New_CommonSDK_Demo"
+

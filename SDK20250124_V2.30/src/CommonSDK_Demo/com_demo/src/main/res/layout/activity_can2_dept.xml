@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".can.Can2DeptActivity">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titlebar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <LinearLayout
+                android:id="@+id/can_layout_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_can_mode_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:enabled="false"
+                    android:text="@string/can_layout_mode" />
+
+                <Button
+                    android:id="@+id/btn_can_data_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:enabled="false"
+                    android:text="@string/can_layout_data" />
+
+            </LinearLayout>
+
+            <TableLayout
+                android:id="@+id/table_can_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/can_layout_switch">
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:minWidth="80dp"
+                        android:text="SJW [0,  3]:"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/edt_can_mode_sjw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:digits="1234567890"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:minWidth="80dp"
+                        android:text="BS1 [0, 15]:"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/edt_can_mode_bs1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:digits="1234567890"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:minWidth="80dp"
+                        android:text="BS2 [0,   7]:"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/edt_can_mode_bs2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:digits="1234567890"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:minWidth="80dp"
+                        android:text="pres [1, 1024]:"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/edt_can_mode_prescaler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:digits="1234567890"
+                        android:text="36" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_can_mode_baud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:minWidth="80dp"
+                        android:textSize="18sp" />
+
+                    <CheckBox
+                        android:id="@+id/cb_can_mode_self"
+                        android:text="@string/can_set_mode_loopback" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/btn_can_set_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:text="@string/can_set_mode" />
+
+                <Button
+                    android:id="@+id/btn_can_set_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:enabled="false"
+                    android:text="@string/can_set_filter" />
+
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/table_can_send_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/table_can_mode"
+                android:orientation="vertical">
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:minWidth="80dp"
+                        android:text="@string/can_frame_format"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/sp_can_frame_format"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/can_frame_type"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/sp_can_frame_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/can_id_hex"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_can_send_id_hex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:textSize="18sp" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/can_id"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/edt_can_send_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:digits="1234567890" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/can_data_hex"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_can_send_data_hex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:textSize="18sp" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/can_data_string"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/edt_can_send_data_string"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/btn_can_send_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:text="@string/can_send" />
+
+                <Button
+                    android:id="@+id/btn_can_receive_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:text="@string/can_get_one_frame_data" />
+
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/tv_can_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/table_can_send_data"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

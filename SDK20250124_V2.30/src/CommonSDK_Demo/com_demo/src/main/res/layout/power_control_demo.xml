@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    
+	    <TableLayout
+	        
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="red on"
+			        android:onClick="red_on"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="red off"
+			        android:onClick="red_off"/>
+	        </TableRow>
+	        
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="green on"
+			        android:onClick="green_on"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="green off"
+			        android:onClick="green_off"/>
+	        </TableRow>
+	        
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="blue on"
+			        android:onClick="blue_on"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="blue off"
+			        android:onClick="blue_off"/>
+	        </TableRow>
+	    </TableLayout>
+	    
+	    <TableLayout
+	        android:id="@+id/printerPower"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+	        <TableRow>
+	            <Button 
+	                android:id="@+id/printerPowerOn"
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="getFpStatus "
+			        android:onClick="printerPowerOn"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="getUvcStatus"
+			        android:onClick="printerPowerOff"/>
+	        </TableRow>
+	        
+	    </TableLayout>
+	    
+	    <LinearLayout
+	        android:id="@+id/tps990hRGBLed"
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:visibility="gone">
+	        <TableLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+	        <TableRow>
+	            <TextView
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="R"/>
+	            <SeekBar
+			        android:id="@+id/seekbarR"
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="9"
+			        android:max="100"
+			        android:progress="0"/>
+	        </TableRow>
+	        
+	    </TableLayout>
+	    
+	    <TableLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+	        <TableRow>
+	            <TextView
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="G"/>
+	            <SeekBar
+			        android:id="@+id/seekbarG"
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="9"
+			        android:max="100"
+			        android:progress="0"/>
+	        </TableRow>
+	        
+	    </TableLayout>
+	    
+	    <ToggleButton
+        	android:id="@+id/toggleButtonB"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textOff="Blue关"
+        	android:textOn="Blue开" />
+	    </LinearLayout>
+	    
+	    <TableLayout
+	        android:id="@+id/a6a7Power"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:visibility="gone">
+	        <TableRow>
+	            <Button
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="A6上电"
+	                android:onClick="A6High"/>
+	            <Button
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="A6下电"
+	                android:onClick="A6Low"/>
+	        </TableRow>
+	        
+	        <TableRow>
+	            <Button
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="A7上电"
+	                android:onClick="relayOn"/>
+	            <Button
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="A7下电"
+	                android:onClick="relayOff"/>
+	        </TableRow>
+	        
+	        <TableRow>
+	            <Button
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="打开继电器"
+	                android:onClick="A7High"/>
+	            <Button
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="关闭继电器"
+	                android:onClick="A7Low"/>
+	        </TableRow>
+	    </TableLayout>
+	    
+	    <TableLayout
+	        android:id="@+id/tps980DoubleCamPower"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:visibility="gone">
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="980双目rgb上电 "
+			        android:onClick="camRGBPowerOn"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="980双目rgb下电"
+			        android:onClick="camRGBPowerOff"/>
+	        </TableRow>
+	        
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:text="980双目ir上电"
+			        android:onClick="camIRPowerOn"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:text="980双目ir下电"
+			        android:onClick="camIRPowerOff"/>
+	        </TableRow>
+	    </TableLayout>
+	    
+	    <TableLayout
+	        android:id="@+id/power154_158"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:visibility="gone">
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="微波上电 "
+			        android:onClick="powerOn154"/>
+	    
+			    <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="微波下电"
+			        android:onClick="powerOff154"/>
+	        </TableRow>
+	        
+	        <TableRow>
+	            <Button 
+			        android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+			        android:text="微波读状态 "
+			        android:onClick="status158"/>
+	            <TextView
+	                android:id="@+id/showResult"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"/>
+	        </TableRow>
+	    </TableLayout>
+	    
+	</LinearLayout>
+	
+</ScrollView>
+

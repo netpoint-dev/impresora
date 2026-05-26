@@ -1,0 +1,160 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".pos.RSSerialActivity" >
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <TableLayout
+        android:id="@+id/serial_tablelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titlebar"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pos_serial_col"
+            android:textColor="@color/Blue"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/Blue"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_show_baud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/pos_rs232"
+                android:textSize="18sp"/>
+
+            <Spinner
+                android:id="@+id/spinner_rs232num"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/pos_rs485"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinner_rs485num"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"/>
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/pos_baud"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinner_baud"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"/>
+
+        </TableRow>
+
+        <Button
+            android:id="@+id/btn_sendRS232"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/pos_rs232_send"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"/>
+
+        <TableRow
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pos_rs232_recv"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tv_rs232recv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+        </TableRow>
+
+        <Button
+            android:id="@+id/btn_switchRS485"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/pos_rs485_switch"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_sendRS485"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/pos_rs485_send"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"/>
+
+        <TableRow
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pos_rs485_drct"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tv_rs485drct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pos_rs485_recv"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tv_rs485recv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>

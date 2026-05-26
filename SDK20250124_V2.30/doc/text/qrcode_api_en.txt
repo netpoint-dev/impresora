@@ -1,0 +1,114 @@
+           QR Code API
+Development Documentation
+                     V1.1.0
+             Update Records
+  Date                      Description
+
+2022-10-31              First Edition Release
+
+2023-02-22                  Update API
+
+2023-04-23             Update API and demo
+
+2024-06-20         Update API and documentation
+                                    Contents
+1 Introduction
+   1.1 Get the dock sweep control object
+   1.2 Open
+   1.3 Close
+   1.4 Set up receiving listening
+   1.5 Scan dock to receive monitoring class
+   1.6 Send Command
+1 Introduction
+(com.common.apiutil.decode)
+
+It includes an interface for opening and closing hard read heads and obtaining scan information.
+
+
+1.1 Get the dock sweep control object
+
+   /**
+    * @Function Get the dock sweep control object
+    *
+    * @Parameter context
+    *
+    * */
+
+   public DecodeReader(Context context)
+
+
+
+1.2 Open
+
+   /**
+    * @Function Turn on and power on the scan code read head
+    *
+    *
+    * @Parameter
+    * 1.baud: Baudrate
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int open(int baud)
+
+
+
+1.3 Close
+
+   /**
+    * @Function Turn off and power down the scan code read head
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int close()
+
+
+
+1.4 Set up receiving listening
+  /**
+   * @Function Set up data monitoring for terminal sweeping
+   *
+   * @Parameter listener: IDecodeReaderListener
+   *
+   * @Return void
+   *
+   * */
+
+  public void setDecodeReaderListener(IDecodeReaderListener listener)
+
+
+
+1.5 Scan dock to receive monitoring class
+
+  /**
+   * @Function Scan dock to receive monitoring class
+   *
+   * */
+
+  public interface IDecodeReaderListener{
+      /**
+       * @Parameter data
+       *
+       * */
+      void onRecvData(byte[] data);
+  }
+
+
+
+1.6 Send Command
+
+  /**
+   * @Function Send command
+   *
+   * @Parameter data
+   *
+   * @Return ResultCode: please refer the quick guidance document.
+   *
+   * */
+
+  public synchronized int cmdSend(byte[] data)
+

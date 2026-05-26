@@ -1,0 +1,265 @@
+        Felica Card API
+Development Documentation
+                     V1.0.0
+             Update Records
+  Date                    Description
+
+2024-07-04            First Edition Release
+                                     Contents
+1 Command return value description
+2 Error code description
+3 Operating instructions
+4 Operation analysis
+   4.1 Polling
+   4.2 Read
+   4.3 Write
+5 Android API
+   5.1 Open
+   5.2 Close
+   5.3 Card searching
+   5.4 Read data
+   5.5 Write data
+6 Reference documents
+7 Demo test process
+1 Command return value description
+Success: no data: success (PS: return value is 0)
+With data: relevant command demand data (e.g. read)
+Failed: error: (error code)
+
+
+2 Error code description
+Negative error code: (mostly loss of communication between PICC and PCD, poor contact, re check the card)
+
+
+              Error Code                                    Description
+
+                   -1            Error in parsing input parameters of single chip microcomputer
+
+                   -2                       APK layer interface input parameter error
+
+                  -10                               APK layer transmission error
+
+                 -1001                                    Parameter error
+
+                 -1002                                        IO error
+
+                 -1003                                     timeout error
+
+                 -1004                                      Check error
+
+                 -1005                                     framing error
+
+                 -1006                                   Interference error
+
+                 -1007                                     Protocol error
+
+                 -1008                                  Card conflict error
+
+                 -1009                                      Send error
+
+
+
+3 Operating instructions
+In our demo, you can test it as follow:
+
+           1. Click "open NFC" to open NFC and place the card in the identification area
+           2. Click "polling" to poll the card. If there is a card, you can continue to execute "read" and "write"
+
+
+4 Operation analysis
+Note: the input parameter is hexadecimal, and the return value with data output is hexadecimal
+
+4.1 Polling
+FF FF 00 03
+Yellow area: System Code
+Green area: Request Code
+Blue area: Time Slot Number
+
+Return Value
+Success: length (1 byte) + response code (1 byte) + IDM (8 bytes) + pad (8 bytes)
+Failed: error: (error code)
+
+
+4.2 Read
+01 09 00 01 80 00
+Yellow area: Number of Services
+Green area: Service Code List
+Blue area: Number of Blocks
+Purple area: Block List
+
+Return Value
+Success: Length (1 byte) + response code (1 byte) + IDM (8 bytes) + Status ﬂag1 (1 byte)+ Status Flag2 (1
+byte) + Number of blocks (1 byte) + block data (16 * m bytes (M is the value of number of blocks))
+Failed: Error: (error code)
+
+
+4.3 Write
+01 09 00 01 80 00 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+
+Yellow area: Number of Services
+Green area: Service Code List
+Blue area: Number of Blocks
+Purple area: Block List
+Grey area: Block Data
+
+Return Value
+Success: success
+Failed: error: (error code)
+
+
+5 Android API
+Package:com.common.apiutil.nfc.Nfc
+
+5.1 Open
+
+    /**
+     * @Function Open the NFC device
+     *
+     * @Exception CommonException
+     * 1.DeviceAlreadyOpenException: The device has been turned on
+     * 2.DeviceNotFoundException: The device cannot be opened
+   *
+   * */
+
+  public synchronized void open() throws CommonException
+
+
+
+5.2 Close
+
+  /**
+   * @Function Close the NFC device
+   *
+   * @Exception CommonException
+   *
+   * */
+
+  public synchronized void close()throws CommonException
+
+
+
+5.3 Card searching
+
+  /**
+   * @Function Card searching
+   *
+   * @Parameter
+   * 1.cmd: cmd->4 bytes; System code/Reserved/Time slot number
+   * 2.cmdLen: cmd length
+   *
+   * @Return Success, card data; Failed, CommonException
+   *
+   * */
+
+  public synchronized byte[] FelicaPolling(byte[] cmd, int cmdLen) throws
+  CommonException
+
+
+
+             System code              Reserved         Time slot number
+
+                2 bytes               1 byte '00'           1 byte
+
+
+5.4 Read data
+
+  /**
+   * @Function Read data
+   *
+   * @Parameter
+   * 1.cmd: cmd->determines the number of bytes according to the set parameter;
+  Number of Services/Service Code List/Number of Blocks/Block List
+   * 2.cmdLen: cmd length
+   *
+   * @Return Success, card data; Failed, CommonException
+   *
+   * */
+
+  public synchronized byte[] FelicaRead(byte[] cmd, int cmdLen) throws
+  CommonException
+
+
+
+         Command      bytes   Multiple   Description
+
+                                         It depends on the implementation of the Type 3
+         Number of
+                      1       n          Tag how many Services can be read
+         Services
+                                         simultaneously.
+
+         Service                         Each Service Code is specified in Little Endian
+                      2n
+         Code List                       format.
+
+                                         It depends on the implementation of the Type 3
+         Number of
+                      1       m          Tag how many blocks can be read
+         Blocks
+                                         simultaneously.
+
+                      2m-
+         Block List                      See Section 5.6.
+                      3m
+
+
+5.5 Write data
+
+  /**
+   * @Function Write data
+   *
+   * @Parameter
+   * 1.cmd: cmd->determines the number of bytes according to the set parameter;
+  Number of Services/Service Code List/Number of Blocks/Block List/Block Data
+   * 2.cmdLen: cmd length
+   *
+   * @Return Success, card data; Failed, CommonException
+   *
+   * */
+
+  public synchronized byte[] FelicaWrite(byte[] cmd, int cmdLen) throws
+  CommonException
+
+
+
+         Command      bytes   Multiple   Description
+
+                                         It depends on the implementation of the Type 3
+         Number of
+                      1       n          Tag how many Services can be written
+         Services
+                                         simultaneously.
+
+         Service                         Each Service Code is specified in Little Endian
+                      2n
+         Code List                       format.
+            Command       bytes   Multiple   Description
+
+                                             It depends on the implementation of the Type 3
+            Number of
+                          1       m          Tag how many blocks can be written
+            Blocks
+                                             simultaneously.
+
+                          2m-
+            Block List                       See Section 5.6.
+                          3m
+
+            Block Data    16m
+
+
+
+6 Reference documents
+Please refer these online document:
+
+<Type 3 Tag Operation Speciﬁcation.pdf>
+<JIS-X-6319-4-2005.pdf>
+
+
+7 Demo test process
+          1. Open NFC
+          2. Polling
+          3. Read
+          4. Write
+          5. Close NFC
+

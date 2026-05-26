@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f5f5f5"
+    android:orientation="vertical" >
+
+    <include layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_margin="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OTG"
+                    android:textSize="18sp"/>
+
+                <Switch
+                    android:id="@+id/otgSwitchBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></Switch>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/powerManage_n_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/powerManage_n_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/device_info_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/device_info_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/lcd_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/lcd_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/tp_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/lcd_tp_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/print_test"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/print_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/qrcode_verify"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/qrcode_dialog_hard_decoding"
+                android:layout_marginBottom="10dp"/>
+
+
+            <Button
+                android:id="@+id/magnetic_card_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/magnetic_card_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/moneybox_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/moneybox_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/identity_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/identity_test"
+                android:layout_marginBottom="10dp"
+                android:enabled="false"/>
+
+            <Button
+                android:id="@+id/pcsc_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/pcsc_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/nfc_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/nfc"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/psam"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/psam_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:enabled="false"
+                android:id="@+id/decode_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/decode"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:enabled="false"
+                android:id="@+id/rfid_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/rfid_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:enabled="false"
+                android:id="@+id/ir_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/ir_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:enabled="false"
+                android:id="@+id/led_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/led"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/tamper_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/tamper_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/other_api_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/pos_setting_api_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/digitaltube_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/Digital_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/system_api_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/system_api_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/can_test_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/can_api_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/hardreader_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/hardreader"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/serial_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/serial_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/simple_subled_btn"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:text="@string/lcd_simple_test"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/power_control_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/power_control_test" />
+
+            <Button
+                android:id="@+id/deliverylocker_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/deliverylocker_test" />
+
+            <Button
+                android:id="@+id/powerManager_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/powerManage_test" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

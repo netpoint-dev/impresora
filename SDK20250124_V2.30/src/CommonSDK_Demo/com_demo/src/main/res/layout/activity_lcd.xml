@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+	<include layout="@layout/titlebar" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dip"
+			android:layout_marginRight="10dip"
+			android:layout_marginTop="30dip"
+			android:gravity="center"
+			android:orientation="vertical" >
+
+			<Button
+				android:id="@+id/lcdBtn"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:gravity="center"
+				android:onClick="onClick"
+				android:text="@string/lcd_test"
+				android:background="@drawable/button_number_violet_shape"/>
+
+			<Button
+				android:id="@+id/lcdWhiteBalanceBtn"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:gravity="center"
+				android:onClick="onClick"
+				android:text="@string/lcd_WhiteBalance"
+				android:background="@drawable/button_number_violet_shape"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dip"
+			android:layout_marginRight="10dip"
+			android:layout_marginTop="30dip"
+			android:gravity="center"
+			android:orientation="vertical" >
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:gravity="center"
+				android:text="@string/lcd_screen_light_level"
+				android:textSize="18sp"
+				android:textColor="#F00" />
+
+			<SeekBar
+				android:id="@+id/brightnessSeekbar"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:max="255" />
+		</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5"
+    android:orientation="vertical" >
+
+    <include layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/relay_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/pos_relay_test"
+                android:onClick="onClick"/>
+
+            <Button
+                android:id="@+id/led_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/pos_led_test"
+                android:onClick="onClick"
+                android:layout_marginTop="15dp"/>
+
+            <Button
+                android:id="@+id/rsserial_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/pos_rs_test"
+                android:onClick="onClick"
+                android:layout_marginTop="15dp"/>
+
+            <Button
+                android:id="@+id/input_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/pos_input_test"
+                android:onClick="onClick"
+                android:layout_marginTop="15dp"/>
+
+            <Button
+                android:id="@+id/gpio_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/pos_gpio_test"
+                android:onClick="onClick"
+                android:layout_marginTop="15dp"/>
+
+            <Button
+                android:id="@+id/sensor_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/sensor_test"
+                android:onClick="onClick"
+                android:layout_marginTop="15dp"/>
+
+        </LinearLayout>
+	</ScrollView>
+</LinearLayout>

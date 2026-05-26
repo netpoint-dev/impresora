@@ -1,0 +1,219 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".pos.InputActivity" >
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <LinearLayout
+        android:id="@+id/weigen_tablelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/titlebar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pos_wigan_signal"
+            android:textColor="@color/Blue" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/Blue" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_switch_weigan_door"
+                    android:textSize="18sp"/>
+                <Spinner
+                    android:id="@+id/wiegandSwitchSpr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp" />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_wigan_content"
+                    android:textSize="18sp"/>
+                <EditText
+                    android:id="@+id/edt_wiegandsend"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:text="FFFF"
+                    android:digits="0123456789ABCDEF"
+                    android:inputType="textCapCharacters"/>
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_wigan_type"
+                    android:textSize="18sp"/>
+                <Spinner
+                    android:id="@+id/wiegandtypeSpr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+                <Button
+                    android:id="@+id/wiegandInputBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="@string/pos_wigan_input"
+                    android:textSize="18sp"
+                    android:onClick="onClick"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"/>
+                <Button
+                    android:id="@+id/wiegandOutputBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="@string/pos_wigan_output"
+                    android:textSize="18sp"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"
+                    android:onClick="onClick"/>
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/btn_wiegandSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/pos_wigan_send"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            android:layout_marginBottom="10dp"
+            style="@style/buttonNumberStyle"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_wigan_recv"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/tv_wiegandreceive"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_door_recv"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/tv_doorreceive"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/pos_key_recv"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tv_keyreceive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+        </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_magnetic_sensing1_recv"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/tv_magneticSensationreceive1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pos_magnetic_sensing2_recv"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/tv_magneticSensationreceive2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"/>
+            </TableRow>
+        </TableLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

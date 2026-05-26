@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	
+	    <include layout="@layout/titlebar" />
+	
+	
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_margin="10dp"
+	            android:orientation="vertical" >
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:orientation="horizontal" >
+	
+	                <Button
+	                    android:id="@+id/open_btn"
+	                    style="@style/buttonNumberStyle"
+	                    android:layout_width="0dp"
+	                    android:layout_height="48dp"
+	                    android:layout_margin="10dp"
+	                    android:layout_weight="1"
+	                    android:onClick="openReader"
+	                    android:background="@drawable/button_number_violet_shape"
+	                    android:text="@string/open_reader" />
+	
+	                <Button
+	                    android:id="@+id/close_btn"
+	                    style="@style/buttonNumberStyle"
+	                    android:layout_width="0dp"
+	                    android:layout_height="48dp"
+	                    android:layout_margin="10dp"
+	                    android:layout_weight="1"
+	                    android:onClick="closeReader"
+	                    android:background="@drawable/button_number_violet_shape"
+	                    android:text="@string/close_reader" />
+	            </LinearLayout>
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="10dp"
+	                android:orientation="horizontal" >
+	
+	                <Button
+	                    android:id="@+id/poweron_btn"
+	                    style="@style/buttonNumberStyle"
+	                    android:layout_width="0dp"
+	                    android:layout_height="48dp"
+	                    android:layout_margin="10dp"
+	                    android:layout_weight="1"
+	                    android:onClick="powerOn"
+	                    android:background="@drawable/button_number_violet_shape"
+	                    android:text="@string/power_on" />
+	
+	                <Button
+	                    android:id="@+id/poweroff_btn"
+	                    style="@style/buttonNumberStyle"
+	                    android:layout_width="0dp"
+	                    android:layout_height="48dp"
+	                    android:layout_margin="10dp"
+	                    android:layout_weight="1"
+	                    android:onClick="powerOff"
+	                    android:background="@drawable/button_number_violet_shape"
+	                    android:text="@string/power_off" />
+	            </LinearLayout>
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="5dp"
+	                android:orientation="horizontal" >
+	
+	                <Button
+	                    android:id="@+id/read_btn"
+	                    style="@style/buttonNumberStyle"
+	                    android:layout_width="0dp"
+	                    android:layout_height="48dp"
+	                    android:layout_margin="10dp"
+	                    android:layout_weight="1"
+	                    android:onClick="readData"
+	                    android:background="@drawable/button_number_violet_shape"
+	                    android:text="@string/ul_read_card" />
+	                
+	                <View
+	                    android:layout_width="0dp"
+	                    android:layout_height="58dp"
+	                    android:layout_margin="10dp"
+	                    android:layout_weight="1"/>
+	                    
+	            </LinearLayout>
+	            
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="5dp"
+	                android:orientation="horizontal">
+	                
+	                <RadioGroup
+	                        android:id="@+id/radioZoneGroup"
+	                       	android:layout_width="wrap_content"
+	                    	android:layout_height="wrap_content"
+	                    	android:layout_margin="10dp"
+	                        android:orientation="horizontal">
+	                        
+	
+	                        <RadioButton
+	                            android:id="@+id/zone_0"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="16sp"
+	                            android:checked="true"
+	                            android:text="0" />
+	
+	                        <RadioButton
+	                            android:id="@+id/zone_1"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="16sp"
+	                   	        android:text="1" />
+	                    
+	                  
+	
+	                        <RadioButton
+	                            android:id="@+id/zone_2"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="16sp"
+	                            android:text="2" />
+	
+	                        <RadioButton
+	                            android:id="@+id/zone_config"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="16sp"
+	                   	        android:text="config" />
+	                </RadioGroup>
+	                
+	            </LinearLayout>
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:layout_marginTop="5dp"
+	                android:orientation="vertical" >
+	
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_marginTop="5dp"
+	                    android:orientation="horizontal" >
+	
+	                    <TextView
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:text="@string/at88sc153read_addr"
+	                        android:textSize="14sp" />
+	
+	                    <EditText
+	                        android:id="@+id/addr_edt"
+	                        android:layout_width="50dp"
+	                        android:layout_height="wrap_content"
+	                        android:layout_weight="1"
+	                        android:maxLength="3"
+	                        android:text="00"
+	                        android:textSize="14sp" />
+	                </LinearLayout>
+	
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_marginTop="5dp"
+	                    android:orientation="horizontal" >
+	
+	                    <TextView
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:text="@string/at88sc153read_numm"
+	                        android:textSize="14sp" />
+	
+	                    <EditText
+	                        android:id="@+id/num_edt"
+	                        android:layout_width="50dp"
+	                        android:layout_height="wrap_content"
+	                        android:layout_weight="1"
+	                        android:maxLength="3"
+	                        android:text="40"
+	                        android:textSize="14sp" />
+	                </LinearLayout>
+	
+	                <EditText
+	                    android:id="@+id/read_result_edt"
+	                    android:layout_width="match_parent"
+	                    android:layout_height="match_parent"
+	                    android:layout_marginTop="10dp"
+	                    android:background="@android:drawable/edit_text"
+	                    android:editable="false"
+	                    android:textSize="14sp" />
+	            </LinearLayout>
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:orientation="vertical" >
+	
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:orientation="horizontal" >
+	
+	                    <Button
+	                        android:id="@+id/write_btn"
+	                        style="@style/buttonNumberStyle"
+	                        android:layout_width="0dp"
+	                        android:layout_height="48dp"
+	                        android:layout_margin="10dp"
+	                        android:layout_weight="1"
+	                        android:onClick="writeData"
+	                        android:background="@drawable/button_number_violet_shape"
+	                        android:text="@string/ul_write_card" />
+	
+	                    <Button
+	                        android:id="@+id/write_circle"
+	                        style="@style/buttonNumberStyle"
+	                        android:layout_width="0dp"
+	                        android:layout_height="48dp"
+	                        android:layout_margin="10dp"
+	                        android:layout_weight="1"
+	                        android:onClick="writeCircle"
+	                        android:background="@drawable/button_number_violet_shape"
+	                        android:text="循环写卡" />
+	                </LinearLayout>
+	
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_marginTop="5dp"
+	                    android:orientation="horizontal" >
+	
+	                    <TextView
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:text="@string/at88sc153write_addr"
+	                        android:textSize="14sp" />
+	
+	                    <EditText
+	                        android:id="@+id/write_addr_edt"
+	                        android:layout_width="50dp"
+	                        android:layout_height="wrap_content"
+	                        android:layout_weight="1"
+	                        android:maxLength="3"
+	                        android:text="00"
+	                        android:textSize="14sp" />
+	                </LinearLayout>
+	
+	                <TextView
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_marginLeft="10dp"
+	                    android:text="@string/content"
+	                    android:textSize="14sp" />
+	
+	                <EditText
+	                    android:id="@+id/write_content_edt"
+	                    android:layout_width="match_parent"
+	                    android:layout_height="50dp"
+	                    android:background="@android:drawable/edit_text"
+	                    android:maxLength="256"
+	                    android:text="00003200CD000000"
+	                    android:textSize="14sp" />
+	            </LinearLayout>
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:orientation="vertical" >
+	
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:orientation="horizontal" >
+	
+	                    <TextView
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:text="@string/PSC"
+	                        android:textSize="14sp" />
+	
+	                    <Button
+	                        android:id="@+id/verify_psc_btn"
+	                        style="@style/buttonNumberStyle"
+	                        android:layout_width="0dp"
+	                        android:layout_height="48dp"
+	                        android:layout_margin="10dp"
+	                        android:layout_weight="1"
+	                        android:onClick="verifyPassword"
+	                        android:background="@drawable/button_number_violet_shape"
+	                        android:text="@string/verify" />
+	
+	                    <RadioGroup
+	                        android:id="@+id/radioPwGroup"
+	                       	android:layout_width="0dp"
+	                       	android:layout_weight="1"
+	                        android:layout_height="62dp"
+	                        android:layout_marginTop="10dp"
+	                        android:layout_marginLeft="10dp"
+	                        android:orientation="vertical">
+	
+	                        <RadioButton
+	                            android:id="@+id/radioWrite"
+	                            android:layout_width="match_parent"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="12dp"
+	                            android:text="@string/at88sc153BtWrite" />
+	
+	                        <RadioButton
+	                            android:id="@+id/radioRead"
+	                            android:layout_width="match_parent"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="12dp"
+	                            android:text="@string/at88sc153BtRead" />
+	                    </RadioGroup>
+	                    
+	                    <RadioGroup
+	                        android:id="@+id/radioIndexGroup"
+	                       	android:layout_width="0dp"
+	                       	android:layout_weight="1"
+	                        android:layout_height="62dp"
+	                        android:layout_marginTop="10dp"
+	                        android:layout_marginLeft="10dp"
+	                        android:orientation="vertical">
+	
+	                        <RadioButton
+	                            android:id="@+id/radioIndex0"
+	                            android:layout_width="match_parent"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="12dp"
+	                            android:checked="true"
+	                            android:text="0" />
+	
+	                        <RadioButton
+	                            android:id="@+id/radioIndex1"
+	                            android:layout_width="match_parent"
+	                            android:layout_height="wrap_content"
+	                            android:textSize="12dp"
+	                            android:text="1" />
+	                    </RadioGroup>
+	                </LinearLayout>
+	                
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:orientation="horizontal">
+	
+		                <EditText
+		                    android:id="@+id/psc_edt1"
+		                    android:layout_width="0dp"
+		                    android:layout_weight="1"
+		                    android:layout_height="wrap_content"
+		                    android:background="@android:drawable/edit_text"
+		                    android:maxLength="2"
+		                    android:textSize="16sp" />
+		                
+		                <EditText
+		                    android:id="@+id/psc_edt2"
+		                    android:layout_width="0dp"
+		                    android:layout_weight="1"
+		                    android:layout_height="wrap_content"
+		                    android:background="@android:drawable/edit_text"
+		                    android:maxLength="2"
+		                    android:textSize="16sp" />
+		                
+		                <EditText
+		                    android:id="@+id/psc_edt3"
+		                   	android:layout_width="0dp"
+		                    android:layout_weight="1"
+		                    android:layout_height="wrap_content"
+		                    android:background="@android:drawable/edit_text"
+		                    android:maxLength="2"
+		                    android:textSize="16sp" />
+	                
+	                </LinearLayout>
+	            </LinearLayout>
+	        </LinearLayout>
+	
+	</LinearLayout>
+</ScrollView>

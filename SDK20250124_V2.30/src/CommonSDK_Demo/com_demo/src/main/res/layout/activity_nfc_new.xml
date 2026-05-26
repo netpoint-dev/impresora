@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".nfc.NFCActivityNew">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/titlebar">
+
+        <TextView
+            android:id="@+id/tv_show_nfc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nfc_tv_scanning"
+            android:textSize="24sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextNfcAPDUCount"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:hint="@string/nfc_tv_apdu_count"
+                android:inputType="number"
+                android:text="1"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/editTextNfcAPDU"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:hint="@string/apdu_to_send"
+                android:inputType="textMultiLine"
+                android:text="00A4040000"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/buttonNfcAPDU"
+                style="@style/buttonNumberStyle"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/send_apdu"
+                android:enabled="false"
+                android:onClick="onClick"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textNfcReader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/reader"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <TextView
+            android:id="@+id/textNfcScanSuccessCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/Blue"/>
+
+        <TextView
+            android:id="@+id/textNfcApduCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/Blue"/>
+
+    </LinearLayout>
+
+
+    <!-- NFC 识别区域 -->
+    <!-- 绘制方框的 View -->
+    <com.common.demo.nfc.NFCBoundingBoxView
+        android:id="@+id/boundingBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </com.common.demo.nfc.NFCBoundingBoxView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

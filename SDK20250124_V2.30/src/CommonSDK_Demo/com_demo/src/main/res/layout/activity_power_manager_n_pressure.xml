@@ -1,0 +1,397 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".power.PressureNActivity"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <!-- ScrollView使文本内容可滚动 -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/border">
+
+        <!-- TextView用来显示测试内容 -->
+        <TextView
+            android:id="@+id/testTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp" />
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <EditText
+                        android:id="@+id/tofCustomMmEt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="自定义mm"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold"
+                        android:inputType="number"  />
+
+                    <EditText
+                        android:id="@+id/tofCustomErrEt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="误差范围+-mm"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold"
+                        android:inputType="number"  />
+                    <Button
+                        android:id="@+id/tofCustomStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+
+                    <TextView
+                        android:id="@+id/tofCustomCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fail/all[0/0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3cm压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/tof3cmStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+
+                    <TextView
+                        android:id="@+id/tof3cmCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fail/all[0/0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30cm压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/tof30cmStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+                    <TextView
+                        android:id="@+id/tof30cmCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fail/all[0/0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="净空压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/tofNetStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+                    <TextView
+                        android:id="@+id/tofNetCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fail/all[0/0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/tofStopBtn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_number_violet_shape"
+                android:onClick="onClick"
+                android:layout_marginBottom="10dp"
+                android:text="停止" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="卡模式压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_vertical"/>
+                    <Button
+                        android:id="@+id/nfcCardActivateBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/powerManage_n_nfc_activate_card_mode_text" />
+
+                    <Button
+                        android:id="@+id/nfcCardDeactivateBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_nfc_deactivate_card_mode_text" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="读卡压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_vertical"/>
+
+                    <Button
+                        android:id="@+id/nfcReaderStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+                    <Button
+                        android:id="@+id/nfcReaderStopBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="停止" />
+
+                    <TextView
+                        android:id="@+id/nfcReaderCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="success/all[0/0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HID压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/hidStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+                    <Button
+                        android:id="@+id/hidStopBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="停止" />
+
+                    <TextView
+                        android:id="@+id/hidCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="success/all[0/0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="audio压测"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/audioStartBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="开始" />
+                    <Button
+                        android:id="@+id/audioStopBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="停止" />
+
+                    <TextView
+                        android:id="@+id/audioCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="all[0]"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开机上下电存储：/storage/emulated/0/npressure_power.txt"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hid存储：/storage/emulated/0/npressure_hid.txt"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="记录框内容是否保存本地：/storage/emulated/0/npressure_all.txt"
+                        android:layout_marginBottom="10dp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"/>
+
+                    <CheckBox
+                        android:id="@+id/saveLocalCb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/clearBtn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_number_violet_shape"
+                android:onClick="onClick"
+                android:layout_marginBottom="20dp"
+                android:text="清空数据" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,369 @@
+                NFC API
+Development Documentation
+                     V1.1.0
+             Update Records
+  Date                      Description
+
+2022-10-31              First Edition Release
+
+2023-02-22              Modify the interface
+
+2023-04-23             Update the interface
+
+2024-06-20         Update API and documentation
+                                         Contents
+1 Introduction
+   1.1 SelectCardReturn Class
+     1.1.1 Card type enumeration
+   1.2 NfcUtil Class
+     1.2.1 Get Instance
+     1.2.2 Initialize the serial port
+     1.2.3 Destroy the serial port
+     1.2.4 Check the microcontroller software version
+     1.2.5 CPU Card-Select Card
+     1.2.6 CPU Card-Send the APDU Command
+     1.2.7 M1-Authentication
+     1.2.8 M1-Read Block
+     1.2.9 M1-Write Block
+     1.2.10 M1-Close the Card
+     1.2.11 M1-Initialize the e-wallet
+     1.2.12 M1-Read the e-wallet
+     1.2.13 M1-Write the e-wallet
+   1.3 NFC Model
+     1.3.1 Supported Card Types
+     1.3.2 Mifare UltraLight EV1 card
+     1.3.3 Mifare Desfire EV2/EV3 Card
+     1.3.4 CPU Card
+     1.3.5 Mifare Classic Card
+     1.3.6 Felica Card
+     1.3.7 Mifare Desfire EV1 Card
+1 Introduction
+Package: com.common.apiutil.nfc
+
+
+1.1 SelectCardReturn Class
+
+                           Class                           Description
+
+                            Nfc                       Reflection interface
+
+                           NfcUtil                            MCU
+
+                      SelectCardReturn                 Card information
+
+
+1.1.1 Card type enumeration
+
+
+   /**
+    * @Function Card type enumeration
+    *
+    * @Parameter
+    * 1.cardType: M0,M1,ISO15693,FELICA,ID_CARD,TYPE_A,TYPE_B
+    *
+    * */
+
+   public class SelectCardReturn {
+       private CardTypeEnum cardType;
+       private byte[] cardNum;
+       public SelectCardReturn() {
+
+        }
+
+        public void setCardType(CardTypeEnum cardType) {
+            this.cardType = cardType;
+        }
+
+        public CardTypeEnum getCardType() {
+            return this.cardType;
+        }
+   }
+
+
+
+1.2 NfcUtil Class
+Supports identiﬁcation of CPU card and M1 card
+
+1.2.1 Get Instance
+
+
+   /**
+    * @Function Get instance
+    *
+    * @Parameter context
+    *
+    * */
+
+   public synchronized static final NfcUtil getInstance(Context context)
+
+
+
+1.2.2 Initialize the serial port
+
+
+   /**
+    * @Function Initialize the serial port
+    *
+    * */
+
+   public synchronized void initSerial()
+
+
+
+1.2.3 Destroy the serial port
+
+
+   /**
+    * @Function Destroy the serial port
+    *
+    * */
+
+   public synchronized void destroySerial()
+
+
+
+1.2.4 Check the microcontroller software version
+
+
+   /**
+    * @Function Check the microcontroller software version
+    *
+    * @Return Microcontroller software version number
+    *
+    * */
+
+   public synchronized int checkVersion()
+
+
+
+1.2.5 CPU Card-Select Card
+
+
+   /**
+    * @Function CPU Card-Select Card
+    *
+    * */
+
+   public synchronized SelectCardReturn selectCard()
+1.2.6 CPU Card-Send the APDU Command
+
+
+   /**
+    * @Function CPU Card-Send the APDU Command
+    *
+    * */
+
+   public synchronized byte[] sendAPDU(byte[] cmd, int timeout)
+
+
+
+1.2.7 M1-Authentication
+
+
+   /**
+    * @Function M1-Authentication
+    *
+    * @Exception WrongParamException
+    *
+    * */
+
+   public synchronized boolean M1_AUTHENTICATE(int block, int keyType, byte[] key)
+   throws WrongParamException
+
+
+
+1.2.8 M1-Read Block
+
+
+   /**
+    * @Function M1-Read Block
+    *
+    * */
+
+   public synchronized byte[] M1_READ_BLOCK(int block) throws WrongParamException
+
+
+
+1.2.9 M1-Write Block
+
+
+   /**
+    * @Function M1-Write Block
+    *
+    * @Exception WrongParamException
+    *
+    * */
+
+   public synchronized boolean M1_WRITE_BLOCK(int block, byte[] data) throws
+   WrongParamException
+1.2.10 M1-Close the Card
+
+
+   /**
+    * @Function M1-Close the Card
+    *
+    * */
+
+   public synchronized boolean M1_CLOSE_CARD()
+
+
+
+1.2.11 M1-Initialize the e-wallet
+
+
+   /**
+    * @Function M1-Initialize the e-wallet
+    *
+    * @Parameter
+    * 1.block: Write Block:0 - 255
+    * 2.money: Value
+    *
+    * @Return True, success; false，failed
+    *
+    * @Exception WrongParamException
+    *
+    * */
+
+   public boolean M1_INIT_WALLET(int block, int money) throws WrongParamException
+
+
+
+1.2.12 M1-Read the e-wallet
+
+
+   /**
+    * @Function M1-Read the e-wallet
+    *
+    * @Parameter
+    * 1.block: Write Block:0 - 255
+    *
+    * @Return Value
+    *
+    * @Exception WrongParamException,ReadWalletMoneyWrongException,
+   NotInitWalletException
+    *
+    * */
+
+   public Long M1_READ_WALLET(int block) throws WrongParamException,
+   ReadWalletMoneyWrongException, NotInitWalletException
+
+
+
+1.2.13 M1-Write the e-wallet
+   /**
+    * @Function M1-Write the e-wallet
+    *
+    * @Parameter
+    * 1.block: Write Block:0 - 255
+    * 2.money: Value
+    * 3.dealType: Type:0, Add；1, Sub
+    *
+    * @Return True, success; false, failed
+    *
+    * @Exception WrongParamException
+    *
+    * */
+
+   public boolean M1_WRITE_WALLET(int block, int dealType, int money) throws
+   WrongParamException
+
+
+
+
+                             Type                                   Description
+
+                     WrongParamException                     Parameter error exception
+
+                ReadWalletMoneyWrongException              Read e-wallet error exception
+
+                    NotInitWalletException               E-wallet is not initialized exception
+
+                   NoClassObjectsException               The required class was not found
+
+
+1.3 NFC Model
+1.3.1 Supported Card Types
+
+It depends on the speciﬁc NFC chip and terminal device
+
+1.3.2 Mifare UltraLight EV1 card
+
+a Write Block
+
+
+
+   /**
+    * @Function Write Block
+    *
+    * @Parameter
+    * 1.noBlock: Block
+    * 2.inBuf: Data
+    * 3.inLen: Length
+    *
+    * @Exception CommonException
+    *
+    * */
+   public synchronized void ultraigh_write_page(byte noBlock, byte[] inBuf, int
+   inLen) throws CommonException
+
+
+
+b Read Block
+
+
+
+   /**
+    * @Function Read Block
+    *
+    * @Parameter
+    * 1.noBlock: Block
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized byte[] ultraigh_read_page(byte noBlock) throws CommonException
+
+
+
+c Ultraigh EV1 Password Veriﬁcation
+
+
+
+   /**
+    * @Function Ultraigh EV1 Password verification
+    *
+    * @Parameter
+    * 1.noBlock: 0-255
+    * 2.pwd: A 4-byte password
+    *
+    * @Return success：2 bytes. Failed：exception
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized byte[] ultraigh_pwd_auth(byte noBlock, byte[] pwd) throws
+   CommonException
+
+
+
+1.3.3 Mifare Desﬁre EV2/EV3 Card
+
+./NFC/Deﬁre_Ev2&Ev3_Card.pdf
+
+1.3.4 CPU Card
+
+./NFC/cpu_card_api.pdf
+
+1.3.5 Mifare Classic Card
+
+./NFC/mifare_classic_card_api.pdf
+
+1.3.6 Felica Card
+./NFC/felica_card_api.pdf
+
+1.3.7 Mifare Desﬁre EV1 Card
+
+./NFC/desﬁre_ev1_card_api.pdf
+

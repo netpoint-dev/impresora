@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/secondLedLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="gone"  >
+    
+    <Button
+        android:id="@+id/openSecondLed"
+        android:layout_width="match_parent"
+    	android:layout_height="136dp"
+    	android:text="打开数码管"
+    	android:visibility="gone"/>
+	
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/serial_dev"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_select_character"
+            android:textColor="#FF000000" />
+
+        <RadioGroup
+            android:id="@+id/radiogroup_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RadioButton
+                android:id="@+id/radiobutton_character_unit_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/radiobutton_character_unit_price"
+                android:textColor="#FF000000"/>
+
+            <RadioButton
+                android:id="@+id/radiobutton_character_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/radiobutton_character_total_price"
+                android:textColor="#FF000000" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_character_collect_bill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/radiobutton_character_collect_bill"
+                android:textColor="#FF000000" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_character_give_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/radiobutton_character_give_change"
+                android:textColor="#FF000000" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_character_none_bright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/radiobutton_character_none_bright"
+                android:textColor="#FF000000" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_input_money"
+        android:textColor="#FF000000" />
+
+    <EditText
+        android:id="@+id/et_input_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/et_input_money_hint"
+        android:inputType="numberDecimal"
+        android:maxLength="9"
+        android:textColor="#FF000000"
+        android:textColorHint="#FF000000" />
+
+    <Button
+        android:id="@+id/bt_show_input_money"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:text="@string/bt_show_input_money" />
+
+    <Button
+        android:id="@+id/bt_clear_all"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:text="@string/bt_clear_all" />
+
+    <Button
+        android:id="@+id/bt_reset"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:text="@string/bt_reset" />
+
+</LinearLayout>

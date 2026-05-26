@@ -1,0 +1,256 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E8E8E8" >
+    
+    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+            
+            <Button
+                android:id="@+id/read_version"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"
+                android:text="version" 
+                android:visibility="gone"/>
+        </LinearLayout>   
+        
+        <TextView
+            android:id="@+id/time_view"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#fff"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:layout_margin="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="20sp"
+            android:text="time_view"
+            android:visibility="gone"/>
+        
+        <TextView
+            android:id="@+id/hint_view"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#fff"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:layout_margin="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="20sp"
+            android:text="hint_view" />
+        
+        <Button
+            android:id="@+id/read_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="读卡"
+            android:layout_marginLeft="30dp"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/tps350_power_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下电"
+            android:layout_marginLeft="30dp"
+            android:visibility="gone"/>
+        
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/test_info_view"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#333"
+            android:visibility="gone" />
+        
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:visibility="gone" >
+            
+            <TextView
+                android:id="@+id/tAhint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="32dp"
+                android:textColor="#000000"
+            	android:textSize="20sp"
+            	android:text="ta"
+            	android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/cellphone_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="19dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <ImageView
+                    android:id="@+id/people_view"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_launcher"/>
+                <ImageView
+                    android:id="@+id/finger_view"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:visibility="gone"/>
+                <TextView
+	                android:id="@+id/cellphone_showData"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="32dp"
+	                android:layout_marginLeft="15dp"
+	                android:textColor="#000000"
+	                android:lineSpacingMultiplier="1.5"
+	            	android:textSize="20sp"/>
+        	</LinearLayout>
+            <TextView
+                android:id="@+id/showData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="32dp"
+                android:textColor="#000000"
+                android:lineSpacingMultiplier="1.5"
+            	android:textSize="20sp"
+            	android:layout_below="@id/cellphone_view"/>
+            
+            
+            <EditText
+                android:id="@+id/block_num"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_below="@id/showData"
+                android:layout_marginLeft="19dp"
+                android:text="01" 
+                android:visibility="gone"/>
+            <EditText
+                android:id="@+id/pwcheck"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_below="@id/block_num"
+                android:layout_marginLeft="19dp"
+                android:text="FFFFFFFFFFFF" 
+                android:visibility="gone"/>
+            <EditText
+                android:id="@+id/edittext2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_below="@id/showData"
+                android:layout_marginLeft="30dp"
+                android:hint="请输入密码" 
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/passwordconfirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确认"
+                android:layout_toRightOf="@id/pwcheck"
+                android:layout_marginTop="52dp"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/writedata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="写入数据"
+                android:layout_marginTop="160dp"
+                android:layout_marginLeft="200dp"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/writedataconfirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确认写入"
+                android:layout_marginLeft="30dp"
+				android:layout_below="@id/edittext2"
+                android:visibility="gone"/>
+             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/showData"
+                android:layout_marginLeft="23dp"
+                android:layout_toRightOf="@+id/showData"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/ic_launcher"
+					android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_launcher"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+        
+        <TextView
+            android:id="@+id/default_view"
+            android:layout_marginTop="100dp"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:textSize="20sp"
+            android:textColor="#333"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="请获取权限" />
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/requestPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取权限" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

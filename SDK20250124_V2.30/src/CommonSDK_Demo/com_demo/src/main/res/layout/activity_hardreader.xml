@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/container"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	tools:context=".decode.HardReaderActivity"
+	tools:ignore="MergeRootFrame"
+	android:orientation="vertical">
+
+	<include android:id="@+id/titlebar"
+		layout="@layout/titlebar" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_margin="10dp"
+		android:orientation="vertical">
+
+		<RadioGroup
+			android:id="@+id/radioGroup_type"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<RadioButton
+				android:id="@+id/radioButton_serial"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/hardreader_serial"
+				android:textSize="18sp"
+				android:layout_weight="1"
+				android:checked="true"/>
+
+			<RadioButton
+				android:id="@+id/radioButton_usb"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/hardreader_usb"
+				android:textSize="18sp"
+				android:layout_weight="1" />
+
+		</RadioGroup>
+
+
+		<LinearLayout
+			android:id="@+id/ly1"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+			<TableLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<TableRow>
+					<Button
+						android:id="@+id/open_hardreader"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/hardreader_open"
+						android:onClick="openHardreader"
+						android:background="@drawable/button_number_violet_shape"
+						android:layout_marginRight="10dp"/>
+
+					<Button
+						android:id="@+id/close_hardreader"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/hardreader_close"
+						android:onClick="closeHardreader"
+						android:background="@drawable/button_number_violet_shape"/>
+				</TableRow>
+			</TableLayout>
+
+			<Button
+				android:id="@+id/scan_hardreader"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="扫描"
+				android:onClick="scanHardreader"
+				android:visibility="gone"/>
+
+			<TableLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:visibility="gone">
+				<TableRow>
+					<Button
+						android:id="@+id/cycle_test"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:text="循环扫描"
+						android:onClick="circleTest"/>
+
+					<EditText
+						android:id="@+id/circle_num"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="100" />
+				</TableRow>
+			</TableLayout>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="18sp"
+				android:layout_marginTop="10dp"
+				android:text ="@string/hardreader_recv" />
+
+			<TextView
+				android:id="@+id/data_show"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="18sp"
+				android:layout_marginTop="10dp"/>
+
+			<TextView
+				android:id="@+id/circleCountShow"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="18sp" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+

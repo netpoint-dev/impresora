@@ -1,0 +1,499 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".deliverylocker.DeliverylockerActivity" >
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titlebar">
+        <TableLayout
+            android:id="@+id/led_tablelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_test"
+                android:textColor="@color/Blue"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp"/>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/powerManage_version"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:id="@+id/versionTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <Button
+                android:id="@+id/getPinLevelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/powerManage_pin_get_level"
+                android:onClick="onClick"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:visibility="gone"/>
+
+            <TableRow
+                android:layout_marginBottom="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_moneybox_in_pin"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/moneyBoxInPinLevelEdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-1" />
+            </TableRow>
+
+            <Button
+                android:id="@+id/setPinLevelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/powerManage_pin_set_level"
+                android:onClick="onClick"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_set_pin_text"
+                android:visibility="gone"/>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_moneybox_out_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/moneyBoxOutPinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_mpos1_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/mpos1PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_mpos2_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/mpos2PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_lan_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/lanPinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_usb1_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/usb1PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_usb2_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/usb2PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_usb3_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/usb3PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_usb4_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/usb4PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_usb5_pin"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/usb5PinLevelChebox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_k108_fill_light_brightness" />
+
+                <EditText
+                    android:id="@+id/lightBrightnessEdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0-255"
+                    android:text="0"
+                    android:gravity="center"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <Button
+                    android:id="@+id/lightSetBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:text="@string/powerManage_k108_set"
+                    android:visibility="gone"/>
+
+                <SeekBar
+                    android:id="@+id/lightBrightnessSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:max="255"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerManage_k108_lcd_brightness" />
+
+                <EditText
+                    android:id="@+id/lcdBrightnessEdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0-100"
+                    android:text="0"
+                    android:gravity="center"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <Button
+                    android:id="@+id/lcdSetBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:text="@string/powerManage_k108_set"
+                    android:visibility="gone"/>
+
+                <SeekBar
+                    android:id="@+id/lcdBrightnessSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:max="100"/>
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <TableRow
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/powerManage_k108_hdmi_state" />
+
+                        <TextView
+                            android:id="@+id/hdmiStateTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/powerManage_k108_small_battery_state" />
+
+                        <TextView
+                            android:id="@+id/smallBatteryStateTv"
+                            android:layout_width="136dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/powerManage_k108_large_battery_state" />
+
+                        <TextView
+                            android:id="@+id/largeBatteryStateTv"
+                            android:layout_width="136dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center" />
+                    </TableRow>
+
+                </TableLayout>
+
+                <Button
+                    android:id="@+id/stateGetBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="220dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/powerManage_k108_get" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <TableRow
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/powerManage_k108_small_battery_power" />
+
+                        <EditText
+                            android:id="@+id/smallBatteryPowerEdt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="0-100"
+                            android:gravity="center"
+                            android:focusable="false"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/powerManage_k108_large_battery_power" />
+
+                        <EditText
+                            android:id="@+id/largeBatteryPowerEdt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="0-100"
+                            android:gravity="center"
+                            android:focusable="false"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%" />
+                    </TableRow>
+
+                </TableLayout>
+
+                <Button
+                    android:id="@+id/powerGetBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="220dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/powerManage_k108_get" />
+
+            </LinearLayout>
+
+
+            <TableRow android:layout_marginTop="10dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/updateBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:text="@string/deliverylocker_update"/>
+
+                <EditText
+                    android:id="@+id/binPathEdt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:text="" />
+            </TableRow>
+
+            <TextView
+                android:id="@+id/updateStatusTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"/>
+
+        </TableLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

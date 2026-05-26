@@ -1,0 +1,1663 @@
+demo_defireEv2&Ev3 Card
+    Development manual
+
+
+    Date      2021-12-08
+
+    Version   V1.0.0
+1. the command return value description
+  Success: No data: Success (PS: Return value is 0)
+  There is data: related command requirements data (such as: read data)
+  Failure: Error: (error code)
+
+  2. error code description
+  Negative error code: (mainly PICC and PCD communication is lost, contact failure. You need to
+  re-check the card)
+  -2 APK layer interface Introduction parameter error
+        -10 APK layer transparent error
+  -1001 parameter error
+  -1002 IO error
+  -1003 timeout error
+  -1004 Check error
+  -1005 frame error
+  -1006 interference error
+  -1007 protocol error
+  -1008 card conflict error
+  -1009 send error
+  16 credit error code: (card instruction operation problem)
+      The format is 0x13xx, the error code is XX, "DS226031 - Product Data Sheet Mifare Desfire
+  Ev2 Contactless Multi-Application IC (3.1) .pdf" Chapter VII or "Desfire EV3 User MANUAL
+  3.0.pdf" Chapter 8 finds related commands , Matching this XX information
+
+  3. the operating instructions
+  1. Enter the operating interface and place the card in the identification area.
+  2. Click "Open NFC", such as opening success, button "Check IC Card" can operate, continue 3.
+  3. Click "Check IC Card", such as no card, the information bar displays "not retrieved to IC card"; if
+  there is a card, the information bar displays the information, the command button can operate,
+  you can continue to test the relevant command.
+  4. The first-time EV2 / EV3 card needs to be activated to use, click the button "New Card First
+  USE" to activate.
+  When the application exits, the NFC is automatically turned off, and can be saheder.
+
+  4. Precautions
+      This Demo is commanded, this parameter is only example, if you need to modify, please
+  refer to Manual "DS226031 - Product Data Sheet Mifare Desfire Ev2 ContactLi-Application IC
+  (3.1) .pdf" or "Desfire EV3 User Manual 3.0.pdf"
+
+
+
+                                                     1
+5. Operation analysis
+Note: Verify an instruction of the EV2 card requires prerequisites, such as AuthenticateEv2First,
+first need to call SelectApplication, and successfully execute the AuthenticateEv2First to
+complete the verification. So each command operation in DEMO is integrated, the input
+parameter is 16, and below is an instructions for each operation in the test interface.
+
+
+1. AuthenticateEV2First in Demo
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+        ①                                      ②
+① ：SelectApplication parameters, select application
+② ：AuthenticateEv2First parameters, this parameter consists of: Key (16 bytes) + keyno (1
+    byte) + lencap (1 byte), the default is 0x00
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+2. AuthenticateEV2NonFirst in Demo
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+   ①                                      ②
+① ：SelectApplication parameters, select application
+② ：The parameters of Authenticateev2nonfirst, this parameter consists of: key (16 bytes) +
+    Keyno (1 byte), the default is 0x00
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+3. FreeMem in Demo
+return value:
+Success: 3 Bytes data
+Failure: Error: (error code)
+
+
+4. Format in Demo
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+                                                   2
+5. SetConfiguration in Demo
+00 00 00 00 00
+    ①       ②
+①       ：SelectApplication parameters, select application
+②       ：SetConfiguration parameters, this parameter consists of option (1 byte) + Data (1
+    byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+6. GetVersion in Demo
+return value:
+Success: 28 Bytes
+Failure: Error: (error code)
+
+
+7. GetCardUID in Demo
+return value:
+Success: n bytes' data (N is determined by the card, generally 7 bytes)
+Failure: Error: (error code)
+
+
+8. ChangeKey in Demo
+00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00
+    ①                                    ②
+①       ：SelectApplication parameters, select application
+②       ：ChangeKey's parameters, composition: ISEqualgetKeyno (1 byte) + KeyNO (1 byte) +
+NEWKEY (16 Bytes) + Oldkey (16 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+9. ChangeKeyEV2 in Demo
+00 00 00 00 00 12 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+    ①                                    ②
+①       ：SelectApplication parameters, select application
+
+                                                 3
+②       ：ChangeKeyev2 parameters consisting: ISEqualgetKeyno (1 byte) + Keysetno (1 byte) +
+KeyNO (1 byte) + NEWKEY (16 BYTES) + Oldkey (16 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+10. InitializeKeySet in Demo
+00 00 01 01 02
+    ①      ②
+①：SelectApplication parameters, select application
+②：InitializeKeyset parameters, Composition: KeySetNo (1BYTE) + KeySetType (1byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+11. FinalizeKeySet in Demo
+00 00 01 01 01
+    ①      ②
+①：SelectApplication parameters, select application
+②：FinalizeKeyset parameters, Composition: KeysetNo (1BYTE) + KeySetVersion (1byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+12. RollKeySet in Demo
+00 00 01 01
+    ① ②
+①：SelectApplication parameters, select application
+②：RollKeyset parameters consisting: KeySetNo (1byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+13. GetKeySettings in Demo
+00 00 00
+    ①
+①       ：SelectApplication parameters, select application
+
+                                               4
+return value:
+Success: 2 bytes
+Failure: Error: (error code)
+
+
+14. ChangeKeySettings in Demo
+00 00 00 0F
+    ①    ②
+①       ：SelectApplication parameters, select application
+② ：ChangeKeySettings Parameters, KeySettings (1byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+15. GetKeyVersion in Demo
+00 00 00 00 00
+    ①       ②
+①       ：SelectApplication parameters, select application
+② ：GetKeyVersion parameters, Keyno (1 byte) + keysetno (1 byte)
+return value:
+Success: 1 bytes
+Failure: Error: (error code)
+
+
+16. CreateApplication in Demo
+00 00 01 0F 91 01 00 10 10 00
+                 ①
+①：CreateApplication Parameters, Composition: AID (3 Bytes) + KeySett1 (1 Byte) + KeySett2 (1
+Byte) + KeySett3 (1 Byte) + AKSVERSION (1 Byte) + NokeySets (1 Byte) + MaxKeysize (1 Byte) +
+AppKeySetSett 1 byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+17. CreateDelegatedApplication in Demo
+00 00 02 00 00 00 10 00 0F 81 00 00 00 00 00
+                ①
+①：CreateDelegatedApplication Parameters, Composition: AID(3 bytes) + DAMSlotNo(2 bytes) +
+DAMSlotVersion(1 byte) + QuotaLimit(2 bytes) + KeySett1(1 byte) + KeySett2(1 byte) +
+
+                                               5
+KeySett3(1 byte) + AKSVersion(1 byte) + NoKeySets(1 byte) + MaxKeySize(1 byte) +
+AppKeySetSett(1 byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+18. DeleteApplication in Demo
+00 00 00 01 00
+①       ②       ③
+①：AuthKey certification number, default piccmasterkey 0x00
+②：DeleteApplication parameters, Composition: AID (3 bytes)
+③：Application certification type, default 0x00, EV3 is used, corresponding to ①
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+19. SelectApplication in Demo
+00 00 01
+    ①
+① ：SelectApplication parameters, Composition: AID（3 bytes）
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+20. GetApplicationIDs in Demo
+return value:
+Success: n Bytes (n is determined by the application, one application 3 bytes, M app n = 3 * m
+bytes)
+Failure: Error: (error code)
+
+
+21. GetDelegatedInfo in Demo
+00 00
+  ①
+①：GetDelegatedInfo parameters, Composition: DAMSlotNo(2 bytes)
+return value:
+Success: 8 Bytes (1 Byte) + Quotalimit (2 Bytes) + FreeBlocks (2 Bytes) + AID (3 bytes))
+Failure: Error: (error code)
+
+                                                 6
+22. CreateStdDataFile in Demo
+Ev2 → 00 00 01 01 01 00 00 20 00 00
+Ev3 → 00 00 01 01 01 00 00 20 00 00 07 41 00 00 20 00 00
+   ①                ②                         ③
+① ：SelectApplication parameters, select application
+② ：CreateStdDataFile parameters, Composition: FileNo(1 byte) + FileOption(1 byte) +
+   AccessRights(2 bytes + FileSize(3 bytes)
+③ ：CreateStddatafile parameters, Composition: Fileno (1 Byte) + FileOption (1 Byte) +
+   Accessrights (2 Bytes + FileSize (3 bytes), create a file, used for getFileCounters
+   authentication (EV2 does not exist)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+23. CreateBackupDataFile in Demo
+00 00 01 02 01 00 00 20 00 00
+   ①                ②
+①：SelectApplication parameters, select application
+②： CreateBackupDataFile parameters, Composition: FileNo(1 byte) + FileOption(1 byte) +
+AccessRights(2 bytes + FileSize(3 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+24. CreateValueFile in Demo
+00 00 01 03 01 00 00 00 00 00 00 50 C3 00 00 C8 00 00 00 01
+   ①                                 ②
+①：SelectApplication parameters, select application
+②：CreateValueFile parameters, Composition: FileNo(1 byte) + FileOption(1 byte) +
+AccessRights(2 bytes) + LowerLimit(4 bytes) + UpperLimit(4 bytes) + Value(bytes) +
+LimitedCreditEnabled(1 byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+
+                                                  7
+25. CreateLinearRecordFile in Demo
+00 00 01 04 01 00 00 20 00 00 10 00 00
+   ①                   ②
+①：SelectApplication parameters, select application
+②：CreateLinearRecordFile parameters, Composition: FileNo(1 byte) + FileOption(1 byte) +
+AccessRights(2 bytes) + RecordSize(3 bytes) + MaxNoOfRecs(3 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+26. CreateCyclicRecordFile in Demo
+00 00 01 05 01 00 00 20 00 00 10 00 00
+   ①                   ②
+①：SelectApplication parameters, select application
+②：CreateCyclicRecordFile parameters, Composition: FileNo(1 byte) + FileOption(1 byte) +
+AccessRights(2 bytes) + RecordSize(3 bytes) + MaxNoOfRecs(3 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+27. CreateTransactionMACFile in Demo
+00 00 01 06 03 0F FF 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+   ①                                        ②
+①：SelectApplication parameters, select application
+②：CreateTransactionMACFile parameters, Composition: FileNo(1 byte) + FileOption(1 byte) +
+AccessRights(2 bytes) + TMKeyOption(1 byte) + TMKey(16 bytes) + TMKeyVer(1 byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+28. DeleteFile in Demo
+00 00 01 05
+   ①    ②
+①：SelectApplication parameters, select application
+②：DeleteFile parameters, Composition: FileNo(1 byte)
+
+                                                8
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+29. GetFileIDs in Demo
+00 00 01
+   ①
+①：SelectApplication parameters, select application
+return value:
+Success: n bytes (n is determined by the number of files existing in this app, one file 1 bytes, n
+file n bytes)
+Failure: Error: (error code)
+
+
+30. GetFileSettings in Demo
+00 00 01 01
+   ①       ②
+①：SelectApplication parameters, select application
+②：GetFileSettings parameters, Composition:FileNo(1 byte)
+return value:
+Success: n bytes (n is determined by the file type)
+Failure: Error: (error code)
+
+
+31. ChangeFileSettings in Demo
+Ev2→ 00 00 01 01 01 00 00
+Ev3→ 00 00 01 07 43 00 00 41 FE FF
+   ①                   ②
+①：SelectApplication parameters, select application
+②：ChangefileSettings Parameters, EV2 Composition: Fileno (1 Byte) + FileOption (1 Byte) +
+Accessrights (2 Bytes), EV3 Composition: Fileno (1 Byte) + FileOption (1 Byte) + Accessrights (2
+Bytes) + SDMOption (1 Byte + SDMACCESSRIGHTS (2 Bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+32. GetFileCounters(only on Ev3) in Demo
+00 00 01 07
+   ①       ②
+
+                                                   9
+①：SelectApplication parameters, select application
+②：GetFileCounters parameters, Composition:FileNo(1 byte)
+return value:
+Success: 5 Bytes (SDMReadctr (3 bytes) + reserved (2 bytes))
+Failure: Error: (error code)
+
+
+33. ReadData in Demo
+00 00 01 01 01 00 00 00 15 00 00
+     ①                ②
+①：SelectApplication parameters, select application
+②：ReadData parameters, Composition:CommMode(1 byte) + FileNo(1 byte) + Offset(3 bytes) +
+Length(3 bytes)
+return value:
+Success: n bytes (N is determined by the input parameter length, the value of Length is equal to
+N)
+Failure: Error: (error code)
+
+
+34. WriteData in Demo
+00 00 01 01 01 00 00 00 09 00 00 01 02 03 04 05 06 07 08 09
+     ①                               ②
+①：SelectApplication parameters, select application
+②：WriteData parameters, Composition: CommMode (1 Byte) + Fileno (1 Byte) + LENGTH (3
+Bytes) + Data (consistent with Length)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+35. GetValue in Demo
+00 00 01 01 03
+     ①      ②
+①：SelectApplication parameters, select application
+②：GetValue parameters, Composition:CommMode(1 byte) + FileNo(1 byte)
+return value:
+Success: 4 bytes
+Failure: Error: (error code)
+
+
+36. Credit in Demo
+
+                                                 10
+00 00 01 01 03 02 00 00 00
+   ①              ②
+①：SelectApplication parameters, select application
+②：Credit parameters, Composition:CommMode(1 byte) + FileNo(1 byte) + Data(4 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+37. Debit in Demo
+00 00 01 01 03 02 00 00 00
+   ①              ②
+①：SelectApplication parameters, select application
+②：Debit parameters, Composition:CommMode(1 byte) + FileNo(1 byte) + Data(4 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+
+38. LimitedCredit in Demo
+00 00 01 01 03 02 00 00 00
+   ①              ②
+①：SelectApplication parameters, select application
+②：LimitedCredit parameters, Composition:CommMode(1 byte) + FileNo(1 byte) + Data(4 bytes)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+39. ReadRecords in Demo
+00 00 01 01 04 00 00 00 01 00 00
+   ①                  ②
+①：SelectApplication parameters, select application
+②：ReadRecords parameters, Composition:CommMode(1 byte) + FileNo(1 byte) + RecNo(3
+bytes) + RecCount(3 bytes)
+return value:
+Success: n bytes (n is determined by the record size set when the loop file is created, namely n =
+recordsize)
+Failure: Error: (error code)
+
+
+                                                 11
+40. WriteRecord in Demo
+00 00 01 01 04 00 00 00 01 00 00 01
+     ①                 ②
+①：SelectApplication parameters, select application
+②：WriteRecord's parameters, Composition: CommMode (1 Byte) + Fileno (1 Byte) + LENGTH (3
+bytes) + Data (consistent with Length)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+41. UpdateRecord in Demo
+00 00 01 01 04 00 00 00 00 00 00 01 00 00 01
+①                        ②
+①：SelectApplication parameters, select application
+②：UpdateRecord Parameters, Composition: CommMode (1 Byte) + Fileno (1 Byte) + Recno (3
+Bytes) + LENGTH (3 Bytes) + Data (consistent with Length)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+42. ClearRecordFile in Demo
+00 00 01 04
+     ①   ②
+①：SelectApplication parameters, select application
+②：ClearRecordfile parameters, Fileno (1 byte)
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+43. CommitTransaction in Demo
+01
+①
+①：CommitTransaction Parameters, Composition: Option(1 byte)
+return value:
+Success: 12 Bytes (TMC (4 Bytes) + TMV (8 bytes))
+Failure: Error: (error code)
+
+
+                                                12
+44. AbortTransaction in Demo
+return value:
+Success: Success
+Failure: Error: (error code)
+
+
+
+
+45. CommitReaderID in Demo
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                         ①
+①：CommitReaderID Parameters, Composition:TMRI（16 bytes）
+return value:
+Success: 16 Bytes (EnctMri)
+Failure: Error: (error code)
+
+
+46. Read_Sig in Demo
+return value:
+Success: 56 Bytes
+Failure: Error: (error code)
+
+6. Android API interface
+Note: Byte sorting default small-end mode
+
+
+1. int NFC_Device_Open();
+    Function: Open NFC
+    Return value: 0 →success
+    Non-zero→ failure
+
+
+2. int NFC_Device_Close();
+    Function: Turn off    NFC
+    Return value: 0 →success
+    Non-zero → failure
+
+
+3. int NFC_Device_Activate(byte[] timeoutMs, byte[] outData, int[]
+
+    outLen);
+    Function: Search and activate cards
+
+                                              13
+   Parameter: timeoutMs → Timeout 4 byte small end mode
+   EXAMPLE: 0x10 0x00 0x00 0x00
+   Established parameters: outData → receives data
+   outLen →Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+4. int NFC_Device_Remove();
+   Function: Remove the card
+   Return value: 0→ success
+   Non-zero → failure
+
+
+5. int CPU_GET_ATS(byte[] outData, int[] outLen);
+   Function: Get Card ATS
+   Parameter: no
+   Established parameters: outData→ receives data
+   outlen→Length of outData
+   Return:value: 0→ success
+   Non-zero→ failure
+
+
+6. int AuthenticateISO(byte KeyNo, byte KeyType, byte[] Key);
+   Function: EV1 card certification, used to activate EV2 / EV3 card
+   Parameter: KeyNo → 1 byte default 0x00
+   KeyType→1 byte default 0x00
+   Key→16 byte default is 0x00
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+7. int AuthenticateEV2First(byte[] Key,byte KeyNo,byte LenCap);
+   Function: EV2 / EV3 card certification
+   Parameter: KEY→ 16 byte authentication, white card default is 0x00
+   KeyNo→ 1 byte
+
+
+
+
+                                                14
+   LenCap →1 byte default is 0x00
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+8. int AuthenticateEV2First(byte[] Key,byte KeyNo,byte
+
+   LenCap,byte[]PcdCap2);
+   Function: EV2 / EV3 card certification
+   Parameter: KEY →1616 byte authentication, white card default is 0x00
+   KeyNo→16 1 byte
+
+
+
+
+   LenCap →1 byte is not 0x00 value
+
+
+
+   PcdCap2→1 to 6 bytes
+
+
+
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+
+                                              15
+9. int AuthenticateEV2NonFirst(byte[] Key,byte KeyNo);
+   Function: EV2 / EV3 card certification
+   Parameter: KEY → 16 byte authentication, white card default is 0x00
+   KeyNo → 1 byte
+
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero →failure
+
+
+10. int FreeMem(byte[] outData,int[] outLen) ;
+   Function: Get free memory
+   Parameter: no
+   Established parameters: outData →receives data
+   outLen →Length of outData
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+11. int Format();
+   Function: format
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+12. int SetConfiguration(byte Option,byte[] Data);
+   Function: Configuring card properties
+
+
+
+
+                                              16
+   Parameter: Option1 byte
+
+
+
+
+            Data→1-25bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+13. int GetVersion(byte[] outData,int[] outLen);
+   Function: Get the card version information
+   Parameter: no
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+14. int GetCardUID(byte[] outData,int[] outLen);
+   Function: Get the card UID
+   Parameter: no
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→success
+   Non-zero→ failure
+
+
+15. int ChangeKeyEv1(byte KeyNo, byte[] Key);
+   Function: EV1 card modified the secret key for activating EV2 / EV3
+   Parameter: Keyno1 Byte
+
+
+
+
+                                                17
+   Key→116 byte The key after modification, it is set, do not understand, set all 0x00
+   Outlet parameters: no
+   Return value: 0→1 success
+   Non-zero→1 failure
+
+
+16. int ChangeKey(byte isEqualGetKeyNo,byte KeyNo,byte KeyVer,byte[]
+
+   NewKey,byte[] OldKey);
+            Function: Modify the secret key, or enable other secret keys
+            Parameter: isEqualGetKeyNo→1 Byte 0x01 or 0x00
+            Set 0x01 if the certified secret is the same as the target secret key
+            Set 0x00 if the authentication secret is different from the key number of the target
+            For example, AuthenticateEV2First or AuthenticateEV2NonFirst's Key number is the
+       same as Key number used by ChangeKey, isEqualGetKeyNo is 0x01, the opposite 0x00
+            KeyNo→1 byte
+
+
+
+
+                                                18
+   KeyVer→ byte is used for new secrets of new secrets, set it it yourself, don't understand
+0x00
+   NewKey→16 bytes, new secret keys, self-setting, do not understand 0x00
+   OldKey→16 bytes, old secret keys, default all 0x00
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+17. int ChangeKeyEV2(byte isEqualGetKeyNo,byte KeySetNo,byte
+
+   KeyNo,byte KeyVer,byte[] NewKey,byte[] OldKey);
+            Function: Modify the secret key, or enable other secret keys
+            Parameter: isEqualGetKeyNo→1 Byte 0x01 or 0x00
+            Set 0x01 if the certified secret is the same as the target secret key
+            Set 0x00 if the authentication secret is different from the key number of the target
+            For example, AuthenticateEV2First or AuthenticateEV2NonFirst's Key numberis the
+       same as Key number used by ChangeKey, isEqualGetKeyNo is 0x01, the opposite 0x00
+            KeySetNo→1 bytes
+
+
+
+
+                                                19
+            KeyNo→1 bytes
+
+
+
+
+   KeyVer→1 byte is used for new secret keys, set up, set 0x00 if you don't understand
+   NewKey→16bytes, new secret keys, settled, set 0x00 if you don't understand
+   OldKey→16 bytes, old secret keys, default all 0x00
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+18. int InitializeKeySet(byte KeySetNo,byte KeySetType);
+   Function: Initialization Secret Key Set
+     Parameter: KeySetNo→1 byte
+   KeySetType→1 byte
+
+
+
+
+                                               20
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+19. int FinalizeKeySet(byte KeySetNo,byte KeySetVersion);
+   Function: Complete the secret key set
+     Parameter: KeySetNo→1 byte
+   KeySetVersion→1 bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+20. int RollKeySet(byte KeySetNo);
+   Function: Rolling Secret Key Set
+    Parameter：KeySetNo→1byte
+   Function: Rolling Secret Key Set
+     Parameter: KeySetNo→1byte
+
+
+
+
+                                           21
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→failure
+
+
+21. int GetKeySettings(byte[] outData,int[] outLen);
+   Function: Get the secret key settings
+   Parameter: no
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero →failure
+
+
+22. int ChangeKeySettings(byte KeySetting);
+   Function: Change the key setting
+   Parameter:KeySetting→1byte
+
+
+
+
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero →failure
+
+
+23. int GetKeyVersion(byte KeyNo, byte KeySetNo, byte[] outData, int[]
+
+   outLen);
+
+
+   Function: Get the secret key version
+   Parameter: KeyNo→1 bytes
+
+
+
+
+                                            22
+                       KeySetNo→1 byte
+
+
+
+
+   Outlet parameters：outData→Receive data
+      outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+24. int CreateApplication(byte[] AID, byte KeySett1, byte KeySett2, byte
+
+   KeySett3, byte AKSVersion, byte NoKeySets, byte MaxKeySize, byte
+
+   AppKeySetSett);
+   Function: Create an app
+   Parameter: AID →3 byte
+   KeySett1→1 bytes
+   KeySett2→1 bytes
+
+
+
+
+                                            23
+   KeySett3→1 byte
+   AKSVersion →1 byte
+   NoKeySets →1 byte
+   MaxKeySize →1 byte
+   AppKeySetSett →1 byte
+
+
+
+
+Outlet parameters: no
+Return value: 0 →success
+Non-zero→ failure
+
+
+
+                           24
+25. int CreateDelegatedApplication(byte[] AID, byte[] DAMSlotNo, byte
+
+   DAMSlotVersion, byte[] QuotaLimit, byte KeySett1, byte KeySett2,
+
+   byte KeySett3, byte AKSVersion, byte NoKeySets, byte MaxKeySize,
+
+   byte AppKeySetSett);
+   Function: Create a delegated application
+   Introducing parameters:AID →3bytes
+           DAMSlotNo →2bytes
+           DAMSlotVersion →1byte
+           QuotaLimit →2bytes
+      KeySett1→1byte
+      KeySett2→1byte
+      KeySett3→1byte
+      AKSVersion →1byte
+
+
+
+
+      NoKeySets →1byte
+      MaxKeySize →1byte
+      AppKeySetSett →1byte
+
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+                                              25
+26. int DeleteApplication(byte[] AID, byte AppType);
+   Function: Delete an application
+   Introducing parameters:AID →3byte
+
+
+
+
+                AppType→1byte
+                If the authentication key is PICCMasterKey, AppType is set to 0x00 (applicable
+            EV2 / EV3)
+                If the authentication key is PICCDAMAuthKey, AppType is set to 0x10
+            (Applicable EV3)
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+27. int SelectApplication(byte[] AID);
+   Function: Select an application
+   Introducing parameters:AID→3bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+28. int SelectApplication(byte[] AID,byte[] AID2);
+                Function: Select 2 applications
+                Parameter: AID →3 byte
+                AID2 →3 bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+29. int GetApplicationIDs(byte[] OutData, int[] OutLen);
+
+                                                  26
+   Function: Select Apply ID
+   Parameter: no
+   Established parameters:outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+30. int GetDelegatedInfo(byte[] DAMSlotNo, byte[] OutData, int[]
+
+   OutLen);
+   Function: Get Delegated application information
+   Parameter: DAMSlotNo→2 byte
+
+
+
+   Established parameters:outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+31. int CreateStdDataFile(byte FileNo,byte FileOption,byte[]
+
+   AccessRights,byte[] FileSize);
+
+
+   Function: Create a standard file
+   Parameter: FileNo → 1byte
+
+
+
+
+      FileOption →1byte
+   Ev2：
+
+
+
+
+   Ev3：
+
+                                              27
+      AccessRights→2byts
+
+
+
+      FileSize →3bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+32. int CreateBackupDataFile(byte FileNo, byte FileOption, byte[]
+
+   AccessRights, byte[] FileSize);
+   Function: Create a backup file
+   Parameter: FileNo →1byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →2bytes
+
+                                     28
+      FileSize →3bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+33. int CreateValueFile(byte FileNo,byte FileOption,byte[]
+
+   AccessRights,byte[] LowerLimit,byte[] UpperLimit,byte[] Value,byte
+
+   LimitedCreditEnabled);
+   Function: Create a value file
+   Parameter: FileNo →1 byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →2bytes
+
+
+
+      LowerLimit →4bytes
+
+
+
+
+      UpperLimit →4bytes
+
+
+
+
+      Value →4bytes
+
+                                     29
+      LimitedCreditEnabled →1byte
+
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+34. int CreateLinearRecordFile(byte FileNo, byte FileOption, byte[]
+
+   AccessRights, byte[] RecordSize, byte[] MaxNoOfRecs);
+   Function: Create a line record file
+   Parameter: FileNo →1bytes
+   Function: Create a linear record file
+   Parameter: FileNo → 1 byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →2bytes
+
+
+
+      RecordSize →3bytes
+      MaxNoOfRecs →3bytes
+
+
+                                           30
+   Outlet parameters: no
+   Return value: 0→success
+   Non-zero→ failure
+
+
+35. int CreateCyclicRecordFile(byte FileNo, byte FileOption, byte[]
+
+   AccessRights, byte[] RecordSize, byte[] MaxNoOfRecs);
+   Function: Create a loop log file
+   Parameter: FileNo →1byte
+   Function: Create a loop log file
+   Parameter: FileNo →1 byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →2bytes
+
+
+
+      RecordSize →3bytes
+      MaxNoOfRecs →3bytes
+
+
+
+
+   Outlet parameters: no
+   Return value: 0→ success
+
+
+                                      31
+   Non-zero→ failure
+
+
+36. int CreateTransactionMACFile(byte FileNo, byte FileOption, byte[]
+
+   AccessRights, byte TMKeyOption, byte[] TMKey, byte TMKeyVer);
+   Function: Create a TransactionMac file
+   Parameter: FileNo →1 byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →2bytes
+
+
+
+      TMKeyOption →1bytes
+
+
+
+
+      TMKey→16bytes
+      TMKeyVer→1byte
+
+
+
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+37. int DeleteFile(byte FileNo);
+   Function: Delete a file
+   Parameter: FileNo → 1 byte
+
+
+                                            32
+       Outlet parameters: no
+       Return value: 0→ success
+       Non-zero →failure
+
+
+38. int GetFileIDs(byte[] OutData, int[] OutLen);
+   Function: Get the ID of the file in the application
+   Parameter: no
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+39. int GetFileSettings(byte FileNo, byte[] outData, int[] outLen);
+   Function: Get the configuration of the file
+   Parameter: FileNo→ byte
+
+
+
+
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+40. int GetFileCounters(byte FileNo, byte[] outData, int[] outLen);
+   Function: Get the count count (EV3 proprietary)
+   Parameter: FileNo→1byte
+
+
+
+
+                                                  33
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+
+
+41. int ChangeFileSettings(byte FileNo, byte FileOption, byte[]
+
+   AccessRights);
+
+
+   Function: Change the configuration of the file
+   Parameter:FileNo→1 byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →2byte
+
+
+                                                34
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+42. int ChangeFileSettings(byte FileNo, byte FileOption, byte[]
+
+   AccessRights, byte[] Option);
+   Function: Change the configuration of the file
+   Parameter: FileNo→1byte
+
+
+
+
+      FileOption →1byte
+
+
+
+
+      AccessRights →21bytes
+
+
+
+      Option→Optional parameters, please decide according to the parameter description, the
+   following is only partial screenshots
+
+
+
+
+                                                35
+   Outlet parameters: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+43. int ReadData(byte FileNo, byte[] Offset, byte[] Length, byte
+
+   CommMode, byte[] outData, int[] outLen);
+   Function: Read standard files or backup file data
+   Parameter: FileNo→1 byte
+
+
+
+
+      Offset →3bytes
+
+
+
+      Length →3bytes
+
+
+
+
+                                               36
+      CommMode→1byte
+
+
+
+
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+44. int WriteData(byte FileNo,byte[] Offset,byte[] Length,byte
+
+   CommMode,byte[] Data);
+
+
+   Function: Write a standard file or backup file data
+   Parameter: FileNo→1byte
+
+
+
+
+      Offset→3bytes
+
+
+
+      Length →3bytes
+
+
+
+
+      CommMode→1byte
+
+
+
+
+      Data→ Length byte
+                                                 37
+   Outlet parameters: no
+   Return value: 0 →success
+   Non-zero→ failure
+
+
+45. int GetValue(byte FileNo, byte CommMode, byte[] outData, int[]
+
+   outLen);
+   Function: Get the value of the value file
+   Parameter: FileNo→1 byte
+
+
+
+
+      CommMode→1byte
+
+
+
+
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+46. int Credit(byte FileNo,byte CommMode,byte[] Data);
+   Function: Add value of value files
+
+
+   Parameter:FileNo→1 byte
+
+
+
+
+      CommMode→1 byte
+
+
+
+                                               38
+      Data→4bytes
+
+
+
+   Parameter: no
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+47. int LimitedCredit(byte FileNo, byte CommMode, byte[] Data);
+   Function: Limit the value of added value files
+   Parameter: FileNo→1byte
+
+
+
+
+      CommMode→1byte
+
+
+
+
+      Data→4bytes
+
+
+
+   Parameter: no
+   return value:0 →success
+      Non-zero →fail
+
+
+48. int Debit(byte FileNo,byte CommMode,byte[] Data);
+   Function: Reduce the value of the value file
+   Parameter：FileNo→1byte
+
+
+                                                  39
+      CommMode→1byte
+
+
+
+
+      Data→4bytes
+
+
+
+   Parameter: no
+   return value:0 →success
+      Non-zero →fail
+
+
+49. int ReadRecords(byte FileNo, byte[] RecNo, byte[] RecCount, byte
+
+   CommMode, byte[] outData, int[] outLen);
+   Function: read the data of the record file
+   Parameter：FileNo→1byte
+
+
+
+
+      RecNo →3bytes
+
+
+
+
+      RecCount →3bytes
+
+
+
+
+                                                40
+      CommMode→1byte
+
+
+
+
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+
+
+50. int WriteRecord(byte FileNo,byte[] Offset,byte[] Length,byte
+
+   CommMode,byte[] Data);
+   Function: Write data to record files
+   Parameter：FileNo→1byte
+
+
+
+
+      Offset →3bytes
+
+
+
+      Length →3bytes
+
+
+
+
+      CommMode→1byte
+
+
+
+
+                                            41
+      Data→ Length byte
+
+
+   Parameter: no
+   return value:0 →success
+      Non-zero →fail
+
+
+51. int UpdateRecord(byte FileNo,byte[] RecNo,byte[] Offset,byte[]
+
+   Length,byte CommMode,byte[] Data);
+   Function: Update the data of the record file
+   Parameter：FileNo→1byte
+
+
+
+
+      RecNo→3bytes
+
+
+
+
+      Offset →3bytes
+      Length →3bytes
+
+
+
+
+      CommMode→1byte
+
+
+
+
+                                                  42
+      Data→ Length byte
+
+
+   Parameter: no
+   return value:0 →success
+      Non-zero →fail
+
+
+52. int ClearRecordFile(byte FileNo);
+   Function: Clear the record file
+   Parameter：FileNo→1byte
+
+
+
+
+   Parameter: no
+   return value:0 →success
+      Non-zero →fail
+
+
+53. int CommitTransaction();
+   Function: Submit a transaction
+   Parameter：no
+   return value:0 →success
+      Non-zero →fail
+
+
+54. int CommitTransaction(byte Option, byte[] outData, int[] outLen);
+   Function: Submit a transaction
+   Parameter：Option→1 byte
+
+
+
+
+                                        43
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+55. int AbortTransaction();
+   Function: Interrupt Transaction
+   Parameter：no
+   Parameter: no
+   return value:0 →success
+      Non-zero →fail
+
+
+56. int CommitReaderID(byte[] TMRI, byte[] outData, int[] outLen);
+   Function: Submit Reader ID
+   Parameter：TMRI→16bytes
+
+
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+57. int Read_Sig(byte Address, byte[] outData, int[] outLen);
+   Function: Retrieve the ECC original verification signature
+   Parameter：Address →1byte
+
+
+
+
+   Established parameters: outData→ receives data
+   outLen→Length of outData
+   Return value: 0→ success
+   Non-zero→ failure
+
+
+
+
+                                                44
+7. Demo Test process
+
+  Ev2/Ev3 Demo Test
+         Step
+
+
+
+
+      Open NFC
+
+
+
+
+    Check IC Card
+
+
+
+
+      ……
+    （一条一条往
+     下执行）
+
+
+
+
+                      CommitReaderI     CommitTransact
+        Debit                                             LimitedCredit
+                           D                ion
+
+
+
+
+                      CommitTransact    CommitReaderI
+     ReadRecord                                           WriteRecord
+                          ion                D
+
+
+
+
+                                        CommitReaderI    CommitTransact
+    UpdateRecord      ClearRecordFile
+                                             D               ion
+
+
+
+
+                      DeleteApplicati                    AbortTransactio
+       Format                              Read_Sig
+                            on                                  n
+
+
+
+
+     Close_NFC
+
+
+
+
+                                             45
+

@@ -1,0 +1,1680 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <LinearLayout
+        android:id="@+id/select_ev"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/switch_ev2_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:onClick="changeEV"
+            android:background="@drawable/button_number_violet_shape"
+            android:enabled="false"
+            style="@style/buttonNumberStyle"
+            android:text="EV2" />
+
+        <Button
+            android:id="@+id/switch_ev3_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:onClick="changeEV"
+            style="@style/buttonNumberStyle"
+            android:background="@drawable/button_number_violet_shape"
+            android:text="EV3" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/ScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:textAllCaps="false">
+
+        <TableLayout
+            android:id="@+id/TableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/Button_OpenNFC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Open NFC"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_CheckNFC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check IC Card"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NFC card data" />
+
+            <TextView
+                android:id="@+id/TextView_CardInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_GetATS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get ATS"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_CardATS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_ActivateNewCard"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="2K3DES -> AES128"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_ActivateNewCard"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_AuthenticateEV2First"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_AuthenticateEV2First"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="AuthenticateEV2First"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape" />
+
+                <TextView
+                    android:id="@+id/TextView_AuthenticateEV2First"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_AuthenticateEV2NonFirst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_AuthenticateEV2NonFirst"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="AuthenticateEV2NonFirst"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_AuthenticateEV2NonFirst"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_FreeMem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FreeMem"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_FreeMem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_Format"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="Format"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_Format"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_SetConfiguration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_SetConfiguration"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="SetConfiguration"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_SetConfiguration"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_GetVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetVersion"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_GetCardUID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetCardUID"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetCardUID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ChangeKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_ChangeKey"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="ChangeKey"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_ChangeKey"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ChangeKeyEV2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 00 12 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_ChangeKeyEV2"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="ChangeKeyEV2"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_ChangeKeyEV2"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetKeySettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetKeySettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetKeySettings"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetKeySettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ChangeKeySettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 0F"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_ChangeKeySettings"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="ChangeKeySettings"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_ChangeKeySettings"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetKeyVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetKeyVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetKeyVersion"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetKeyVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateApplication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 0F 91 01 00 10 10 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateApplication"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_InitializeKeySet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 02"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_InitializeKeySet"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="InitializeKeySet"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_InitializeKeySet"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize"/>
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_FinalizeKeySet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 01"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_FinalizeKeySet"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="FinalizeKeySet"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_FinalizeKeySet"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_RollKeySet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_RollKeySet"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="RollKeySet"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_RollKeySet"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateDelegatedApplication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 02 00 00 00 10 00 0F 81 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateDelegatedApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateDelegatedApplication"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateDelegatedApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_SelectApplication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_SelectApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="SelectApplication"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_SelectApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_GetApplicationIDs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetApplicationIDs"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetApplicationIDs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetDelegatedInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetDelegatedInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetDelegatedInfo"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetDelegatedInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateStdDataFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 01 00 00 20 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateStdDataFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateStdDataFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateStdDataFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateBackupDataFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 02 01 00 00 20 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateBackupDataFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateBackupDataFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateBackupDataFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateValueFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 03 01 00 00 00 00 00 00 50 C3 00 00 C8 00 00 00 01"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateValueFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateValueFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateValueFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateLinearRecordFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 04 01 00 00 20 00 00 10 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateLinearRecordFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateLinearRecordFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateLinearRecordFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateCyclicRecordFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 05 01 00 00 20 00 00 10 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateCyclicRecordFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateCyclicRecordFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateCyclicRecordFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CreateTransactionMACFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 06 03 0F FF 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_CreateTransactionMACFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="CreateTransactionMACFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_CreateTransactionMACFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_DeleteFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 05"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_DeleteFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="DeleteFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_DeleteFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetFileIDs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetFileIDs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetFileIDs"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetFileIDs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetFileSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetFileSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetFileSettings"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetFileSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ChangeFileSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 07 43 00 00 41 FE FF"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_ChangeFileSettings"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="ChangeFileSettings"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_ChangeFileSettings"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:id="@+id/line_GetFileCounters"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetFileCounters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 07"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetFileCounters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetFileCounters"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetFileCounters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ReadData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 01 00 00 00 15 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_ReadData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ReadData"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_ReadData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_WriteData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 01 00 00 00 09 00 00 01 02 03 04 05 06 07 08 09"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_WriteData"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="WriteData"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_WriteData"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_GetValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 03"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_GetValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetValue"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_GetValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_Credit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 03 02 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_Credit"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="Credit"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_Credit"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_Debit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 03 02 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_Debit"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="Debit"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_Debit"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_LimitedCredit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 03 02 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_LimitedCredit"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="LimitedCredit"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_LimitedCredit"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_WriteRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 04 00 00 00 01 00 00 01"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_WriteRecord"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="WriteRecord"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_WriteRecord"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ReadRecords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 04 00 00 00 01 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_ReadRecords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ReadRecords"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_ReadRecords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_UpdateRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 01 04 00 00 00 00 00 00 01 00 00 01"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_UpdateRecord"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="UpdateRecord"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_UpdateRecord"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_ClearRecordFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 01 04"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_ClearRecordFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="ClearRecordFile"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_ClearRecordFile"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CommitReaderID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_CommitReaderID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CommitReaderID"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_CommitReaderID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_CommitTransaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="01"
+                android:textSize="@dimen/textSize" />
+
+            <Button
+                android:id="@+id/Button_CommitTransaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CommitTransaction"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_CommitTransaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_AbortTransaction"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="AbortTransaction"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_AbortTransaction"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_Read_Sig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Read_Sig"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+
+            <TextView
+                android:id="@+id/TextView_Read_Sig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answer"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <EditText
+                android:id="@+id/EditText_DeleteApplication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 00 00 01 00"
+                android:textSize="@dimen/textSize" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_DeleteApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="DeleteApplication"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_DeleteApplication"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/Button_Format2Over"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight1"
+                    android:layout_height="wrap_content"
+                    android:text="Format"
+                    android:textSize="@dimen/textSize"
+                    android:textAllCaps="false"
+                    style="@style/buttonNumberStyle"
+                    android:background="@drawable/button_number_violet_shape"/>
+
+                <TextView
+                    android:id="@+id/TextView_Format2Over"
+                    android:layout_width="0dp"
+                    android:layout_weight="@integer/weight2"
+                    android:layout_height="wrap_content"
+                    android:text="Answer"
+                    android:textSize="@dimen/textSize" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_blue_dark" />
+
+            <Button
+                android:id="@+id/Button_CloseNFC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Close NFC"
+                android:textSize="@dimen/textSize"
+                android:textAllCaps="false"
+                style="@style/buttonNumberStyle"
+                android:background="@drawable/button_number_violet_shape"/>
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

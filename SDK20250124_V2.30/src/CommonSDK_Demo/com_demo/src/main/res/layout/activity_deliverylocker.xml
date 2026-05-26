@@ -1,0 +1,160 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".demo.deliverylocker.DeliverylockerActivity" >
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <TableLayout
+        android:id="@+id/led_tablelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/titlebar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deliverylocker_test"
+            android:textColor="@color/Blue"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/Blue"
+            android:layout_marginBottom="10dp"/>
+
+        <TableRow
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deliverylocker_x"
+                android:layout_marginRight="10dp" />
+
+            <EditText
+                android:id="@+id/coordinateXEdt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0"
+                android:inputType="number"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deliverylocker_y"
+                android:layout_marginRight="10dp" />
+
+            <EditText
+                android:id="@+id/coordinateYEdt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0"
+                android:inputType="number"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deliverylocker_version"
+                android:layout_marginRight="10dp" />
+
+            <TextView
+                android:id="@+id/versionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deliverylocker_status"
+                android:layout_marginRight="10dp" />
+
+            <TextView
+                android:id="@+id/statusTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <Button
+            android:id="@+id/versionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/deliverylocker_version"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/openBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/deliverylocker_open"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/statusBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/deliverylocker_status"
+            android:onClick="onClick"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"/>
+
+        <TableRow android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/updateBtn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_number_violet_shape"
+                android:onClick="onClick"
+                android:text="@string/deliverylocker_update" />
+
+            <EditText
+                android:id="@+id/binPathEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:text="" />
+        </TableRow>
+
+
+
+    </TableLayout>
+
+</RelativeLayout>

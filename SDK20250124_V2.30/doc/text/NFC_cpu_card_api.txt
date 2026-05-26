@@ -1,0 +1,139 @@
+          CPU Card API
+Development Documentation
+                     V1.0.0
+             Update Records
+  Date                    Description
+
+2024-07-04            First Edition Release
+                  Contents
+1 Introduction
+   1.1 Open
+   1.2 Close
+   1.3 Activate
+   1.4 Get ATS
+   1.5 Transmit
+   1.6 Halt
+   1.7 Remove
+1 Introduction
+The NFC interface is deﬁned under the com.tps550.api. And the CPU card interface of the operationclass
+nfc is deﬁned as follows:
+
+1.1 Open
+
+   /**
+    * @Function Open the NFC device
+    *
+    * @Exception CommonException
+    * 1.DeviceAlreadyOpenException: The device has been turned on
+    * 2.DeviceNotFoundException: The device cannot be opened
+    *
+    * */
+
+   public synchronized void open() throws CommonException
+
+
+
+1.2 Close
+
+   /**
+    * @Function Close the NFC device
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void close()throws CommonException
+
+
+
+1.3 Activate
+
+   /**
+    * @Function NFC card selection and card reading basic information
+    *
+    * @Parameter
+    * 1.timeOut: Timeout, ms
+    *
+    * @Exception CommonException
+    * 1.IllegalArgumentException: data is invalid
+    * 2.DeviceNotOpenException: The device cannot be opened
+    * 3.TimeoutException: overtime
+    *
+    * @Return byte[]: In the form of byte array byte[] returns card, type, data card
+   type, card number and other card basic information data
+    *
+   * */
+
+  public synchronized byte[] activate(int timeOut) throws CommonException
+
+
+
+1.4 Get ATS
+
+  /**
+   * @Function Get the ATS data for the card
+   *
+   * @Exception CommonException
+   * 1.IllegalArgumentException: data is invalid
+   * 2.DeviceNotFoundException: The device cannot be opened
+   *
+   * @Return byte[]: returns the ATS data of the card in the form of byte array
+  byte[]
+   *
+   * */
+
+  public synchronized byte[] cpu_get_ats() throws CommonException
+
+
+
+1.5 Transmit
+
+  /**
+   * @Function NFC data sending
+   *
+   * @Parameter
+   * 1.sendBuffer: Byte array to send
+   * 2.sendBufferLength: Data byte array length to send
+   *
+   * @Exception CommonException
+   * 1.IllegalArgumentException: Data is invalid
+   * 2.DeviceNotOpenException: The device cannot be opened
+   *
+   * */
+
+  public synchronized byte[] transmit(byte[] sendBuffer, int sendBufferLength)
+  throws CommonException
+
+
+
+1.6 Halt
+
+  /**
+   * @Function Hang up the card
+   *
+   * @Exception CommonException
+   * 1.IllegalArgumentException: data is invalid
+   * 2.DeviceNotFoundException: The device cannot be opened
+   *
+   * */
+
+  public synchronized void halt() throws CommonException
+
+
+
+1.7 Remove
+
+  /**
+   * @Function Waiting for card removal
+   *
+   * @Parameter
+   * 1.timeOut: Timeout
+   *
+   * @Exception CommonException
+   * 1.IllegalArgumentException: data is invalid
+   * 2.DeviceNotFoundException: The device cannot be opened
+   *
+   * */
+
+  public synchronized void remove(int timeOut) throws CommonException
+

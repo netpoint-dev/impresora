@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_select_serial"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_pos_serial">
+        </Spinner>
+    </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bt_modify_baud"
+            android:id="@+id/bt_modify_baud"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_input_baud"
+            android:inputType="numberDecimal"
+            android:maxLength="9"
+            android:hint="@string/et_input_baud_hint"/>
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_select_character"/>
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/radiogroup_character">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radiobutton_character_unit_price"
+                android:checked="false"
+                android:id="@+id/radiobutton_character_unit_price"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radiobutton_character_total_price"
+                android:checked="false"
+                android:id="@+id/radiobutton_character_total_price"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radiobutton_character_collect_bill"
+                android:checked="false"
+                android:id="@+id/radiobutton_character_collect_bill"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radiobutton_character_give_change"
+                android:checked="false"
+                android:id="@+id/radiobutton_character_give_change"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radiobutton_character_none_bright"
+                android:checked="false"
+                android:id="@+id/radiobutton_character_none_bright"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_input_money"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bt_show_input_money"
+            android:id="@+id/bt_show_input_money"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginRight="10dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_input_money"
+            android:inputType="numberDecimal"
+            android:maxLength="9"
+            android:text="8888.8888"/>
+            <!-- android:hint="@string/et_input_money_hint" -->
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_clear_all"
+        android:id="@+id/bt_clear_all"
+        android:background="@drawable/button_number_violet_shape"
+        style="@style/buttonNumberStyle"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_reset"
+        android:id="@+id/bt_reset"
+        android:background="@drawable/button_number_violet_shape"
+        style="@style/buttonNumberStyle"/>
+
+</LinearLayout>

@@ -1,0 +1,271 @@
+            System API
+Development Documentation
+                     V1.1.0
+             Update Records
+  Date                      Description
+
+2022-10-31              First Edition Release
+
+2023-02-22                Modify the API
+
+2024-06-20         Update API and documentation
+                                     Contents
+1 Introduction
+   1.1 SystemApiUtil Class
+     1.1.1 SystemApiUtil
+     1.1.2 Show the Status Bar
+     1.1.3 Hide the Status Bar
+     1.1.4 Show the Navigation Bar
+     1.1.5 Hide the Navigation Bar
+     1.1.6 Set the System Time
+     1.1.7 Silent Installation
+     1.1.8 Register for Broadcasting1
+     1.1.9 Unbind Broadcast
+     1.1.10 Reboot Device
+     1.1.11 Shut Down the Device
+   1.2 SystemUtil Class
+     1.2.1 Get CPU usage
+     1.2.2 Get memory usage
+     1.2.3 Get CPU temperature
+     1.2.4 Determine the module of NFC(PN512)
+     1.2.5 Obtain th SDK functions supported by the device
+1 Introduction
+1.1 SystemApiUtil Class
+Package: com.common.apiutil.system
+Includes show/hide status bar, show/hide navigation bar, set system time, silent installation, register/unbind
+broadcast, restart, shutdown
+
+1.1.1 SystemApiUtil
+
+
+   /**
+    * @Function Get the SystemApiUtil control object
+    *
+    * @Parameter context
+    *
+    * */
+
+   public SystemApiUtil (Context context)
+
+
+
+1.1.2 Show the Status Bar
+
+
+   /**
+    * @Function Show the status bar
+    *
+    * */
+
+   public synchronized void showStatusBar()
+
+
+
+1.1.3 Hide the Status Bar
+
+
+   /**
+    * @Function Hide the status bar
+    *
+    * */
+
+   public synchronized void hideStatusBar()
+
+
+
+1.1.4 Show the Navigation Bar
+
+
+   /**
+    * @Function Show the navigation bar
+    *
+    * */
+   public synchronized void showNavigationBar()
+
+
+
+1.1.5 Hide the Navigation Bar
+
+
+   /**
+    * @Function Hide the navigation bar
+    *
+    * */
+
+   public synchronized void hideNavigationBar()
+
+
+
+1.1.6 Set the System Time
+
+
+   /**
+    * @Function Set the system time
+    *
+    * @Parameter
+    * 1.timeInMillis: Time
+    *
+    * */
+
+   public synchronized void setSystemTime(long timeInMillis)
+
+
+
+1.1.7 Silent Installation
+
+
+   /**
+    * @Function Silent installation
+    *
+    * @Parameter
+    * 1.appPath: Path name
+    * 2.packageName: Package name
+    *
+    * */
+
+   public synchronized void installApp(String appPath, String packageName)
+
+
+
+1.1.8 Register for Broadcasting
+
+
+   /**
+    * @Function Register for broadcasting
+    *
+    * Register for broadcast, silently install immediately wake up the app (call
+   before invoking installApp)
+    *
+    * */
+
+   public synchronized void registerWakeUpAppBroadcast()
+
+
+
+1.1.9 Unbind Broadcast
+
+
+   /**
+    * @Function Unbind broadcast
+    *
+    * */
+
+   public synchronized void unRegisterWakeUpAppBroadcast()
+
+
+
+1.1.10 Reboot Device
+
+
+   /**
+    * @Function Reboot Device
+    *
+    * */
+
+   public synchronized void rebootDevice()
+
+
+
+1.1.11 Shut Down the Device
+
+
+   /**
+    * @Function Shut down
+    *
+    * */
+
+   public synchronized void shutdown()
+
+
+
+1.2 SystemUtil Class
+Package: com.common.apiutil.util
+System property control API
+
+1.2.1 Get CPU usage
+
+
+   /**
+    * @Function Get the CPU usage
+    *
+    * @Return CPU usage; ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public static int getCpuRate()
+
+
+
+1.2.2 Get memory usage
+
+
+   /**
+    * @Function Get memory usage
+    *
+    * @Return Memory usage; ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public static int getMemRate()
+
+
+
+1.2.3 Get CPU temperature
+
+
+   /**
+    * @Function Get CPU temperature
+    *
+    * @Return CPU temperature; ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public static int getCpuTem()
+
+
+
+1.2.4 Determine the module of NFC(PN512)
+
+
+   /**
+    * @Function Determine the module of NFC
+    *
+    * @Return True or false
+    *
+    * */
+
+   public static boolean isPN512NFC()
+
+
+
+1.2.5 Obtain the functions supported
+
+
+   /**
+    * @Function Obtain the functions supported
+    *
+    * @Return
+    * Print = 1
+ * QR Code = 2
+ * Magnetic Stripe Card = 3
+ * Money box = 4
+ * ID Card = 5
+ * IC Card = 6
+ * NFC = 7
+ * PSAM = 8
+ * Tamper Test = 9
+ * LED = 10
+ * Relay = 11
+ * RS485/232 = 12
+ * Wiegand/Door Magnetic = 13
+ * Nixie tube test = 14
+ * System API = 15
+ * Can Bus = 16
+ * GPIO = 17
+ * Serial port= 18
+ * Sample LCD = 19
+ *
+ * */
+
+public static String[] getDeviceSupport()
+

@@ -1,0 +1,274 @@
+  Desﬁre EV1 Card API
+Development Documentation
+                     V1.0.0
+             Update Records
+  Date                    Description
+
+2024-07-04            First Edition Release
+                                          Contents
+1 NFC Class
+2 Password Authentication
+3 Modify the key
+4 Create an App
+5 Create a File
+6 Delete existing App
+7 Delete an existing File
+8 Format the card
+9 Get the APPID of all existing APPs
+10 Get the FileNo of all existing files
+11 Select the corresponding APPLICATION by APPID
+12 Read data from the target file
+13 Write data to the target file
+1 NFC Class
+
+ /**
+  * @Function NFC Construction method.
+  *
+  * @Parameter
+  * 1.context: Context
+  *
+  * @Return Nfc: Nfc object
+  *
+  * */
+
+ public Nfc(Context context)
+
+
+
+
+2 Password Authentication
+
+ /**
+  * @Function Password authentication. You need to select a directory before
+ calling this method.
+  *
+  * @Parameter
+  * 1.KeyNo: The number of the Key. 1 byte, KeyNo = 0 means master key.
+  * 2.keytype: The type of key. 1 byte, for expansion, currently needs to be set to
+ 0.
+  * 3.desKey: The key. 16 bytes, The key which encryption and decryption uses a 16-
+ byte 2K3DES algorithm. The default password for the new card is 16 bytes of 0x00.
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_auth(byte KeyNo, byte keytype, byte[] desKey) throws
+ CommonException
+
+
+
+
+3 Modify the key
+
+ /**
+  * @Function Modify the key. Password authentication is required before calling
+ this method.
+  *
+  * @Parameter
+  * 1.KeyNo: The number of the target key. 1 byte.
+  * 2.desKey: The new key.16 bytes.
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_change_key(byte KeyNo, byte[] desKey) throws
+ CommonException
+
+
+
+
+4 Create an App
+
+ /**
+  * @Function Create an App. You must first select the system directory before
+ calling this method.
+  *
+  * @Parameter
+  * 1.appid: Each APPLICATION needs to be associated with an APPID. 4 bytes, only
+ the low 24bit is valid, that is, the maximum value is 0xFFFFFF.
+  * 2.KeySetting: The permission settings of key.1 byte,and the defult value is
+ 0x0F.
+  * 3.MaxKeyNo: The maximum number of Keys that the APPLICATION can contain.1 byte.
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_create_app(int appid, byte KeySetting, byte MaxKeyNo)
+ throws CommonException
+
+
+
+
+5 Create a File
+
+ /**
+  * @Function Create a File.You need to select an existing target directory Before
+ calling this method.
+  *
+  * @Parameter
+  * 1.FileNo: Each file needs to be associated with a FileNo. 1 byte, the maximum
+ number of files that can be created in each APPLICATION is 16, so the value range
+ is 0x00-0x0F.
+  * 2.commset: Communication encryption. 1 byte, currently only supports commset =
+ 0 for MACed encrypted communication.
+  * 3.inBuf: Indicates which keys the file needs to verify for read and write
+ permissions. 2 bytes, please refer to Desfire's specification for specific
+ meaning. If it is not clear, it can be set to 0x0000.
+  * 4.inLen: The byte array length of inBuf.
+  * 5.filesize: The size of the file created. 4 bytes, only low 24bit effective.
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_create_std_data_file(byte FileNo, byte commset, byte[]
+ inBuf, int inLen, int filesize) throws CommonException
+
+
+
+
+6 Delete existing App
+
+ /**
+  * @Function Delete existing App.You need to select the system directory and pass
+ password authentication before calling this method.
+  *
+  * @Parameter
+  * 1.appid: APPID corresponding to the target App.
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_del_app(int appid) throws CommonException
+
+
+
+
+7 Delete an existing File
+
+ /**
+  * @Function Delete an existing File. You need to select the target directory and
+ pass password authentication before calling this method.
+  *
+  * @Parameter
+  * 1.FileNo: FileNo corresponding to the target file
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_del_file(byte FileNo) throws CommonException
+
+
+
+
+8 Format the card
+
+ /**
+  * @Function Format the card.You need to select the system directory and pass
+ password authentication before calling this method.
+   *
+   * @Return 0, success; Non 0, failed
+   *
+   * */
+
+  public synchronized int md_factory_reset() throws CommonException
+
+
+
+
+9 Get the APPID of all existing APPs
+
+  /**
+   * @Function Get the APPID of all existing APPLICATIONs.You must first select the
+  system directory before calling this method.
+   *
+   * @Return Byte array containing all APPIDs
+   *
+   * */
+
+  public synchronized byte[] md_get_app_ids() throws CommonException
+
+
+
+
+10 Get the FileNo of all existing ﬁles
+
+  /**
+   * @Function Get the FileNo of all existing files.You need to select an existing
+  target directory Before calling this method.
+   *
+   * @Return Byte array containing all FileNos
+   *
+   * */
+
+  public synchronized byte[] md_get_file_ids() throws CommonException
+
+
+
+
+11 Select the corresponding APPLICATION by APPID
+
+  /**
+   * @Function Select the corresponding APPLICATION by APPID. When performing
+  directory level related operations, such as creating a directory, you must first
+  select the directory with APPID = 0. This directory is the default system
+  directory and cannot be deleted or created.
+   *
+   * @Parameter
+   * 1.appid: APPID corresponding to the target APPLICATION.
+   *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_select_app(int appid) throws CommonException
+
+
+
+
+12 Read data from the target ﬁle
+
+ /**
+  * @Function Read data from the target file.You need to select the target
+ directory and pass password authentication before calling this method.
+  *
+  * @Parameter
+  * 1.FileNo: FileNo corresponding to the target file.
+  * 2.offset: Read the offset of the position. 4 bytes, only low 24bit effective.
+  * 3.inLen: Read the length of the data.4 bytes, only low 24bit effective.
+  *
+  * @Return The data content read. No more than 256 bytes
+  *
+  * */
+
+ public synchronized byte[] md_read_data(byte FileNo, int offset, int inLen) throws
+ CommonException
+
+
+
+
+13 Write data to the target ﬁle
+
+ /**
+  * @Function Write data to the target file.You need to select the target directory
+ and pass password authentication before calling this method.
+  *
+  * @Parameter
+  * 1.FileNo: FileNo corresponding to the target file.
+  * 2.offset: The offset of the write location.4 bytes, only low 24bit effective.
+  * 3.length: The length of the data written.4 bytes, only low 24bit effective.
+  * 4.inBuf: The data content written. No more than 256 bytes
+  * 5.inLen: The byte array length of inBuf.
+  *
+  * @Return 0, success; Non 0, failed
+  *
+  * */
+
+ public synchronized int md_write_data(byte FileNo, int offset, int length, byte[]
+ inBuf, int inLen) throws CommonException
+

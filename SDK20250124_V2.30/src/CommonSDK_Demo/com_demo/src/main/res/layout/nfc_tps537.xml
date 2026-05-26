@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="复位"
+    	android:onClick="reset"/>
+    
+    <Button
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="打开串口"
+    	android:onClick="openSerial"/>
+    
+    <Button
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="关闭串口"
+    	android:onClick="closeSerial"/>
+        
+    <Button
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="查版本"
+    	android:onClick="checkVersion"/>
+    
+    <View
+        android:layout_width="match_parent"
+    	android:layout_height="10dp"/>
+    
+    <Button
+        
+        android:id="@+id/selectCard"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="寻卡"
+    	android:onClick="select"/>
+    
+    <View
+        android:layout_width="match_parent"
+    	android:layout_height="10dp"/>
+    
+    <Button
+        android:visibility="gone"
+        android:id="@+id/readAllBlock"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="读所有块"
+    	android:onClick="readAllBlock"/>
+    
+    <TableLayout
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content">
+    	<TableRow >
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="2"
+    	        android:text="认证"
+    	        android:onClick="AUTHENTICATE"/>
+    	    <EditText 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:hint="block号"
+    	        android:text="10"
+    	        android:id="@+id/auth_block"/>
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="2"
+    	        android:text="密码类型:A"
+    	        android:onClick="auth_keyType"
+    	        android:id="@+id/auth_keyType"/>
+    	    <EditText 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="2"
+    	        android:hint="密码"
+    	        android:text="FFFFFFFFFFFF"
+    	        android:id="@+id/auth_key"/>
+    	</TableRow>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<Button 
+  	        android:layout_width="match_parent"
+  	        android:layout_height="wrap_content"
+  	        android:text="读Block"
+  	        android:onClick="READ_BLOCK"/>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<TableRow >
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="2"
+    	        android:text="写Block"
+    	        android:onClick="WRITE_BLOCK"/>
+    	    <EditText 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="5"
+    	        android:hint="待写入数据(16字节)"
+    	        android:text="FFFFFFFFFFFF88888888888877777777"
+    	        android:id="@+id/write_content"/>
+    	</TableRow>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<TableRow >
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:text="初始化电子钱包"
+    	        android:onClick="INIT_WALLET"/>
+    	    <EditText 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:hint="money(4字节)"
+    	        android:text="1"
+    	        android:id="@+id/init_money"/>
+    	</TableRow>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<Button 
+  	        android:layout_width="match_parent"
+  	        android:layout_height="wrap_content"
+  	        android:text="读电子钱包"
+  	        android:onClick="READ_WALLET"/>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<TableRow >
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:text="操作电子钱包"
+    	        android:onClick="WRITE_WALLET"/>
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:text="加"
+    	        android:onClick="dealType"
+    	        android:id="@+id/wallet_type"/>
+    	    <EditText 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:hint="money(4字节)"
+    	        android:text="1"
+    	        android:id="@+id/deal_money"/>
+    	</TableRow>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<TableRow >
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:text="块数据拷贝到缓存"
+    	        android:onClick="TRANSFER"/>
+    	    <Button 
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="1"
+    	        android:text="缓存拷贝块数据"
+    	        android:onClick="RESTORE"/>
+    	</TableRow>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<Button 
+  	        android:layout_width="match_parent"
+  	        android:layout_height="wrap_content"
+  	        android:text="sendAPDU"
+  	        android:onClick="sendapdu"/>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+    	
+    	<Button 
+  	        android:layout_width="match_parent"
+  	        android:layout_height="wrap_content"
+  	        android:text="关闭卡"
+  	        android:onClick="CLOSE_CARD"/>
+    	
+    	<View
+	        android:layout_width="match_parent"
+	    	android:layout_height="10dp"/>
+        
+    </TableLayout>
+    
+    <TextView
+        android:id="@+id/showResult"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:textSize="24sp"/>
+
+</LinearLayout>
+    
+</ScrollView>
+
+

@@ -1,0 +1,262 @@
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	 <include
+	        android:id="@+id/titlebar"
+	        layout="@layout/titlebar" />
+	 
+	 
+		 <LinearLayout
+		 	    android:id="@+id/color_led_layout"
+		 	    android:layout_width="wrap_content"
+		 	    android:layout_height="wrap_content"
+		 	    android:orientation="vertical">
+		 	    
+		     <Button
+		        android:id="@+id/openred"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:text="@string/led_bt_red_open"
+		        android:onClick="onClick"
+		        android:background="@drawable/button_number_violet_shape" />
+		
+		    <Button
+		        android:id="@+id/closered"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:text="@string/led_bt_red_close" 
+		        android:onClick="onClick"
+		        android:background="@drawable/button_number_violet_shape" />
+		     
+		    <Button
+		        android:id="@+id/opengreen"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:text="@string/led_bt_green_open"
+		        android:onClick="onClick"
+		        android:background="@drawable/button_number_violet_shape" />
+		
+		    <Button
+		        android:id="@+id/closegreen"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:text="@string/led_bt_green_close"
+		        android:onClick="onClick"
+		        android:background="@drawable/button_number_violet_shape" />
+		    
+		    <Button
+		        android:id="@+id/openblue"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:text="@string/led_bt_blue_open"
+		        android:onClick="onClick"
+		        android:background="@drawable/button_number_violet_shape" />
+		
+		    <Button
+		        android:id="@+id/closeblue"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:text="@string/led_bt_blue_close" 
+		        android:onClick="onClick"
+		        android:background="@drawable/button_number_violet_shape" />
+	    
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:id="@+id/tps575_led_layout"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical"
+	        android:visibility="gone">
+	        <Button
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="showText"
+		    	android:text="showText"/>
+	        
+	        <Button
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="showTwoLineText_m_m"
+		    	android:text="showTwoLineText_m_m"/>
+	        
+	        <Button
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="showTwoLineText_m_r"
+		    	android:text="showTwoLineText_m_r"/>
+	        
+	        <Button
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="showTwoLineText_r_m"
+		    	android:text="showTwoLineText_r_m"/>
+	        
+	        <Button
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="showTwoLineText_r_r"
+		    	android:text="showTwoLineText_r_r"/>
+	        
+	        
+	        
+	        <Button
+	            android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="showBitmap"
+		    	android:text="showBitmap"/>
+		    
+		    <Button
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="close"
+		    	android:text="close"/>
+		    
+		    <LinearLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal">
+		        <Button
+			        android:id="@+id/thick_minus"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			    	android:layout_height="wrap_content"
+			    	android:onClick="thick_minus"
+			    	android:text="sub"/>
+		        
+		        <TextView
+		            android:id="@+id/thick_contrast"
+		            android:layout_width="0dp"
+			        android:layout_weight="1"
+		            android:layout_height="wrap_content"
+		            android:textSize="20sp"
+		            android:text="quick set:3"
+		            android:gravity="center"/>
+		        <Button
+			        android:id="@+id/thick_add"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			    	android:layout_height="wrap_content"
+			    	android:onClick="thick_add"
+			    	android:text="add"/>
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal">
+		        <Button
+			        android:id="@+id/fine_minus"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			    	android:layout_height="wrap_content"
+			    	android:onClick="fine_minus"
+			    	android:text="sub"/>
+		        
+		        <TextView
+		            android:id="@+id/fine_contrast"
+		            android:layout_width="0dp"
+			        android:layout_weight="1"
+		            android:layout_height="wrap_content"
+		            android:textSize="20sp"
+		            android:text="slow set:10"
+		            android:gravity="center"/>
+		        <Button
+			        android:id="@+id/fine_add"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			    	android:layout_height="wrap_content"
+			    	android:onClick="fine_add"
+			    	android:text="add"/>
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal">
+		        <Button
+			        android:id="@+id/level_sub"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			    	android:layout_height="wrap_content"
+			    	android:onClick="level_sub"
+			    	android:text="sub"/>
+		        
+		        <TextView
+		            android:id="@+id/fine_level"
+		            android:layout_width="0dp"
+			        android:layout_weight="1"
+		            android:layout_height="wrap_content"
+		            android:textSize="20sp"
+		            android:text="backlight level:1"
+		            android:gravity="center"/>
+		        <Button
+			        android:id="@+id/level_add"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			    	android:layout_height="wrap_content"
+			    	android:onClick="level_add"
+			    	android:text="add"/>
+		    </LinearLayout>
+		    
+		    <Button
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="open backLight"
+		        android:onClick="openBackLight"/>
+		    <Button
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="close backLight"
+		        android:onClick="closeBackLight"/>
+		    <Button
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="check backLight"
+		        android:onClick="checkBackLight"/>
+		   	<Button
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="check LCD"
+		        android:onClick="checkMainLcd"/>
+		    
+		    <EditText
+		        android:id="@+id/setContent" 
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:textSize="24sp"/>
+	    </LinearLayout>
+	    
+	    <include
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    layout="@layout/activity_secondled"/>
+	
+	</LinearLayout>
+    
+</ScrollView>

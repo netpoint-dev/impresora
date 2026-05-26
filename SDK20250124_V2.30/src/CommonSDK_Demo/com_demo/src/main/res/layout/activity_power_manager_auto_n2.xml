@@ -1,0 +1,1522 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".power.PowerManageKN2AutoActivity"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/getAllResultBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/buttonNumberStyle"
+                android:layout_weight="1"
+                android:background="@drawable/button_number_violet_shape"
+                android:onClick="onClick"
+                android:text="@string/powerManage_n_get_all_result_text"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/pressureBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/buttonNumberStyle"
+                android:layout_weight="1"
+                android:background="@drawable/button_number_violet_shape"
+                android:onClick="onClick"
+                android:text="@string/powerManage_n_pressure_text"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_basic_info_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/basicInfoAllResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/basicInfoPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/basicInfoFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_info_sn_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/snTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/snSetBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_set_text"
+                        android:layout_marginRight="10dp" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_info_imei_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/iemiTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_info_imsi_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/imsiTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_info_ccid_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/ccidTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_info_factoryver_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/factoryVerTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_info_tof_calibrate_flag_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofCalibrateFlagTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_tof_calibration_10cm_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofCalibration10cmTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_tof_calibration_60cm_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofCalibration60cmTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_ble_at_version_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bleAtVersionTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_ble_sdk_version_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bleSdkVersionTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_ble_compile_time_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bleCompileTimeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_ble_version_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bleVersionTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_ble_mac_address_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bleMacAddressTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_efuse_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/efuseTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/basicInfoCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+
+                <Button
+                    android:id="@+id/initSimBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_init_sim_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_led_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/allLedResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/allLedPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/allLedFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_red_led_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/redLedSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="255"
+                        android:layout_marginRight="10dp" />
+
+                    <TextView
+                        android:id="@+id/redLedBrightnessTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_green_led_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/greenLedSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="255"
+                        android:layout_marginRight="10dp" />
+
+                    <TextView
+                        android:id="@+id/greenLedBrightnessTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_blue_led_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/blueLedSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="255"
+                        android:layout_marginRight="10dp" />
+
+                    <TextView
+                        android:id="@+id/blueLedBrightnessTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_logo_led_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/logoLedSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="255"
+                        android:layout_marginRight="10dp" />
+
+                    <TextView
+                        android:id="@+id/logoLedBrightnessTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/ledCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_audio_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/audioResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/audioPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp" />
+
+                    <Button
+                        android:id="@+id/audioFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_audio_volume_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <SeekBar
+                        android:id="@+id/audioVolumeSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="7"
+                        android:progress="5"
+                        android:layout_marginRight="10dp" />
+
+                    <TextView
+                        android:id="@+id/audioVolumeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/audioCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_mcu_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/mcuResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/mcuCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_tof_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/tofPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp" />
+
+                    <Button
+                        android:id="@+id/tofFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_tof_calibration_10cm_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofCalibration10cmResultTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/tofCalibration10cmBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_calibration_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_tof_calibration_60cm_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofCalibration60cmResultTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/tofCalibration60cmBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_calibration_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_tof_distance_threshold_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/tofDistanceThresholdEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="200"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_tof_distance_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tofDistanceTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/tofCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_telephony_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/telephonyResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/telephonyPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp" />
+
+                    <Button
+                        android:id="@+id/telephonyFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_ip_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/telephonyPingEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="ip/domain"
+                        android:text="www.baidu.com"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_send_count_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/telephonyPingCountEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="(1~255)"
+                        android:text="5"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal"
+                        android:inputType="number" />
+                </TableRow>
+
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_package_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/telephonyPingPackageEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="(0~1372)"
+                        android:text="32"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal"
+                        android:inputType="number" />
+                </TableRow>
+
+
+                <TableRow android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_timeout_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/telephonyPingTimeoutEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="(1~65535ms)"
+                        android:text="10000"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_horizontal"
+                        android:inputType="number" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_rssi_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/telephonyRssiTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_pingstatus_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/telephonyPingStatusTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_receive_count_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/telephonyPingReceiveCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_telephony_ping_single_time_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/telephonyPingSingleTimeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/telephonyCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_nfc_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcCardResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/nfcCardPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp" />
+
+                    <Button
+                        android:id="@+id/nfcCardFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <TableRow>
+
+                    <Button
+                        android:id="@+id/nfcCardActivateBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/powerManage_n_nfc_activate_card_mode_text" />
+
+                    <Button
+                        android:id="@+id/nfcCardDeactivateBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_nfc_deactivate_card_mode_text" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcReaderResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/nfcReaderPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone"
+                        tools:visibility="visible"  />
+
+                    <Button
+                        android:id="@+id/nfcReaderFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_nfc_typea_uid_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcTypeAUIDTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_nfc_cpu_ats_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcCpuAtsTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_nfc_cpu_apdu_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcCpuApduTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_nfc_typeb_atqb_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcTypeBAtqBTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_nfc_mifare_block0_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcMifareBlock0Tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_nfc_mifare_block1_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nfcMifareBlock1Tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/nfcReaderActivateBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_nfc_activate_reader_mode_text" />
+            </TableLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_bluetooth_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bluetoothResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <Button
+                    android:id="@+id/bluetoothCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_hid_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powerManage_n_all_result_text"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hidResultTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+
+                    <Button
+                        android:id="@+id/hidPassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_pass_text"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone"
+                        tools:visibility="visible"  />
+
+                    <Button
+                        android:id="@+id/hidFailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonNumberStyle"
+                        android:layout_weight="1"
+                        android:background="#ffaf00"
+                        android:onClick="onClick"
+                        android:text="@string/powerManage_n_fail_text"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
+                </TableRow>
+
+                <TextView
+                    android:id="@+id/hidReadTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"/>
+
+                <Button
+                    android:id="@+id/hidCheckBtn"
+                    style="@style/buttonNumberStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:onClick="onClick"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/powerManage_n_check_text" />
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/powerManage_n_other_text"
+                android:textColor="@color/Blue" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Blue"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+                <TableRow>
+                    <Button
+                        android:id="@+id/switchToWindowBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_switch_to_window_text" />
+
+                    <Button
+                        android:id="@+id/switchToAndroidBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_switch_to_android_text" />
+
+                    <Button
+                        android:id="@+id/switchToHidBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_switch_to_hid_text" />
+                    <Button
+                        android:id="@+id/switchToLoaderBtn"
+                        style="@style/buttonNumberStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_number_violet_shape"
+                        android:onClick="onClick"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/powerManage_n_switch_to_loader_text" />
+
+                </TableRow>
+            </TableLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

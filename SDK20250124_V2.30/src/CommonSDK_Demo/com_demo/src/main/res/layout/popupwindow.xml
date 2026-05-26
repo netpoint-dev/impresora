@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:background="#ffffff"
+android:id="@+id/pop_layout"
+android:layout_margin="10dp"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:background="#eae7e7"
+    android:layout_height="40dp">
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="@string/system_time_cancel"
+        android:textSize="13sp"
+        android:id="@+id/quxiao"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:textColor="#ff0000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:text="@string/system_time_set"
+        android:textColor="#9e9d9c"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="@string/system_time_sure"
+        android:textSize="13sp"
+        android:id="@+id/queren"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:textColor="#ff0000"/>
+</RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="#ffffff"
+    android:orientation="horizontal">
+
+    <NumberPicker
+        android:background="#ffffff"
+        android:id="@+id/day"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"></NumberPicker>
+    <NumberPicker
+        android:background="#ffffff"
+        android:id="@+id/hour"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"></NumberPicker>
+    <NumberPicker
+        android:background="#ffffff"
+        android:id="@+id/minte"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"></NumberPicker>
+</LinearLayout>
+
+</LinearLayout>

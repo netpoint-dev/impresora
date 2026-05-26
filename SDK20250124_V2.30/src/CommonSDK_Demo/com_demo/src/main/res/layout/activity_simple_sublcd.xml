@@ -1,0 +1,158 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".pos.GpioActivity" >
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <TableLayout
+        android:id="@+id/led_tablelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/titlebar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lcd_simple_test"
+            android:textColor="@color/Blue"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/Blue"
+            android:layout_marginBottom="10dp"/>
+
+        <TableRow
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/getVersionBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lcd_getversion_btn"
+                android:onClick="onClick"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"/>
+
+            <TextView
+                android:id="@+id/versionTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/getResolutionBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lcd_get_resolution_btn"
+                android:onClick="onClick"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"/>
+
+            <TextView
+                android:id="@+id/resolutionTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/updateBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lcd_update_btn"
+                android:onClick="onClick"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"/>
+
+            <EditText
+                android:id="@+id/updatePathEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/showBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lcd_show_btn"
+                android:onClick="onClick"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"/>
+
+            <EditText
+                android:id="@+id/picPathEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/showBitmapBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lcd_show_bitmap_btn"
+                android:onClick="onClick"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="5dp">
+
+            <Button
+                android:id="@+id/showOffsetBitmapBtn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_number_violet_shape"
+                android:onClick="onClick"
+                android:text="@string/lcd_show_offset_bitmap_btn" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:text="x: 50, y: 50" />
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>

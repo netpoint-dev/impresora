@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".multireader.MultiReaderActivity"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <TableRow>
+                    <Button
+                        android:id="@+id/openReader"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/multireader_open"
+                        android:onClick="openReader"
+                        android:background="@drawable/button_number_violet_shape"
+                        style="@style/buttonNumberStyle"/>
+
+                    <Button
+                        android:id="@+id/closeReader"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/multireader_close"
+                        android:onClick="closeReader"
+                        android:background="@drawable/button_number_violet_shape"
+                        style="@style/buttonNumberStyle"/>
+                </TableRow>
+            </TableLayout>
+
+            <LinearLayout
+                android:id="@+id/forIdcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/checkSN"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/multireader_get_sn"
+                    android:onClick="checkSN"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"/>
+
+                <Button
+                    android:id="@+id/checkPhyDDR"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/multireader_get_phyddr"
+                    android:onClick="checkPhyDDR"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TableRow>
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_find_id"
+                            android:onClick="find"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_select_id"
+                            android:onClick="select"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_read_id"
+                            android:onClick="read"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+                    </TableRow>
+                </TableLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/multireader_loop"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/loopCheckIDChb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"/>
+                    <Button
+                        android:id="@+id/checkIDBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/multireader_check_id"
+                        android:onClick="checkID"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/button_number_violet_shape"
+                        style="@style/buttonNumberStyle"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <LinearLayout
+                android:id="@+id/forTypaAcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TableRow>
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_check_typea"
+                            android:onClick="readTypeUID"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+
+                    </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <!--<TableRow>
+
+                        <EditText
+                            android:id="@+id/apdudata"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="0084000004" />
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_send_apdu"
+                            android:onClick="sendAPDU"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+                    </TableRow>-->
+                    <TableRow>
+                        <EditText
+                            android:id="@+id/editTextNfcAPDUCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:hint="@string/nfc_tv_apdu_count"
+                            android:inputType="number"
+                            android:text="1" />
+
+                        <EditText
+                            android:id="@+id/editTextNfcAPDU"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:hint="@string/apdu_to_send"
+                            android:inputType="textMultiLine"
+                            android:text="0084000004" />
+
+                        <Button
+                            android:id="@+id/buttonNfcAPDU"
+                            style="@style/buttonNumberStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_number_violet_shape"
+                            android:text="@string/nfc_send_apdu"
+                            android:onClick="sendAPDU"/>
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TableRow>
+
+                        <EditText
+                            android:id="@+id/blocknum"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="01" />
+
+                        <EditText
+                            android:id="@+id/password"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="FFFFFFFFFFFF" />
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_verify_typea"
+                            android:onClick="verifyTypeA"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_verify_typeb"
+                            android:onClick="verifyTypeB"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+                    </TableRow>
+                </TableLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/multireader_read_block"
+                    android:onClick="readTypeA"
+                    android:background="@drawable/button_number_violet_shape"
+                    android:layout_marginBottom="10dp"
+                    style="@style/buttonNumberStyle"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TableRow>
+
+                        <EditText
+                            android:id="@+id/newdata"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="111111111111" />
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_write_block"
+                            android:onClick="writeTypeA"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+                    </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TableRow>
+
+                        <EditText
+                            android:id="@+id/newdata_addsub"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="11111111" />
+
+                        <Spinner
+                            android:id="@+id/walletOperationSpr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="add" />
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_wallet_operate"
+                            android:onClick="add_sub"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+                    </TableRow>
+                </TableLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nfc_read_wallet"
+                    android:onClick="readWalletCommand"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_number_violet_shape"
+                    style="@style/buttonNumberStyle"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TableRow>
+
+                        <EditText
+                            android:id="@+id/data_write_wallet"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="11111111" />
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/multireader_write_wallet"
+                            android:onClick="writeWallet"
+                            android:background="@drawable/button_number_violet_shape"
+                            style="@style/buttonNumberStyle"/>
+                    </TableRow>
+                </TableLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/multireader_get_version"
+                android:onClick="checkVersion"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_number_violet_shape"
+                style="@style/buttonNumberStyle"/>
+
+            <TextView
+                android:id="@+id/showResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:id="@+id/headImg"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#f5f5f5"
+	android:orientation="vertical" >
+
+	<include android:id="@+id/titlebar"
+		layout="@layout/titlebar" />
+
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+id/titlebar"
+		android:layout_margin="10dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical" >
+
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/nfc_reset"
+				android:onClick="reset"
+				android:background="@drawable/button_number_violet_shape"
+				style="@style/buttonNumberStyle"/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="10dp"/>
+
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/nfc_open_serial"
+				android:onClick="openSerial"
+				android:background="@drawable/button_number_violet_shape"
+				style="@style/buttonNumberStyle"/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="10dp"/>
+
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/nfc_close_serial"
+				android:onClick="closeSerial"
+				android:background="@drawable/button_number_violet_shape"
+				style="@style/buttonNumberStyle"/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="10dp"/>
+
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/nfc_check_version"
+				android:onClick="checkVersion"
+				android:background="@drawable/button_number_violet_shape"
+				style="@style/buttonNumberStyle"/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="10dp"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<CheckBox
+					android:id="@+id/loopFindChb"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/nfc_loop_find"
+					android:layout_margin="10dp"/>
+
+				<Button
+					android:id="@+id/selectCard"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/nfc_loop_start_find"
+					android:onClick="select"
+					android:background="@drawable/button_number_violet_shape"
+					style="@style/buttonNumberStyle"/>
+			</LinearLayout>
+
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="10dp"/>
+
+			<Button
+				android:visibility="gone"
+				android:id="@+id/readAllBlock"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="读所有块"
+				android:onClick="readAllBlock"
+				style="@style/buttonNumberStyle"/>
+
+			<TableLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<TableRow >
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:text="@string/nfc_authentication"
+						android:onClick="AUTHENTICATE"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<EditText
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:hint="block号"
+						android:text="10"
+						android:id="@+id/auth_block"/>
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:text="@string/nfc_password_TypeA"
+						android:onClick="auth_keyType"
+						android:id="@+id/auth_keyType"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<EditText
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:hint="@string/nfc_password_TypeA_hint"
+						android:text="FFFFFFFFFFFF"
+						android:id="@+id/auth_key"/>
+				</TableRow>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<Button
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/nfc_read_block"
+					android:onClick="READ_BLOCK"
+					android:background="@drawable/button_number_violet_shape"
+					style="@style/buttonNumberStyle"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<TableRow >
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:text="@string/nfc_write_block"
+						android:onClick="WRITE_BLOCK"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<EditText
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="5"
+						android:hint="@string/nfc_write_block_hint"
+						android:layout_marginLeft="10dp"
+						android:text="FFFFFFFFFFFF88888888888877777777"
+						android:id="@+id/write_content"/>
+				</TableRow>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<TableRow >
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/nfc_initialize_wallet"
+						android:onClick="INIT_WALLET"
+						android:layout_marginRight="10dp"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<EditText
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:hint="@string/nfc_write_wallet_hint"
+						android:text="1"
+						android:id="@+id/init_money"/>
+				</TableRow>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<Button
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/nfc_read_wallet"
+					android:onClick="READ_WALLET"
+					android:background="@drawable/button_number_violet_shape"
+					style="@style/buttonNumberStyle"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<TableRow >
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/nfc_write_wallet"
+						android:onClick="WRITE_WALLET"
+						android:layout_marginRight="10dp"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/nfc_plus"
+						android:onClick="dealType"
+						android:id="@+id/wallet_type"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<EditText
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:hint="@string/nfc_write_wallet_hint"
+						android:text="1"
+						android:id="@+id/deal_money"/>
+				</TableRow>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<TableRow >
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/nfc_block_to_cache"
+						android:onClick="TRANSFER"
+						android:layout_marginRight="10dp"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+					<Button
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/nfc_cache_to_block"
+						android:onClick="RESTORE"
+						android:background="@drawable/button_number_violet_shape"
+						style="@style/buttonNumberStyle"/>
+				</TableRow>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+<!--				<Button
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/nfc_send_apdu"
+					android:onClick="sendapdu"
+					android:background="@drawable/button_number_violet_shape"
+					style="@style/buttonNumberStyle"/>-->
+
+				<LinearLayout
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content">
+
+					<EditText
+						android:id="@+id/editTextNfcAPDUCount"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:hint="@string/nfc_tv_apdu_count"
+						android:inputType="number"
+						android:text="1"/>
+
+					<EditText
+						android:id="@+id/editTextNfcAPDU"
+						android:layout_width="0dp"
+						android:layout_height="fill_parent"
+						android:layout_weight="1"
+						android:hint="@string/apdu_to_send"
+						android:inputType="textMultiLine"
+						android:text="00A4040000" />
+
+					<Button
+						android:id="@+id/buttonNfcAPDU"
+						style="@style/buttonNumberStyle"
+						android:layout_width="0dp"
+						android:layout_height="50dp"
+						android:layout_marginLeft="20dp"
+						android:layout_weight="1"
+						android:background="@drawable/button_number_violet_shape"
+						android:text="@string/nfc_send_apdu"
+						android:onClick="sendapdu"/>
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+				<Button
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/nfc_close_card"
+					android:onClick="CLOSE_CARD"
+					android:background="@drawable/button_number_violet_shape"
+					style="@style/buttonNumberStyle"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="10dp"/>
+
+			</TableLayout>
+
+			<TextView
+				android:id="@+id/showResult"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:textSize="24sp"/>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+</RelativeLayout>
+
+

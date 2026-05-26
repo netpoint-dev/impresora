@@ -1,0 +1,80 @@
+        Money Box API
+Development Documentation
+                     V1.1.0
+             Update Records
+  Date                      Description
+
+2022-10-31              First Edition Release
+
+2023-02-22           The API has been modified
+
+2024-06-20         Update API and documentation
+                                      Contents
+1 Introduction
+   1.1 MoneyBox Class
+     1.1.1 Open the Money Box
+     1.1.2 Open the Money Box(@Deprecated)
+     1.1.3 Close the Money Box(@Deprecated)
+     1.1.4 Get the Money Box Status
+1 Introduction
+1.1 MoneyBox Class
+Package: com.common.apiutil.moneybox
+
+1.1.1 Open the Money Box
+
+
+   /**
+    * @Function Open the Money Box, power on 450ms and power off automatically
+    *
+    * @Parameter
+    * 1.which: start from 1
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public static int open(int which)
+
+
+
+1.1.2 Open the Money Box(@Deprecated)
+
+
+   /**
+    * @Function Open the Money Box, after power on it and power off within 500ms
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public static synchronized int open()
+
+
+
+1.1.3 Close the Money Box(@Deprecated)
+
+
+   /**
+    * @Function Close the Money Box
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public static synchronized int close()
+
+
+
+1.1.4 Get the Money Box Status
+/**
+ * @Function Get the money box status
+ *
+ * @Parameter
+ * 1.which: money box number: start with 1
+ *
+ * @Return ResultCode: please refer the quick guidance document.
+ *
+ * */
+
+public static int getState(int which)
+

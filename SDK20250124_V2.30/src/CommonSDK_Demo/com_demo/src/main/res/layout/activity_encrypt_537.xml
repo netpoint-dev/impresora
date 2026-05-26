@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <Button
+            android:id="@+id/btn_serial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="打开串口"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_getState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取芯片状态"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_setkey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="保存密钥"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_encrypt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SM4 ECB 加密/解密"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_get_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取状态"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_upgrade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="升级成 App 模式"
+            android:background="@drawable/button_number_violet_shape"
+            style="@style/buttonNumberStyle"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>

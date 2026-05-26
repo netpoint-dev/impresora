@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/titlebar" />
+
+    <LinearLayout
+        android:id="@+id/felica_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/titlebar"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/nfc_open_btn"
+            style="@style/buttonNumberStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_number_violet_shape"
+            android:text="@string/nfc_open_text" />
+
+        <Button
+            android:id="@+id/nfc_FelicaSetMode_btn"
+            style="@style/buttonNumberStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_number_violet_shape"
+            android:text="@string/nfc_felica_set_mode" />
+
+        <Button
+            android:id="@+id/nfc_FelicaExchange_btn"
+            style="@style/buttonNumberStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_number_violet_shape"
+            android:text="@string/nfc_felica_exchange" />
+
+        <Button
+            android:id="@+id/nfc_FelicaExchange_test_btn"
+            style="@style/buttonNumberStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_number_violet_shape"
+            android:text="@string/nfc_felica_exchange_test" />
+
+        <Button
+            android:id="@+id/nfc_close_btn"
+            style="@style/buttonNumberStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_number_violet_shape"
+            android:text="@string/nfc_close_text" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="7dp"
+            android:background="@color/Gray" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nfc_result_tips"
+            android:textSize="23sp" />
+
+        <ScrollView
+            android:id="@+id/scroll_android_nfc_save_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="108dp">
+
+            <TextView
+                android:id="@+id/tv_show_data"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
+        </ScrollView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

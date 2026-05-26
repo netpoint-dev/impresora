@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#f5f5f5"
+    android:orientation="vertical"
+    tools:context=".nfc.NfcPN512ActivityMain">
+
+    <include layout="@layout/titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/cpu_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:orientation="horizontal"
+                android:text="@string/nfc_cpu_m1_test"
+                android:onClick="onClick"/>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="15dp">
+            </View>
+
+            <Button
+                android:id="@+id/mifare_desfire_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/nfc_mifare_desfire_test"
+                android:onClick="onClick"/>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="15dp">
+            </View>
+
+            <Button
+                android:id="@+id/felica_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/nfc_felica_test"
+                android:onClick="onClick"/>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="15dp">
+            </View>
+
+            <Button
+                android:id="@+id/felica_extra_btn"
+                style="@style/buttonNumberStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/button_number_violet_shape"
+                android:text="@string/nfc_felica_pass_through_test_title"
+                android:onClick="onClick"/>
+
+<!--            <View-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="15dp">-->
+<!--            </View>-->
+
+<!--            <Button-->
+<!--                android:id="@+id/mifare_ultraLight_btn"-->
+<!--                style="@style/buttonNumberStyle"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="75dp"-->
+<!--                android:background="@drawable/button_number_violet_shape"-->
+<!--                android:text="@string/nfc_mifare_ultraLight_test"-->
+<!--                android:onClick="onClick"/>-->
+
+<!--            <View-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="15dp">-->
+<!--            </View>-->
+
+<!--            <Button-->
+<!--                android:id="@+id/ntag_21x_btn"-->
+<!--                style="@style/buttonNumberStyle"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="75dp"-->
+<!--                android:background="@drawable/button_number_violet_shape"-->
+<!--                android:text="@string/nfc_ntag_21x_test"-->
+<!--                android:onClick="onClick"/>-->
+
+        </LinearLayout>
+	</ScrollView>
+</LinearLayout>

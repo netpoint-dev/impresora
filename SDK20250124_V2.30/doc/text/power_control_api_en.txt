@@ -1,0 +1,425 @@
+     Power Control API
+Development Documentation
+                     V1.1.0
+             Update Records
+  Date                      Description
+
+2023-04-23              First Edition Release
+
+2023-12-19                Update the API
+
+2024-06-20         Update API and documentation
+                                        Contents
+1 Introduction
+   1.1 Power Control Class
+     1.1.1 Fingerprint device power on/off
+     1.1.2 Iris power on/off
+     1.1.3 Passport power on/off
+     1.1.4 Ethernet power on/off
+     1.1.5 USB camera power on/off
+     1.1.6 ID Card power on/off
+     1.1.7 IC Card power on/off
+     1.1.8 Psam Card power on/off
+     1.1.9 UHF power on/off
+     1.1.10 QR Code power on/off
+     1.1.11 Zink Printer power on/off
+     1.1.12 Self-developed printer power on/off
+     1.1.13 USB/OTG Switch
+     1.1.14 USB/NFC power on/off
+     1.1.15 Other device power on/off
+     1.1.16 Buzzer power on/off
+     1.1.17 USB power on/off
+     1.1.18 Lan power on/off
+     1.1.19 HDMI power on/off
+     1.1.20 MPos power on/off
+     1.1.21 Crypto card power on/off
+     1.1.22 Get the DIP switch status
+     1.1.23 Get the case box switch status
+1 Introduction
+Package: (com.common.apiutil.powercontrol)
+Support control of ﬁngerprint reader, 2D reading head, iris, passport, Ethernet and USB
+
+
+1.1 Power Control Class
+1.1.1 Fingerprint device power on/off
+
+
+   /**
+    * @Function Fingerprint device power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int fingerPrintPower(int status)
+
+
+
+1.1.2 Iris power on/off
+
+
+   /**
+    * @Function Iris power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int irisPower(int status)
+
+
+
+1.1.3 Passport power on/off
+
+
+   /**
+    * @Function Passport power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int pspPower(int status)
+
+
+
+1.1.4 Ethernet power on/off
+
+
+   /**
+    * @Function Ethernet power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int ethernetPower(int status)
+
+
+
+1.1.5 USB camera power on/off
+
+
+   /**
+    * @Function USB camera power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int usbCameraPower(int status)
+
+
+
+1.1.6 ID Card power on/off
+
+
+   /**
+    * @Function ID Card power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int idcardPower(int status)
+1.1.7 IC Card power on/off
+
+
+   /**
+    * @Function IC Card power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int iccardPower(int status)
+
+
+
+1.1.8 Psam Card power on/off
+
+
+   /**
+    * @Function Psam Card power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int psamcard(int status)
+
+
+
+1.1.9 UHF power on/off
+
+
+   /**
+    * @Function UHF power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int uhfPower(int status)
+
+
+
+1.1.10 QR Code power on/off
+   /**
+    * @Function QR Code power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int decodePower(int status)
+
+
+
+1.1.11 Zink Printer power on/off
+
+
+   /**
+    * @Function Zink Printer power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int zinkPower(int status)
+
+
+
+1.1.12 Self-developed printer power on/off
+
+
+   /**
+    * @Function Self-developed printer power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int printerPower(int status)
+
+
+
+1.1.13 USB/OTG Switch
+
+
+   /**
+    * @Function USB/OTG switch
+    *
+    * @Parameter
+    * 1.status: 0, ADB; 1, OTG
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int usbPower(int status)
+
+
+
+1.1.14 USB/NFC power on/off
+
+
+   /**
+    * @Function NFC power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int nfcPower(int status)
+
+
+
+1.1.15 Other device power on/off
+
+
+   /**
+    * @Function Other device power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    * 2.device: Device identification character
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int miscPower(String device, int status)
+
+
+
+1.1.16 Buzzer power on/off
+
+
+   /**
+    * @Function Buzzer power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public synchronized int beepPower(int status)
+
+
+
+1.1.17 USB power on/off
+
+
+   /**
+    * @Function USB power on/off
+    *
+    * @Parameter
+    * 1.which: Start with 1
+    * 2.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int usbPower(int which, int status)
+
+
+
+1.1.18 Lan power on/off
+
+
+   /**
+    * @Function Lan power on/off
+    *
+    * @Parameter
+    * 1.which: Start with 1
+    * 2.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int lanPower(int which, int status)
+
+
+
+1.1.19 HDMI power on/off
+
+
+   /**
+    * @Function HDMI power on/off
+    *
+    * @Parameter
+    * 1.which: Start with 1
+    * 2.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int hdmiPower(int which, int status)
+
+
+
+1.1.20 MPos power on/off
+
+
+   /**
+    * @Function MPos power on/off
+    *
+    * @Parameter
+    * 1.which: Start with 1
+    * 2.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int mposPower(int which, int status)
+
+
+
+1.1.21 Crypto card power on/off
+
+
+   /**
+    * @Function Crypto card power on/off
+    *
+    * @Parameter
+    * 1.status: 0, Power off; 1, Power on
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * */
+
+   public int cryptoCardPower(int status)
+
+
+
+1.1.22 Get the DIP switch status
+
+
+   /**
+    * @Function Get the DIP switch status
+    *
+    * @Return 0, close; 1, open; ResultCode: please refer the quick guidance
+   document.
+    *
+    * */
+
+   public int getDialSwitchStatus()
+1.1.23 Get the case box switch status
+
+
+   /**
+    * @Function Get the case box switch status
+    *
+    * @Return 0, close; 1, open; ResultCode: please refer the quick guidance
+   document.
+    *
+    * */
+
+   public int getCaseSwitchStatus()
+

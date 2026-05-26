@@ -1,0 +1,915 @@
+             Printer API
+Development Documentation
+                     V1.1.0
+             Update Records
+  Date                      Description
+
+2022-10-31              First Edition Release
+
+2023-02-22              Modify the interface
+
+2023-04-23             Update the interface
+
+2024-06-20         Update API and documentation
+                                        Contents
+1 Introduction
+   1.1 Detect the printer type
+   1.2 UsbThermalPrinter Class
+     1.2.1 UsbThermalPrinter
+     1.2.2 Get the Model Version
+     1.2.3 Get the printer status
+     1.2.4 Printer reset
+     1.2.5 Look for black labels
+     1.2.6 Paper Feed
+     1.2.7 Set the print alignment
+     1.2.8 Set the Left Margin
+     1.2.9 Set the Line Spacing
+     1.2.10 Font Bold
+     1.2.11 Set the Font Size
+     1.2.12 Set the Print Grayscale Value
+     1.2.13 Add Print Content
+     1.2.14 Start Printing
+     1.2.15 Get the Total Width of the Input Text
+     1.2.16 Adds an inline offset print
+     1.2.17 Add contents of the current printed line at the end
+     1.2.18 Print picture/Bar code/QR code
+     1.2.19 Table printing, printString is not executed
+     1.2.20 Set italics
+     1.2.21 Set the print paper type
+     1.2.22 Adapt the new label paper
+     1.2.23 Feed out the label paper
+     1.2.24 Roll back the label paper
+   1.3 ThermalPrinter Class
+     1.3.1 Printer width
+     1.3.2 Printer language type
+     1.3.3 Printer status
+     1.3.4 Initialize the 80mm USB printer
+     1.3.5 Initialize the 80mm serial printer
+     1.3.6 Printer Resource Request
+     1.3.7 Get the Model Version
+     1.3.8 Printer Reset
+     1.3.9 Look for Black Labels
+     1.3.10 Paper Feed
+     1.3.11 Set the Print Alignment
+     1.3.12 Set the Font Size
+     1.3.13 The Print Font Width and Height are Enlarged
+     1.3.14 Set the Print Grayscale Value
+1.3.15 Add Print Content
+1.3.16 Start Printing
+1.3.17 Paper Cut
+1.3.18 Send Instructions to the Printer Device
+1.3.19 Print the Picture
+1.3.20 Release the Printer
+1.3.21 Set the Anti-white
+1.3.22 Set the paper width
+1.3.23 Get the print count
+1.3.24 Get printer status
+1 Introduction
+1.1 Detect the printer type
+
+   int printerCheck = SystemUtil.checkPrinter581(this);
+   if(printerCheck == PRINTER_80MM_USB_COMMON){
+       //SY581 USB printer
+   }else if(printerCheck == PRINTER_SY581){
+       //SY581 Serial printer
+   }else if(printerCheck == PRINTER_SY581){
+       //58mm Serial/USB printer
+   }
+
+
+
+1.2 UsbThermalPrinter Class
+Package: com.common.apiutil.printer
+Thermal USB/Serial printer interface(56 mm)
+
+1.2.1 UsbThermalPrinter
+
+
+   /**
+    * @Function UsbThermalPrinter
+    *
+    * @Parameter context
+    *
+    * */
+
+   public UsbThermalPrinter(Context context)
+
+
+
+1.2.2 Get the Model Version
+
+
+   /**
+    * @Function Get the model version
+    *
+    * @Return Model version
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized String getVersion() throws CommonException
+
+
+
+1.2.3 Get the printer status
+   /**
+    * @Function Get the printer status
+    *
+    * @Return ResultCode: please refer the quick guidance document.
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static int checkStatus() throws CommonException
+
+
+
+1.2.4 Printer reset
+
+
+   /**
+    * @Function The printer resets, all settings return to their default settings,
+   and the print buffer is cleared
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void reset() throws CommonException
+
+
+
+1.2.5 Look for black labels
+
+
+   /**
+    * @Function Look for black labels
+    *
+    * @Parameter
+    * 1.search_disdance: Find the maximum number of paper lines before the black
+   label, 0-255
+    * 2.walk_disdance: The number of paper lines after the black label is found, 0-
+   255
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void searchMark(int search_disdance, int walk_disdance) throws
+   CommonException
+
+
+
+1.2.6 Paper Feed
+
+
+   /**
+    * @Function Paper Feed
+    *
+    * @Parameter
+    * 1.line: int > 0
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void walkPaper(int line) throws CommonException
+
+
+
+1.2.7 Set the print alignment
+
+
+   /**
+    * @Function Set the print alignment
+    *
+    * @Parameter
+    * 1.mode:
+    *      1.ALGIN_LEFT
+    *      2.ALGIN_MIDDLE
+    *      3.ALGIN_RIGHT
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setAlgin(int mode) throws CommonException
+
+
+
+1.2.8 Set the Left Margin
+
+
+   /**
+    * @Function Set the left margin
+    *
+    * @Parameter
+    * 1.leftDistance: Margin value: 0-255, Unit: 0.125mm
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setLeftIndent(int leftDistance) throws CommonException
+
+
+
+1.2.9 Set the Line Spacing
+
+
+   /**
+    * @Function Set the line spacing
+    *
+    * @Parameter
+    * 1.lineDistance: 0-255
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setLineSpace(int lineDistance) throws CommonException
+
+
+
+1.2.10 Font Bold
+
+
+   /**
+    * @Function Font bold
+    *
+    * @Parameter
+    * 1.isBold: True: font bold; False: font not bold
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setBold(boolean isBold) throws CommonException
+
+
+
+1.2.11 Set the Font Size
+
+
+   /**
+    * @Function Set the font size
+    *
+    * @Parameter
+    * 1.size: 8-64
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setTextSize(int size) throws CommonException
+
+
+
+1.2.12 Set the Print Grayscale Value
+
+
+   /**
+    * @Function Set the print grayscale value
+    *
+    * @Parameter
+    * 1.gray: Need to check if the hardware supports it
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setGray(int gray) throws CommonException
+
+
+
+1.2.13 Add Print Content
+
+
+   /**
+    * @Function Add print content
+    *
+    * @Parameter
+    * 1.content: print content
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void addString(String content) throws CommonException
+
+
+
+1.2.14 Start Printing
+
+
+   /**
+    * @Function Start printing, and the paper will not be taken after printing
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void printString() throws CommonException
+
+
+
+1.2.15 Get the Total Width of the Input Text
+
+
+   /**
+    * @Function Gets the total width of the input tex
+    *
+    * @Parameter
+    * 1.text: text content
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized int measureText(String text) throws CommonException
+
+
+
+1.2.16 Adds an inline offset print
+    /**
+     * @Function Adds an inline offset print
+     *
+     * @Parameter
+     * 1.offset: Inline offset, which must be an integer multiple of 8, cannot be less
+    than the left margin, and cannot be greater than (384-right margin)
+     * 2.content: String content
+     *
+     * @Exception CommonException
+     *
+     * */
+
+    public synchronized void addStringOffset(int offset, String content) throws
+    CommonException
+
+
+
+Tips: This function is suitable for USB printing two stages, USB printing one stage is not valid
+
+           1. Note that this method can only be added with content within one line, and characters beyond
+             one line will be intercepted and not printed
+           2. When adding content within the same line, offset needs to be added from small to large
+           3. When content is added within the same line, the print format is not allowed in the middle,
+             otherwise it will cause word wrapping
+           4. During the same line addition process, calling the "addString()" method automatically wraps
+           5. Add the contents of this line at the end of the line and call the "endLine()" method
+
+1.2.17 Add contents of the current printed line at the end
+
+
+    /**
+     * @Function Adds the contents of the current printed line to wrap after the
+    addStringOffset method call
+     *
+     * @Exception CommonException
+     *
+     * */
+
+    public synchronized void endLine() throws CommonException
+
+
+
+1.2.18 Print picture/Bar code/QR code
+
+
+    /**
+     * @Function Print picture/Bar code/QR code
+     *
+     * @Parameter
+     * 1.image: Bitmap objects, the width must be less than 384 pixels and an integer
+    multiple of 8, and the high pixels must be an integer of 8
+     * 2.isBuffer: Whether to join the buffer queue, call printString or
+    printStringAndWalk, the buffer queue is used. There is data printed together,
+   mostly used for mixed printing of graphics and text
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void printLogo(Bitmap image, boolean isBuffer) throws
+   CommonException
+
+   //Bar code example
+   Bitmap bitmap = CreateCode(barcodeStr, BarcodeFormat.CODE_128, 320, 176);
+   if (bitmap != null) {
+       mUsbThermalPrinter.printLogo(bitmap, true);
+   }
+
+
+
+1.2.19 Table printing, printString is not executed
+
+
+   /**
+    * @Function Table printing, printString is not executed
+    *
+    * @Parameter
+    * 1.colsTestArr: An array of column text strings
+    * 2.colsWidthArr: The width weight of each column is the proportion of each
+   column
+    * 3.colsAlign: Column alignment: 0 Left, 1 center, 2 right
+    * 4.colsTextSize: Font size 12/24/36
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void addColumnsString(String[] colsTestArr, int[]
+   colsWidthArr, int[] colsAlign, int colsTextSize) throws CommonException
+
+
+
+1.2.20 Set italics
+
+
+   /**
+    * @Function Set italics
+    *
+    * @Parameter isItalic
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public void setItalic(boolean isItalic) throws CommonException
+
+
+
+1.2.21 Set the print paper type
+   /**
+    * @Function Set the print paper type
+    *
+    * @Parameter
+    * 1.mode: 0, normal paper; 2, label paper; default: label paper
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setAlgorithm(int mode) throws CommonException
+
+
+
+1.2.22 Adapt the new label paper
+
+
+   /**
+    * @Function Adapt the new label paper
+    *
+    * @Parameter
+    * 1.line: line number(mm)
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setLableAdapt(int line) throws CommonException
+
+
+
+1.2.23 Feed out the label paper
+
+
+   /**
+    * @Function Feed out the label paper
+    *
+    * @Parameter
+    * 1.line: line number(mm)
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setLableFeedOutNextGap(int line) throws CommonException
+
+
+
+1.2.24 Roll back the label paper
+
+
+   /**
+    * @Function Roll back the label paper
+    *
+    * @Parameter
+    * 1.line: line number(mm)
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void rollback(int line) throws CommonException
+
+
+
+1.3 ThermalPrinter Class
+Package: com.common.apiutil.printer
+Thermal USB/Serial printer interface(80mm)
+
+1.3.1 Printer width
+
+                                      Type                    Description
+
+                        ThermalPrinter.PAPER_80mm                80mm
+
+                        ThermalPrinter.PAPER_58mm                58mm
+
+
+1.3.2 Printer language type
+
+                                   Type                       Description
+
+                          ThermalPrinter.ENGLISH                English
+
+                          ThermalPrinter.PERSIAN                Persian
+
+                          ThermalPrinter.KOREAN                 Korean
+
+                         ThermalPrinter.JAPANESE               Japanese
+
+                          ThermalPrinter.FRENCH                 French
+
+                          ThermalPrinter.RUSSIAN                Russian
+
+                         ThermalPrinter.THAILAND               Thailand
+
+                         ThermalPrinter.CAMBODIA               Cambodia
+
+                           ThermalPrinter.LAOS                   Laos
+
+                          ThermalPrinter.CHINESE                Chinese
+
+                        ThermalPrinter.PORTUGUESE             Portuguese
+
+                          ThermalPrinter.SPANISH                Spanish
+
+                          ThermalPrinter.ITALIAN                Italian
+
+                          ThermalPrinter.GERMAN                 German
+
+                    ThermalPrinter.HONGKONG_CHINA           China HongKong
+1.3.3 Printer status
+
+                            Type                             Description
+
+                   ThermalPrinter.STATUS_OK              The status is normal
+
+                ThermalPrinter.STATUS_NO_PAPER                 No paper
+
+               ThermalPrinter.STATUS_OVER_HEAT                 Over heat
+
+               ThermalPrinter.STATUS_OVER_FLOW              The cache is full
+
+               ThermalPrinter.STATUS_UNKNOWN                Unknown error
+
+               ThermalPrinter.STATUS_BOX_OPEN         The printer box is opened
+
+              ThermalPrinter.STATUS_CUT_WRONG        The printer cutter is incorrect
+
+
+1.3.4 Initialize the 80mm USB printer
+
+
+   /**
+    * @Function Initialize the 80mm USB printer
+    *
+    * */
+
+   public synchronized static boolean init80mmUsbPrinter(Context context)
+
+
+
+1.3.5 Initialize the 80mm serial printer
+
+
+   /**
+    * @Function Initialize the 80mm serial printer
+    *
+    * */
+
+   public synchronized static boolean init80mmSerialPrinter()
+
+
+
+1.3.6 Printer Resource Request
+
+
+   /**
+    * @Function Printer resource request
+    *
+    * @Tips Printer resource application, you must first apply to use the printer-
+   related operations, after using the stop() method to release
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void start(Context context) throws CommonException
+1.3.7 Get the Model Version
+
+
+   /**
+    * @Function Get model version
+    *
+    * @Return Model version
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static String getVersion() throws CommonException
+
+
+
+1.3.8 Printer Reset
+
+
+   /**
+    * @Function Printer reset
+    *
+    * @Tips The printer resets, all settings return to their default settings, and
+   the print buffer is cleared
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void reset() throws CommonException
+
+
+
+1.3.9 Look for Black Labels
+
+
+   /**
+    * @Function Look for black labels
+    *
+    * @Parameter
+    * 1.search_disdance: 0-255
+    * 2.walk_disdance: 0-255
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void searchMark(int search_disdance, int walk_disdance) throws
+   CommonException
+
+
+
+1.3.10 Paper Feed
+   /**
+    * @Function Paper feed
+    *
+    * @Parameter
+    * 1.line: line number [int > 0]
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void walkPaper(int line) throws CommonException
+
+
+
+1.3.11 Set the Print Alignment
+
+
+   /**
+    * @Function Set the print alignment
+    *
+    * @Parameter
+    * 1.mode:
+    *      1.ALGIN_LEFT
+    *      2.ALGIN_MIDDLE
+    *      3.ALGIN_RIGHT
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setAlgin(int mode) throws CommonException
+
+
+
+1.3.12 Set the Font Size
+
+
+   /**
+    * @Function Set the font size
+    *
+    * @Parameter
+    * 1.type:
+    *          - Font size setting, 1-2 defaults to the No.2 font size
+    *          - For single-byte characters, the font size of No.1 font size is 8*16
+   and the font size of No.2 font size is 12*24
+    *          - For double-byte characters, the font size of No.1 font size is 16*16
+   and the font size of No.2 font size is 24*24
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void setFontSize(int type) throws CommonException
+1.3.13 The Print Font Width and Height are Enlarged
+
+
+   /**
+    * @Function The print font width and height are enlarged
+    *
+    * @Parameter
+    * 1.widthMultiple: Default, 1
+    * 2.heightMultiple: Default, 1
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void enlargeFontSize(int widthMultiple, int
+   heightMultiple) throws CommonException
+
+
+
+1.3.14 Set the Print Grayscale Value
+
+
+   /**
+    * @Function Set the print grayscale value
+    *
+    * @Parameter
+    * 1.level: Need to check if your hardware supports it
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void setGray(int level) throws CommonException
+
+
+
+1.3.15 Add Print Content
+
+
+   /**
+    * @Function Add print content
+    *
+    * @Parameter
+    * 1.content: String content
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized void addString(String content) throws CommonException
+
+
+
+1.3.16 Start Printing
+   /**
+    * @Function Start printing, and the paper will not be taken after printing
+    *
+    * @Parameter
+    * 1.enctype: Such as ENGLISH, PERSIAN, KOREAN, JAPANESE, CHINESE
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void printString(String enctype) throws CommonException
+
+
+
+1.3.17 Paper Cut
+
+
+   /**
+    * @Function Paper cut
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void paperCut() throws CommonException
+
+
+
+1.3.18 Send Instructions to the Printer Device
+
+
+   /**
+    * @Function Send instructions to the printer device
+    *
+    * @Parameter
+    * 1.cmdStr: byte[] Command
+    * 2.len: length
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static void sendCommand(byte[] cmdStr, int len) throws
+   CommonException
+
+
+
+1.3.19 Print the Picture
+
+
+   /**
+    * @Function Print the picture
+    *
+    * @Parameter
+    * 1.image: Image resource Bitmap object, width must be less than 384 pixels and
+   an integer multiple of 8, high pixels must be an integer multiple of 8
+    *
+    * */
+
+   public synchronized void printLogo(Bitmap image, boolean isBuffer) throws
+   CommonException
+
+   //Barcode example
+   Bitmap bitmap = CreateCode(barcodeStr, BarcodeFormat.CODE_128, 320, 176);
+   if (bitmap != null) {
+       mUsbThermalPrinter.printLogo(bitmap, true);
+   }
+   mUsbThermalPrinter.addString(barcodeStr);
+   mUsbThermalPrinter.printString();
+
+
+
+1.3.20 Release the Printer
+
+
+   /**
+    * @Function Release the printer, which must be released when the printer is not
+   in use
+    *
+    * */
+
+   public synchronized static void stop(Context context)
+
+
+
+1.3.21 Set the Anti-white
+
+
+   /**
+    * @Function Set the anti-white
+    *
+    * @Parameter
+    * 1.isInverse: True or false
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public static void setInverse(boolean isInverse) throw CommonException
+
+
+
+1.3.22 Set the paper width
+
+
+   /**
+    * @Function Set the paper width
+    *
+    * @Parameter
+    * 1.paperWidth: Paper width
+    *
+    * */
+
+   public static void setPaperWidth(int paperWidth)
+
+
+
+1.3.23 Get the print count
+
+
+   /**
+    * @Function Get the print count
+    *
+    * @Return Printed count
+    *
+    * */
+
+   public static long getPrintCount()
+
+
+
+1.3.24 Get printer status
+
+
+   /**
+    * @Function Get printer status
+    *
+    * @Exception CommonException
+    *
+    * */
+
+   public synchronized static int checkStatus() throws CommonException
+
